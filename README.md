@@ -11,7 +11,14 @@
 
 ```
 ansible-playbook -e parent=<parent> \
-                 -e structure=<strcuture> \
+                 -e structure=role \
+                 -e model=<model> \
+                 site.yml
+```
+or
+```
+ansible-playbook -e parent=<parent> \
+                 -e structure=collection \
                  -e collection_org=<collection_org> \
                  -e collection_name=<collection_name> \
                  -e model=<model> \
