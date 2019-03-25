@@ -10,6 +10,11 @@
 ### Usage
 
 ```
+pip install ansible
+pip install dollar_ref
+```
+
+```
 ansible-playbook -e parent=<parent> \
                  -e structure=role \
                  -e model=<model> \
