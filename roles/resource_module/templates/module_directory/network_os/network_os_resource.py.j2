@@ -1,0 +1,58 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+# (c) 2018, Red Hat, Inc.
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+from __future__ import absolute_import, division, print_function
+from ansible.module_utils.basic import AnsibleModule
+from {{ import_path }}.{{ network_os }}.config.{{ resource }}.{{ resource }} import {{ resource|capitalize }}
+
+__metaclass__ = type
+
+
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'network'}
+
+
+DOCUMENTATION = """
+---
+module: {{ network_os }}_{{ resource }}
+version_added: {{ rm['info']['version_added'] }}
+short_description: {{ rm['info']['short_description'] }}
+description: {{ rm['info']['description'] }}
+author: {{ rm['info']['authors'] }}
+{{ rm|to_docoptions }}
+"""
+
+EXAMPLES = """
+- name: Configure interfaces
+  nxos_interfaces:
+    config:
+      - name: Ethernet1/1
+        description: 'Configured by Ansible'
+        enable: True
+      - name: Ethernet1/2
+        description: 'Configured by Ansible'
+        enable: False
+    operation: merge
+
+"""
+
+RETURN = """
+"""
+
+
+def main():
+    """ main entry point for module execution
+    """
+    module = AnsibleModule(argument_spec={{ resource|capitalize }}.argument_spec,
+                           supports_check_mode=True)
+
+    result = {{ resource|capitalize }}(module).execute_module()
+    module.exit_json(**result)
+
+
+if __name__ == '__main__':
+    main()

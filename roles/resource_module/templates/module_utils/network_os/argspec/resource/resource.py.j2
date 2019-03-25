@@ -1,0 +1,5 @@
+from {{ import_path }}.network.argspec.base import ArgspecBase
+
+class {{ resource|capitalize }}Args(ArgspecBase):
+
+    argument_spec = {{ rm|to_argspec }}

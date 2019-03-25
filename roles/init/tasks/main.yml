@@ -1,0 +1,30 @@
+- name: Ensure 'parent' variable is set (see README.md)
+  assert:
+    that: parent is defined
+
+- name: Ensure 'structure' variable is set and one of 'role' or 'collection' (see README.md)
+  assert:
+    that: structure is defined and structure in ['role', 'collection']
+
+- name: Ensure the 'model' variable is set
+  assert:
+    that: model is defined
+
+- name: Include the model vars
+  include_vars:
+    file: "{{ model }}"
+    name: rm
+
+- name: "Create the {{ structure }} directory structure"
+  file:
+    path: "{{ parent }}/{{ item }}"
+    state: directory
+  with_items: "{{ directories[structure] }}"
+
+- name: Ensure the 'collection_org' is set when 'structure' is set to collection
+  assert:
+    that: collection_org is defined
+
+- name: Ensure the 'collection_name' is set when 'structure' is set to collection
+  assert:
+    that: collection_name is defined

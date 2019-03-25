@@ -1,0 +1,92 @@
+generator_version: 1.0
+metadata:
+  vesion: 1.1
+  status:
+  - preview
+  supported_by:
+  - network
+info:
+  network_os: nxos
+  resource: interfaces
+  version_added: 2.8
+  short_description: 'Manages <xxxx> attributes of <network_os> <resource>.'
+  description:
+  - Manages <xxxx> attributes of <network_os> <resource>.
+  authors:
+  - Ansible Network Engineer
+  extends_documentation_fragment: ios
+  notes:
+    - Tested against <network_os> <version>
+
+schema:
+  type: object
+  description: The schema used for the argspec and docstring
+  properties:
+    config:
+      type: array
+      description: The provided configuration
+      items:
+        type: object
+        properties:
+          some_string:
+            $ref: '#/definitions/some_string'
+          some_bool:
+            $ref: '#/definitions/some_bool'
+          some_int:
+            $ref: '#/definitions/some_int'
+          some_dict:
+            $ref: '#/definitions/some_dict'
+          some_list_of_dicts:
+            type: array
+            description: An array of dicts
+            items:
+              $ref: '#/definitions/some_dict'
+        required:
+        - some_string
+    state:
+      $ref: '#/definitions/state'
+
+definitions:
+  some_string:
+    type: str
+    description:
+    - The some_string_01
+    enum:
+    - choice_a
+    - choice_b
+    - choice_c
+    default: choice_a
+  some_bool:
+    description:
+    - The some_bool.
+    type: bool
+  some_int:
+    description:
+    - The some_int.
+    type: int
+    version_added: '1.1'
+  some_dict:
+    description:
+    - The some_dict.
+    type: object
+    properties:
+      property_01:
+        description:
+        - The property_01
+        type: str
+      property_02:
+        $ref: '#/definitions/some_string'
+  state:
+    description:
+    - The state the configuration should be left in
+    type: str
+    enum:
+    - merged
+    - replaced
+    - overriden
+    - deleted
+    default: merged
+
+
+  examples:
+  - merge_example_01.yml

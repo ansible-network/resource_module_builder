@@ -1,0 +1,75 @@
+from ansible.module_utils.six import iteritems
+from ansible.module_utils.network.common.utils import to_list
+
+from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Args
+from {{ import_path }}.{{ network_os }}.config.base import ConfigBase
+from {{ import_path }}.{{ network_os }}.facts.facts import Facts
+
+
+class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
+
+    gather_subset = [
+        'net_configuration_{{ resource }}',
+    ]
+
+    def get_{{ resource }}_facts(self):
+        facts = Facts().get_facts(self._module, self._connection, self.gather_subset)
+        {{ resource }}_facts = facts['net_configuration'].get('{{ resource }}')
+        if not {{ resource }}_facts:
+            return []
+        return {{ resource }}_facts
+
+    def execute_module(self):
+        result = {'changed': False}
+        commands = list()
+        warnings = list()
+
+        commands.extend(self.set_config())
+        if commands:
+            if not self._module.check_mode:
+                self._connection.edit_config(commands)
+            result['changed'] = True
+        result['commands'] = commands
+
+        {{ resource }}_facts = self.get_{{ resource }}_facts()
+
+        result['before'] = {{ resource }}_facts
+        if result['changed']:
+            result['after'] = {{ resource }}_facts
+
+        result['warnings'] = warnings
+        return result
+
+    def set_config(self):
+        want = self._module.params['config']
+        have = self.get_{{ resource }}_facts()
+        resp = self.set_state(want, have)
+        return to_list(resp)
+
+    def set_state(self, want, have):
+        state = self._module.params['state']
+        if state == 'overridden':
+            commands = self._state_overridden(want, have)
+        elif state == 'deleted':
+            commands = self._state_deleted(want, have)
+        elif state == 'merged':
+            commands = self._state_merged(want, have)
+        elif state == 'replaced':
+            commands = self._state_replaced(want, have)
+        return commands
+
+    def _state_replaced(self, want, have):
+        commands = []
+        return commands
+
+    def _state_overridden(self, want, have):
+        commands = []
+        return commands
+
+    def _state_merged(self, want, have):
+        commands = []
+        return commands
+
+    def _state_deleted(self, want, have):
+        commands = []
+        return commands

@@ -1,0 +1,13 @@
+directories:
+  collection:
+  - plugins/modules
+  - plugins/module_utils
+  - plugins/filter
+  - plugins/action
+  - plugins/inventory
+  - playbooks
+  - docs
+  - roles
+  role:
+  - library
+  - module_utils
