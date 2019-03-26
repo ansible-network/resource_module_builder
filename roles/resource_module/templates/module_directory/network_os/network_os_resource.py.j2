@@ -27,20 +27,26 @@ author: {{ rm['info']['authors'] }}
 """
 
 EXAMPLES = """
-- name: Configure interfaces
-  nxos_interfaces:
-    config:
-      - name: Ethernet1/1
-        description: 'Configured by Ansible'
-        enable: True
-      - name: Ethernet1/2
-        description: 'Configured by Ansible'
-        enable: False
-    operation: merge
-
+---
+{% for example in rm['examples'] %}
+{{ lookup('file', model|dirname + '/' +example) }}
+{% endfor %}
 """
 
 RETURN = """
+before:
+  description: The configuration prior to the model invocation
+  returned: always
+  sample: The configuration returned will alwys be in the same format of the paramters above.
+after:
+  description: The resulting configuration model invocation
+  returned: when changed
+  sample: The configuration returned will alwys be in the same format of the paramters above.
+commands:
+  description: The set of commands pushed to the remote device
+  returned: always
+  type: list
+  sample: ['command 1', 'command 2', 'command 3']
 """
 
 
