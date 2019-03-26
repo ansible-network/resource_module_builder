@@ -121,8 +121,6 @@ ansible-playbook -e parent=~/github/rm_example \
 ```
 ansible-playbook -e parent=~/github/rm_example/roles/my_role \
                  -e structure=role \
-                 -e collection_org=cidrblock \
-                 -e collection_name=my_collection \
                  -e model=models/nxos/interfaces/nxos_interfaces.yml \
                  site.yml
 ```

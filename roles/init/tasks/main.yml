@@ -24,7 +24,9 @@
 - name: Ensure the 'collection_org' is set when 'structure' is set to collection
   assert:
     that: collection_org is defined
+  when: structure == 'collection'
 
 - name: Ensure the 'collection_name' is set when 'structure' is set to collection
   assert:
     that: collection_name is defined
+  when: structure == 'collection'

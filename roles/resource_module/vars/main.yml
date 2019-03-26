@@ -19,7 +19,7 @@ parent_directory: "{{ parent }}{{ parent_directories[structure] }}"
 # set the iport path based on the structure
 import_paths:
   role: ansible.module_utils
-  collection: "ansible_collections.{{ collection_org }}.{{ collection_name }}.plugins.module_utils"
+  collection: "ansible_collections.{{ collection_org|default('') }}.{{ collection_name|default('') }}.plugins.module_utils"
 
 import_path: "{{ import_paths[structure] }}"
 
