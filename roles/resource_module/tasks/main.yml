@@ -11,11 +11,6 @@
     state: touch
   with_items: "{{ resource_module_directories }}"
 
-- name: Load the examples from the filesystem
-  debug:
-    msg: "{{ model|dirname }}/{{ item }}"
-  with_items: "{{ rm['examples'] }}"
-
 - name: Template each of the files
   include: template.yml
   with_items: "{{ resource_module_templates }}"
