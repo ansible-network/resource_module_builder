@@ -43,19 +43,9 @@ See the `models` directory for an example.
 
 ### Examples
 
-**Usage**
-```
-ansible-playbook -e parent=~/github/foo \
-                 -e structure=collection \
-                 -e collection_org=cidrblock \
-                 -e collection_name=foo \
-                 -e model=models/nxos/interfaces/nxos_interfaces.yml \
-                 site.yml
-```
-
 **Collection directory layout**
 
-- `network_os`: nxos
+- `network_os`: myos
 - `resource`: interfaces
 
 ```
@@ -63,7 +53,7 @@ ansible-playbook -e parent=~/github/rm_example \
                  -e structure=collection \
                  -e collection_org=cidrblock \
                  -e collection_name=my_collection \
-                 -e model=models/nxos/interfaces/nxos_interfaces.yml \
+                 -e model=models/myos/interfaces/myos_interfaces.yml \
                  site.yml
 ```
 
@@ -76,7 +66,7 @@ ansible-playbook -e parent=~/github/rm_example \
 │   ├── inventory
 │   ├── modules
 │   │   ├── __init__.py
-│   │   └── nxos_interfaces.py
+│   │   └── myos_interfaces.py
 │   └── module_utils
 │       ├── __init__.py
 │       ├── network
@@ -84,7 +74,7 @@ ansible-playbook -e parent=~/github/rm_example \
 │       │   │   ├── base.py
 │       │   │   └── __init__.py
 │       │   └── __init__.py
-│       └── nxos
+│       └── myos
 │           ├── argspec
 │           │   ├── facts
 │           │   │   ├── facts.py
@@ -115,13 +105,13 @@ ansible-playbook -e parent=~/github/rm_example \
 ```
 **Role directory layout**
 
-- `network_os`: nxos
+- `network_os`: myos
 - `resource`: interfaces
 
 ```
 ansible-playbook -e parent=~/github/rm_example/roles/my_role \
                  -e structure=role \
-                 -e model=models/nxos/interfaces/nxos_interfaces.yml \
+                 -e model=models/myos/interfaces/myos_interfaces.yml \
                  site.yml
 ```
 
@@ -130,7 +120,7 @@ ansible-playbook -e parent=~/github/rm_example/roles/my_role \
     └── my_role
         ├── library
         │   ├── __init__.py
-        │   └── nxos_interfaces.py
+        │   └── myos_interfaces.py
         └── module_utils
             ├── __init__.py
             ├── network
@@ -138,7 +128,7 @@ ansible-playbook -e parent=~/github/rm_example/roles/my_role \
             │   │   ├── base.py
             │   │   └── __init__.py
             │   └── __init__.py
-            └── nxos
+            └── myos
                 ├── argspec
                 │   ├── facts
                 │   │   ├── facts.py
@@ -168,7 +158,7 @@ ansible-playbook -e parent=~/github/rm_example/roles/my_role \
 
 **Using the collection layout**
 
-Note: As of 3/25/2019, the following PR needs to be used:
+Note: As of 3/26/2019, the following PR needs to be used:
 ```
 git clone git@github.com:ansible/ansible.git
 cd ansible
@@ -184,23 +174,23 @@ ln -s ~/github/rm_example ~/.ansible/collections/ansible_collections/cidrblock/m
 
 `site.yml`
  ```
- - hosts: eos101
+ - hosts: myos101
    gather_facts: False
    tasks:
-   - cidrblock.my_collection.nxos_interfaces:
+   - cidrblock.my_collection.myos_interfaces:
 ```
 
 **Using the role layout**
 
 `site.yml`
 ```
-- hosts: eos101
+- hosts: myos101
   gather_facts: False
   roles:
   - my_role
 
-- hosts: eos101
+- hosts: myos101
   gather_facts: False
   tasks:
-  - nxos_interfaces:
+  - myos_interfaces:
 ```

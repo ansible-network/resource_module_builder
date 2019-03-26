@@ -4,9 +4,9 @@ metadata:
   status:
   - preview
   supported_by:
-  - network
+  - '<support_group>'
 info:
-  network_os: nxos
+  network_os: myos
   resource: interfaces
   version_added: 2.8
   short_description: 'Manages <xxxx> attributes of <network_os> <resource>.'
@@ -14,7 +14,7 @@ info:
   - Manages <xxxx> attributes of <network_os> <resource>.
   authors:
   - Ansible Network Engineer
-  extends_documentation_fragment: ios
+  extends_documentation_fragment: myos
   notes:
     - Tested against <network_os> <version>
 
