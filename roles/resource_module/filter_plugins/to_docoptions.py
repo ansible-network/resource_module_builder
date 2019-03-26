@@ -22,7 +22,7 @@ def dive(obj, required=False):
         result['suboptions'] = {}
         if not 'properties' in obj:
             raise AnsibleFilterError('missing properties key')
-        for propkey, propval in obj['properties'].iteritems():
+        for propkey, propval in iteritems(obj['properties']):
             required = bool('required' in obj and propkey in obj['required'])
             result['suboptions'][propkey] = dive(propval, required)
     elif obj['type'] == 'array':
@@ -31,7 +31,7 @@ def dive(obj, required=False):
             raise AnsibleFilterError('missing items key in array')
         if not 'properties' in obj['items']:
             raise AnsibleFilterError('missing properties in items')
-        for propkey, propval in obj['items']['properties'].iteritems():
+        for propkey, propval in iteritems(obj['items']['properties']):
             required = bool('required' in obj['items'] and propkey in obj['items']['required'])
             result['suboptions'][propkey] = dive(propval, required)
     elif obj['type'] in ['str', 'bool', 'int']:

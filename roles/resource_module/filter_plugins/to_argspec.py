@@ -19,7 +19,7 @@ def dive(obj, required=False):
         result['options'] = {}
         if not 'properties' in obj:
             raise AnsibleFilterError('missing properties key')
-        for propkey, propval in obj['properties'].iteritems():
+        for propkey, propval in iteritems(obj['properties']):
             required = bool('required' in obj and propkey in obj['required'])
             result['options'][propkey] = dive(propval, required)
     elif obj['type'] == 'array':
@@ -28,7 +28,7 @@ def dive(obj, required=False):
             raise AnsibleFilterError('missing items key in array')
         if not 'properties' in obj['items']:
             raise AnsibleFilterError('missing properties in items')
-        for propkey, propval in obj['items']['properties'].iteritems():
+        for propkey, propval in iteritems(obj['items']['properties']):
             required = bool('required' in obj['items'] and propkey in obj['items']['required'])
             result['options'][propkey] = dive(propval, required)
     elif obj['type'] in ['str', 'bool', 'int']:
@@ -43,8 +43,7 @@ def dive(obj, required=False):
     return result
 
 def u_to_str(object, context, maxlevels, level):
-    typ = pprint._type(object)
-    if typ is unicode:
+    if isinstance(object, unicode):
         object = str(object)
     return pprint._safe_repr(object, context, maxlevels, level)
 
@@ -52,7 +51,7 @@ def to_argspec(value):
     data = jsonref.loads(json.dumps(value))
     result = dive(data['schema'])
     printer = pprint.PrettyPrinter()
-    printer.format = u_to_str
+    # printer.format = u_to_str
     return printer.pformat(result['options'])
 
 
