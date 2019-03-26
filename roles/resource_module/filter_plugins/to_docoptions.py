@@ -2,9 +2,11 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import (absolute_import, division, print_function)
-from dollar_ref import pluck
 from ansible.parsing.yaml.dumper import AnsibleDumper
 from ansible.errors import AnsibleFilterError
+from ansible.module_utils.six import iteritems
+import json
+import jsonref
 import yaml
 
 __metaclass__ = type
@@ -20,7 +22,7 @@ def dive(obj, required=False):
         result['suboptions'] = {}
         if not 'properties' in obj:
             raise AnsibleFilterError('missing properties key')
-        for propkey, propval in obj['properties'].items():
+        for propkey, propval in obj['properties'].iteritems():
             required = bool('required' in obj and propkey in obj['required'])
             result['suboptions'][propkey] = dive(propval, required)
     elif obj['type'] == 'array':
@@ -29,7 +31,7 @@ def dive(obj, required=False):
             raise AnsibleFilterError('missing items key in array')
         if not 'properties' in obj['items']:
             raise AnsibleFilterError('missing properties in items')
-        for propkey, propval in obj['items']['properties'].items():
+        for propkey, propval in obj['items']['properties'].iteritems():
             required = bool('required' in obj['items'] and propkey in obj['items']['required'])
             result['suboptions'][propkey] = dive(propval, required)
     elif obj['type'] in ['str', 'bool', 'int']:
@@ -45,7 +47,7 @@ def dive(obj, required=False):
     return result
 
 def to_docoptions(value):
-    data = pluck(value)
+    data = jsonref.loads(json.dumps(value))
     result = dive(data['schema'])
     dumper = AnsibleDumper
     dumper.ignore_aliases = lambda *args: True

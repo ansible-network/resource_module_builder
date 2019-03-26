@@ -2,8 +2,10 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import (absolute_import, division, print_function)
+import jsonref
+import json
 import pprint
-from dollar_ref import pluck
+from ansible.module_utils.six import iteritems
 
 __metaclass__ = type
 
@@ -17,7 +19,7 @@ def dive(obj, required=False):
         result['options'] = {}
         if not 'properties' in obj:
             raise AnsibleFilterError('missing properties key')
-        for propkey, propval in obj['properties'].items():
+        for propkey, propval in obj['properties'].iteritems():
             required = bool('required' in obj and propkey in obj['required'])
             result['options'][propkey] = dive(propval, required)
     elif obj['type'] == 'array':
@@ -26,7 +28,7 @@ def dive(obj, required=False):
             raise AnsibleFilterError('missing items key in array')
         if not 'properties' in obj['items']:
             raise AnsibleFilterError('missing properties in items')
-        for propkey, propval in obj['items']['properties'].items():
+        for propkey, propval in obj['items']['properties'].iteritems():
             required = bool('required' in obj['items'] and propkey in obj['items']['required'])
             result['options'][propkey] = dive(propval, required)
     elif obj['type'] in ['str', 'bool', 'int']:
@@ -40,10 +42,19 @@ def dive(obj, required=False):
         result['type'] = obj['type']
     return result
 
+def u_to_str(object, context, maxlevels, level):
+    typ = pprint._type(object)
+    if typ is unicode:
+        object = str(object)
+    return pprint._safe_repr(object, context, maxlevels, level)
+
 def to_argspec(value):
-    data = pluck(value)
+    data = jsonref.loads(json.dumps(value))
     result = dive(data['schema'])
-    return pprint.pformat(result['options'])
+    printer = pprint.PrettyPrinter()
+    printer.format = u_to_str
+    return printer.pformat(result['options'])
+
 
 class FilterModule(object):
     def filters(self):

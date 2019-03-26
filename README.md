@@ -11,7 +11,7 @@
 
 ```
 pip install ansible
-pip install dollar_ref
+pip install jsonref
 ```
 
 ```
