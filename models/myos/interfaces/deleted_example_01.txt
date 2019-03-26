@@ -1,0 +1,10 @@
+
+# Using deleted
+
+<placeholder for the configuration example prior to module invocation>
+
+- name: Configure interfaces
+  myos_interfaces:
+    operation: deleted
+
+<placeholder for the configuration example after module invocation>

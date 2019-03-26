@@ -17,7 +17,6 @@ info:
   extends_documentation_fragment: myos
   notes:
     - Tested against <network_os> <version>
-
 schema:
   type: object
   description: The schema used for the argspec and docstring
@@ -83,10 +82,11 @@ definitions:
     enum:
     - merged
     - replaced
-    - overriden
+    - overridden
     - deleted
     default: merged
-
-
-  examples:
-  - merge_example_01.yml
+examples:
+- merged_example_01.txt
+- replaced_example_01.txt
+- overridden_example_01.txt
+- deleted_example_01.txt

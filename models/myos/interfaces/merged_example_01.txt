@@ -1,0 +1,17 @@
+
+# Using merged
+
+<placeholder for the configuration example prior to module invocation>
+
+- name: Configure interfaces
+  nxos_interfaces:
+    config:
+      - name: Ethernet1/1
+        description: 'Configured by Ansible'
+        enable: True
+      - name: Ethernet1/2
+        description: 'Configured by Ansible'
+        enable: False
+    operation: merged
+
+<placeholder for the configuration example after module invocation>
