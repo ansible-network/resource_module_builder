@@ -1,10 +1,15 @@
-## Resource module models and scaffolder
+## Resource module builder
 
-### To do
+### Overview
 
-1) Improve the model schema
-2) Add the example files to the doc string
-3) Document the model keys
+The resource module builder is an Ansible playbook that helps developers scaffold and maintain an Ansible network resource modules.
+
+**Capabilities**
+- Use a defined model to scaffold a resource module directory layout and initial class files.
+- Scaffold either an ansible role or collection.
+- Subsequent uses of RMB will only replace the module arspec and file containing the module doc string.
+- Complex examples can be stored along side the model in the same directory
+- Maintain the model as the source of truth for the module and use RMB to update the source files as needed.
 
 
 ### Usage
