@@ -42,17 +42,10 @@ def dive(obj, required=False):
         result['type'] = obj['type']
     return result
 
-def u_to_str(object, context, maxlevels, level):
-    if isinstance(object, unicode):
-        object = str(object)
-    return pprint._safe_repr(object, context, maxlevels, level)
-
 def to_argspec(value):
     data = jsonref.loads(json.dumps(value))
     result = dive(data['schema'])
-    printer = pprint.PrettyPrinter()
-    # printer.format = u_to_str
-    return printer.pformat(result['options'])
+    return str(result)
 
 
 class FilterModule(object):
