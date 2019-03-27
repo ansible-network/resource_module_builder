@@ -23,12 +23,14 @@
 ##############################################
 ##############################################
 
+"""
+The module file for {{ network_os }}_{{ resource }}
+"""
+
 from __future__ import absolute_import, division, print_function
 from ansible.module_utils.basic import AnsibleModule
-from {{ import_path }}.{{ network_os }}.config.{{ resource }}.{{ resource }} import {{ resource|capitalize }}
-
-__metaclass__ = type
-
+from {{ import_path }}. \
+     {{ network_os }}.config.{{ resource }}.{{ resource }} import {{ resource|capitalize }}
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
@@ -70,14 +72,16 @@ commands:
 
 
 def main():
-    """ main entry point for module execution
+    """
+    Main entry point for module execution
+
+    :returns: the result form module invocation
     """
     module = AnsibleModule(argument_spec={{ resource|capitalize }}.argument_spec,
                            supports_check_mode=True)
 
     result = {{ resource|capitalize }}(module).execute_module()
     module.exit_json(**result)
-
 
 if __name__ == '__main__':
     main()

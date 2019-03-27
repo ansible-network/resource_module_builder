@@ -72,6 +72,6 @@ resource_module_templates:
 - source: module_utils/network_os/utils/utils.py.j2
   destination: "{{ parent_directory}}/module_utils/{{ network_os }}/utils/utils.py"
   overwrite: False
-- source: module_utils/network/argspec/base.py
+- source: module_utils/network/argspec/base.py.j2
   destination: "{{ parent_directory}}/module_utils/network/argspec/base.py"
   overwrite: False

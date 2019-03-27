@@ -2,16 +2,20 @@
 # -*- coding: utf-8 -*-
 # {{ rm['metadata']['copyright_str'] }}
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+"""
+The {{ network_os }} facts base class
+this contains methods common to all facts subsets
+"""
 
 import re
-
 from copy import deepcopy
-
 from ansible.module_utils.six import iteritems
 
 
-class FactsBase(object):
-
+class FactsBase(object): #pylint: disable=R0205
+    """
+    The {{ network_os }} facts base class
+    """
     generated_spec = {}
     ansible_facts = {'net_configuration': {}}
 
@@ -27,7 +31,8 @@ class FactsBase(object):
 
         self.generated_spec = self.generate_dict(facts_argument_spec)
 
-    def generate_dict(self, spec):
+    @staticmethod
+    def generate_dict(spec):
         """
         Generate dictionary which is in sync with argspec
 
@@ -39,16 +44,17 @@ class FactsBase(object):
         if not spec:
             return obj
 
-        for k, v in iteritems(spec):
-            if 'default' in v:
-                d = {k: v['default']}
+        for key, val in iteritems(spec):
+            if 'default' in val:
+                dct = {key: val['default']}
             else:
-                d = {k: None}
-            obj.update(d)
+                dct = {key: None}
+            obj.update(dct)
 
         return obj
 
-    def parse_conf_arg(self, cfg, arg):
+    @staticmethod
+    def parse_conf_arg(cfg, arg):
         """
         Parse config based on argument
 
@@ -59,9 +65,13 @@ class FactsBase(object):
         """
         match = re.search(r'%s (.+)(\n|$)' % arg, cfg, re.M)
         if match:
-            return match.group(1).strip()
+            result = match.group(1).strip()
+        else:
+            result = None
+        return result
 
-    def parse_conf_cmd_arg(self, cfg, cmd, res1, res2=None):
+    @staticmethod
+    def parse_conf_cmd_arg(cfg, cmd, res1, res2=None):
         """
         Parse config based on command
 
@@ -75,13 +85,14 @@ class FactsBase(object):
         match = re.search(r'\n\s+%s(\n|$)' % cmd, cfg)
         if match:
             return res1
-        else:
-            if res2 is not None:
-                match = re.search(r'\n\s+no %s(\n|$)' % cmd, cfg)
-                if match:
-                    return res2
+        if res2 is not None:
+            match = re.search(r'\n\s+no %s(\n|$)' % cmd, cfg)
+            if match:
+                return res2
+        return None
 
-    def generate_final_config(self, cfg_dict):
+    @staticmethod
+    def generate_final_config(cfg_dict):
         """
         Generate final config dictionary
 
@@ -93,8 +104,7 @@ class FactsBase(object):
         if not cfg_dict:
             return final_cfg
 
-        for k, v in iteritems(cfg_dict):
-            if v is not None:
-                final_cfg.update({k:v})
-
+        for key, val in iteritems(cfg_dict):
+            if val is not None:
+                final_cfg.update({key:val})
         return final_cfg
