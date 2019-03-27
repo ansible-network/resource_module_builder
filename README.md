@@ -10,6 +10,7 @@ The resource module builder is an Ansible playbook that helps developers scaffol
 - Subsequent uses of RMB will only replace the module arspec and file containing the module doc string.
 - Complex examples can be stored along side the model in the same directory
 - Maintain the model as the source of truth for the module and use RMB to update the source files as needed.
+- Generates working sample modules for both `<network_os>_<resource>` and `<network_os>_facts`
 
 
 ### Usage
@@ -71,6 +72,7 @@ ansible-playbook -e parent=~/github/rm_example \
 │   ├── inventory
 │   ├── modules
 │   │   ├── __init__.py
+│   │   ├── myos_facts.py
 │   │   └── myos_interfaces.py
 │   └── module_utils
 │       ├── __init__.py
@@ -125,6 +127,7 @@ ansible-playbook -e parent=~/github/rm_example/roles/my_role \
     └── my_role
         ├── library
         │   ├── __init__.py
+        │   ├── myos_facts.py
         │   └── myos_interfaces.py
         └── module_utils
             ├── __init__.py
@@ -183,6 +186,13 @@ ln -s ~/github/rm_example ~/.ansible/collections/ansible_collections/cidrblock/m
    gather_facts: False
    tasks:
    - cidrblock.my_collection.myos_interfaces:
+     register: result
+   - debug:
+       var: result
+   - cidrblock.my_collection.myos_facts:
+   - debug:
+       var: net_configuration
+
 ```
 
 **Using the role layout**
@@ -198,4 +208,10 @@ ln -s ~/github/rm_example ~/.ansible/collections/ansible_collections/cidrblock/m
   gather_facts: False
   tasks:
   - myos_interfaces:
+    register: result
+  - debug:
+      var: result
+  - myos_facts:
+  - debug:
+      var: net_configuration
 ```
