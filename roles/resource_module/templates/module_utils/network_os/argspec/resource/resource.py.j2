@@ -22,10 +22,14 @@
 ##############################################
 ##############################################
 ##############################################
+"""
+The arg spec for the {{ network_os }}_{{ resource }} module
+"""
 
+from {{ import_path }}. \
+     network.argspec.base import ArgspecBase
 
-from {{ import_path }}.network.argspec.base import ArgspecBase
-
-class {{ resource|capitalize }}Args(ArgspecBase):
-
-    argument_spec = {{ rm|to_argspec }}
+class {{ resource|capitalize }}Args(ArgspecBase): #pylint: disable=R0903
+    """The arg spec for the {{ network_os }}_{{ resource }} module
+    """
+    argument_spec = {{ rm|to_argspec }} #pylint: disable=C0301

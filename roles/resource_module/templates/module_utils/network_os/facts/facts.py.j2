@@ -2,22 +2,42 @@
 # -*- coding: utf-8 -*-
 # {{ rm['metadata']['copyright_str'] }}
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+"""
+The facts class for {{ network_os }}
+this file validates each subset of facts and selectively
+calls the appropriate facts gathering function
+"""
 
-from {{ import_path }}.{{ network_os }}.argspec.facts.facts import FactsArgs
-from {{ import_path }}.{{ network_os }}.argspec.interfaces.interfaces import {{ resource|capitalize }}Args
-from {{ import_path }}.{{ network_os }}.facts.base import FactsBase
-from {{ import_path }}.{{ network_os }}.facts.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Facts
+from {{ import_path }}. \
+     {{ network_os }}.argspec.facts.facts import FactsArgs
+from {{ import_path }}. \
+     {{ network_os }}.argspec.interfaces.interfaces import {{ resource|capitalize }}Args
+from {{ import_path }}. \
+     {{ network_os }}.facts.base import FactsBase
+from {{ import_path }}. \
+     {{ network_os }}.facts.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Facts
 
-
-class Facts(FactsArgs, FactsBase):
+class Facts(FactsArgs, FactsBase): #pylint: disable=R0903
+    """ The fact class for {{ network_os }}
+    """
 
     VALID_SUBSETS = [
         'net_configuration_{{ resource }}',
     ]
 
-    def get_facts(self, module, connection, gather_subset=['all']):
+    def get_facts(self, module, connection, gather_subset=None):
+        """ Collect the facts for {{ network_os }}
+
+        :param module: The module instance
+        :param connection: The device connection
+        :param gather_subset: The facts subset to collect
+        :rtype: dict
+        :returns: the facts gathered
+        """
         runable_subsets = set()
         exclude_subsets = set()
+        if not gather_subset:
+            gather_subset = ['all']
 
         for subset in gather_subset:
             if subset == 'all':
@@ -51,5 +71,7 @@ class Facts(FactsArgs, FactsBase):
 
         return self.ansible_facts
 
-    def _get_net_configuration_{{ resource }}(self, module, connection):
-        return {{ resource|capitalize }}Facts({{ resource|capitalize }}Args.argument_spec, 'config', 'options').populate_facts(module, connection)
+    @staticmethod
+    def _get_net_configuration_{{ resource }}(module, connection):
+        return {{ resource|capitalize }}Facts({{ resource|capitalize }}Args. \
+               argument_spec, 'config', 'options').populate_facts(module, connection)
