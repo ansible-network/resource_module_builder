@@ -66,47 +66,47 @@ ansible-playbook -e parent=~/github/rm_example \
 ├── docs
 ├── playbooks
 ├── plugins
-│   ├── action
-│   ├── filter
-│   ├── inventory
-│   ├── modules
-│   │   ├── __init__.py
-│   │   └── myos_interfaces.py
-│   └── module_utils
-│       ├── __init__.py
-│       ├── network
-│       │   ├── argspec
-│       │   │   ├── base.py
-│       │   │   └── __init__.py
-│       │   └── __init__.py
-│       └── myos
-│           ├── argspec
-│           │   ├── facts
-│           │   │   ├── facts.py
-│           │   │   └── __init__.py
-│           │   ├── __init__.py
-│           │   └── interfaces
-│           │       ├── __init__.py
-│           │       └── interfaces.py
-│           ├── config
-│           │   ├── base.py
-│           │   ├── __init__.py
-│           │   └── interfaces
-│           │       ├── __init__.py
-│           │       └── interfaces.py
-│           ├── facts
-│           │   ├── base.py
-│           │   ├── facts.py
-│           │   ├── __init__.py
-│           │   └── interfaces
-│           │       ├── __init__.py
-│           │       └── interfaces.py
-│           ├── __init__.py
-│           └── utils
-│               ├── __init__.py
-│               └── utils.py
+│   ├── action
+│   ├── filter
+│   ├── inventory
+│   ├── modules
+│   │   ├── __init__.py
+│   │   └── myos_interfaces.py
+│   └── module_utils
+│       ├── __init__.py
+│       ├── network
+│       │   ├── argspec
+│       │   │   ├── base.py
+│       │   │   └── __init__.py
+│       │   └── __init__.py
+│       └── myos
+│           ├── argspec
+│           │   ├── facts
+│           │   │   ├── facts.py
+│           │   │   └── __init__.py
+│           │   ├── __init__.py
+│           │   └── interfaces
+│           │       ├── __init__.py
+│           │       └── interfaces.py
+│           ├── config
+│           │   ├── base.py
+│           │   ├── __init__.py
+│           │   └── interfaces
+│           │       ├── __init__.py
+│           │       └── interfaces.py
+│           ├── facts
+│           │   ├── base.py
+│           │   ├── facts.py
+│           │   ├── __init__.py
+│           │   └── interfaces
+│           │       ├── __init__.py
+│           │       └── interfaces.py
+│           ├── __init__.py
+│           └── utils
+│               ├── __init__.py
+│               └── utils.py
 └── roles
- 
+
 ```
 **Role directory layout**
 
@@ -124,37 +124,37 @@ ansible-playbook -e parent=~/github/rm_example/roles/my_role \
 └── roles
     └── my_role
         ├── library
-        │   ├── __init__.py
-        │   └── myos_interfaces.py
+        │   ├── __init__.py
+        │   └── myos_interfaces.py
         └── module_utils
             ├── __init__.py
             ├── network
-            │   ├── argspec
-            │   │   ├── base.py
-            │   │   └── __init__.py
-            │   └── __init__.py
+            │   ├── argspec
+            │   │   ├── base.py
+            │   │   └── __init__.py
+            │   └── __init__.py
             └── myos
                 ├── argspec
-                │   ├── facts
-                │   │   ├── facts.py
-                │   │   └── __init__.py
-                │   ├── __init__.py
-                │   └── interfaces
-                │       ├── __init__.py
-                │       └── interfaces.py
+                │   ├── facts
+                │   │   ├── facts.py
+                │   │   └── __init__.py
+                │   ├── __init__.py
+                │   └── interfaces
+                │       ├── __init__.py
+                │       └── interfaces.py
                 ├── config
-                │   ├── base.py
-                │   ├── __init__.py
-                │   └── interfaces
-                │       ├── __init__.py
-                │       └── interfaces.py
+                │   ├── base.py
+                │   ├── __init__.py
+                │   └── interfaces
+                │       ├── __init__.py
+                │       └── interfaces.py
                 ├── facts
-                │   ├── base.py
-                │   ├── facts.py
-                │   ├── __init__.py
-                │   └── interfaces
-                │       ├── __init__.py
-                │       └── interfaces.py
+                │   ├── base.py
+                │   ├── facts.py
+                │   ├── __init__.py
+                │   └── interfaces
+                │       ├── __init__.py
+                │       └── interfaces.py
                 ├── __init__.py
                 └── utils
                     ├── __init__.py
