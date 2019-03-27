@@ -6,5 +6,5 @@
 - name: Create the file, if it doesnt exist already or override is set
   template:
     src: "{{ template['source'] }}"
-    dest: "{{ parent_directory}}/{{ template['destination'] }}"
+    dest: "{{ template['destination'] }}"
   when: not file_stat.stat.exists or template['overwrite']

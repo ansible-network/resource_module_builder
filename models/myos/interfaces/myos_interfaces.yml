@@ -5,6 +5,8 @@ metadata:
   - preview
   supported_by:
   - '<support_group>'
+  copyright_str: Copyright 2019 <company_name>
+  license: gpl-3.0.txt
 info:
   network_os: myos
   resource: interfaces

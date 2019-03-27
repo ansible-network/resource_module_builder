@@ -21,6 +21,11 @@
     state: directory
   with_items: "{{ directories[structure] }}"
 
+- name: Copy the license file to the parent directory
+  copy:
+    src: "{{ rm['metadata']['license'] }}"
+    dest: "{{ parent }}/LICENSE.txt"
+
 - name: Ensure the 'collection_org' is set when 'structure' is set to collection
   assert:
     that: collection_org is defined
