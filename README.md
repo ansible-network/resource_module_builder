@@ -2,13 +2,13 @@
 
 ### Overview
 
-The resource module builder is an Ansible playbook that helps developers scaffold and maintain an Ansible network resource modules.
+The resource module builder is an Ansible Playbook that helps developers scaffold and maintain an Ansible network resource module.
 
 **Capabilities**
 - Use a defined model to scaffold a resource module directory layout and initial class files.
-- Scaffold either an ansible role or collection.
-- Subsequent uses of RMB will only replace the module arspec and file containing the module doc string.
-- Complex examples can be stored along side the model in the same directory
+- Scaffold either an Ansible role or a collection.
+- Subsequent uses of the Resource Module Builder (RMB) will only replace the module arspec and file containing the module doc string.
+- Complex examples can be stored along side the model in the same directory.
 - Maintain the model as the source of truth for the module and use RMB to update the source files as needed.
 - Generates working sample modules for both `<network_os>_<resource>` and `<network_os>_facts`
 
@@ -228,7 +228,7 @@ def main():
 
 `module_utils/<ansible_network_os>/facts/<resource>/`.
 
-- Populate facts for the resource
+- Populate facts for the resource.
 - Entry in `module_utils/<ansible_network_os>/facts/facts.py` for `get_facts` API to keep
   `<ansible_network_os>_facts` module and facts gathered for the resource module in sync
   for every subset.
@@ -237,10 +237,10 @@ def main():
 
 `module_utils/<ansible_network_os>/<config>/<resource>/`.
 
-- Implement `execute_module` API that loads the config to device and generates result with
+- Implement `execute_module` API that loads the config to device and generates the result with
   `changed`, `commands`, `before` and `after` keys.
-- Call `get_facts` API that returns the `<resource>` config facts or Return the diff if the
-  device has onbox support diff support.
+- Call `get_facts` API that returns the `<resource>` config facts or return the diff if the
+  device has onbox diff support.
 - Compare facts gathered and given key-values if diff is not supported.
 - Generate final config.
 
