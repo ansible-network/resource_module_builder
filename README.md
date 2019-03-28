@@ -76,11 +76,6 @@ ansible-playbook -e parent=~/github/rm_example \
 │   │   └── myos_interfaces.py
 │   └── module_utils
 │       ├── __init__.py
-│       ├── network
-│       │   ├── argspec
-│       │   │   ├── base.py
-│       │   │   └── __init__.py
-│       │   └── __init__.py
 │       └── myos
 │           ├── argspec
 │           │   ├── facts
@@ -131,11 +126,6 @@ ansible-playbook -e parent=~/github/rm_example/roles/my_role \
         │   └── myos_interfaces.py
         └── module_utils
             ├── __init__.py
-            ├── network
-            │   ├── argspec
-            │   │   ├── base.py
-            │   │   └── __init__.py
-            │   └── __init__.py
             └── myos
                 ├── argspec
                 │   ├── facts
@@ -215,3 +205,47 @@ ln -s ~/github/rm_example ~/.ansible/collections/ansible_collections/cidrblock/m
   - debug:
       var: net_configuration
 ```
+
+### Resource Module Structure/Workflow
+
+**Module**
+
+`library/<ansible_network_os>_<resource>.py`.
+
+- Import `module_utils` resource package and calls `execute_module` API
+```
+def main():
+    result = <resource_package>(module).execute_module()
+```
+
+**Module Argspec**
+
+`module_utils/<ansible_network_os>/argspec/<resource>/`.
+
+- Argspec for the resource.
+
+**Facts**
+
+`module_utils/<ansible_network_os>/facts/<resource>/`.
+
+- Populate facts for the resource
+- Entry in `module_utils/<ansible_network_os>/facts/facts.py` for `get_facts` API to keep
+  `<ansible_network_os>_facts` module and facts gathered for the resource module in sync
+  for every subset.
+
+**Module Package in module_utils**
+
+`module_utils/<ansible_network_os>/<config>/<resource>/`.
+
+- Implement `execute_module` API that loads the config to device and generates result with
+  `changed`, `commands`, `before` and `after` keys.
+- Call `get_facts` API that returns the `<resource>` config facts or Return the diff if the
+  device has onbox support diff support.
+- Compare facts gathered and given key-values if diff is not supported.
+- Generate final config.
+
+**Utils**
+
+`module_utils/<ansible_network_os>/utils`.
+
+- Utilities for the` <ansible_network_os>` platform.
