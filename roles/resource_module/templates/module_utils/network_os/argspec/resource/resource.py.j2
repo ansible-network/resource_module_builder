@@ -26,10 +26,11 @@
 The arg spec for the {{ network_os }}_{{ resource }} module
 """
 
-from {{ import_path }}. \
-     network.argspec.base import ArgspecBase
-
-class {{ resource|capitalize }}Args(ArgspecBase): #pylint: disable=R0903
+class {{ resource|capitalize }}Args(object): #pylint: disable=R0903
     """The arg spec for the {{ network_os }}_{{ resource }} module
     """
+
+    def __init__(self, **kwargs):
+        pass
+
     argument_spec = {{ rm|to_argspec }} #pylint: disable=C0301
