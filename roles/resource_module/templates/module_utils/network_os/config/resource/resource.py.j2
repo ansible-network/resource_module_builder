@@ -91,72 +91,59 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         """
         state = self._module.params['state']
         if state == 'overridden':
-            commands = self._state_overridden(want, have)
+            kwargs = {}
+            commands = self._state_overridden(**kwargs)
         elif state == 'deleted':
-            commands = self._state_deleted(want, have)
+            kwargs = {}
+            commands = self._state_deleted(**kwargs)
         elif state == 'merged':
-            commands = self._state_merged(want, have)
+            kwargs = {}
+            commands = self._state_merged(**kwargs)
         elif state == 'replaced':
-            commands = self._state_replaced(want, have)
+            kwargs = {}
+            commands = self._state_replaced(**kwargs)
         return commands
 
     @staticmethod
-    def _state_replaced(want, have):
+    def _state_replaced(self, **kwargs):
         """ The command generator when state is replaced
 
-        :param want: the desired configuration as a dictionary
-        :param have: the current configuration as a dictionary
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
                   to the deisred configuration
         """
-        if want != have:
-            # compare and generate command set
-            pass
         commands = []
         return commands
 
     @staticmethod
-    def _state_overridden(want, have):
+    def _state_overridden(self, **kwargs):
         """ The command generator when state is overridden
 
-        :param want: the desired configuration as a dictionary
-        :param have: the current configuration as a dictionary
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
                   to the deisred configuration
         """
-        if want != have:
-            pass
         commands = []
         return commands
 
     @staticmethod
-    def _state_merged(want, have):
+    def _state_merged(self, **kwargs):
         """ The command generator when state is merged
 
-        :param want: the additive configuration as a dictionary
-        :param have: the current configuration as a dictionary
         :rtype: A list
         :returns: the commands necessary to merge the provided into
                   the current configuration
         """
-        if want != have:
-            pass
         commands = []
         return commands
 
     @staticmethod
-    def _state_deleted(want, have):
+    def _state_deleted(self, **kwargs):
         """ The command generator when state is deleted
 
-        :param want: the objects from which the configuration should be removed
-        :param have: the current configuration as a dictionary
         :rtype: A list
         :returns: the commands necessary to remove the current configuration
                   of the provided objects
         """
-        if want != have:
-            pass
         commands = []
         return commands
