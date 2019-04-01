@@ -13,6 +13,11 @@ class FactsArgs(object): #pylint: disable=R0903
     def __init__(self, **kwargs):
         pass
 
+    choices = [
+        'all',
+        'net_configuration_{{ resource }}',
+    ]
+
     argument_spec = {
-        'gather_subset': dict(default=['all'], type='list')
+        'gather_subset': dict(default=['all'], choices=choices, type='list')
     }
