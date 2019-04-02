@@ -45,7 +45,7 @@ def dive(obj, required=False):
 def to_argspec(value):
     data = jsonref.loads(json.dumps(value))
     result = dive(data['schema'])
-    return str(result['options'])
+    return result['options']
 
 
 class FilterModule(object):
