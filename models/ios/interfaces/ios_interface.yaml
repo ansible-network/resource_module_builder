@@ -13,7 +13,7 @@ info:
   version_added: 2.9
   short_description: 'Manage Interface on Cisco IOS network devices.'
   description:
-  - Manage Interface on Cisco IOS network devices..
+  - Manage Interface on Cisco IOS network devices.
   authors:
   - Sumit Jaiswal (@justjais)
   extends_documentation_fragment: ios
