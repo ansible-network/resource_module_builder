@@ -12,4 +12,4 @@
         description: 'Configured by Ansible Network'
         enable: False
 	speed: 1000
-    operation: overridden
+    state: overridden

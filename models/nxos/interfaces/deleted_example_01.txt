@@ -9,4 +9,4 @@
       - name: Ethernet1/2
         description: 'Configured by Ansible Network'
         mtu: 1800
-    operation: deleted
+    state: deleted

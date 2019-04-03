@@ -12,4 +12,4 @@
         description: 'Configured by Ansible Network'
         enable: False
 	mode: layer2
-    operation: replaced
+    state: replaced

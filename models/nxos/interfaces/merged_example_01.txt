@@ -11,4 +11,4 @@
         description: 'Configured by Ansible Network'
         enable: False
 	mode: layer3
-    operation: merged
+    state: merged
