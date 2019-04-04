@@ -24,6 +24,8 @@ def dive(obj, required=False):
             result['options'][propkey] = dive(propval, required)
     elif obj['type'] == 'array':
         result['options'] = {}
+        if obj['elements']:
+            result['elements'] = obj['elements']
         if not 'items' in obj:
             raise AnsibleFilterError('missing items key in array')
         if not 'properties' in obj['items']:
