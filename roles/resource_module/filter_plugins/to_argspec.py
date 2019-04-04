@@ -31,6 +31,7 @@ def dive(obj, required=False):
         for propkey, propval in iteritems(obj['items']['properties']):
             required = bool('required' in obj['items'] and propkey in obj['items']['required'])
             result['options'][propkey] = dive(propval, required)
+            result['type'] = 'list'
     elif obj['type'] in ['str', 'bool', 'int']:
         if 'default' in obj:
             result['default'] = obj['default']
