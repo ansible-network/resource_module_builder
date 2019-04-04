@@ -73,7 +73,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
-                  to the deisred configuration
+                  to the desired configuration
         """
         want = self._module.params['config']
         have = self.get_{{ resource }}_facts()
@@ -87,7 +87,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         :param have: the current configuration as a dictionary
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
-                  to the deisred configuration
+                  to the desired configuration
         """
         state = self._module.params['state']
         if state == 'overridden':
@@ -110,7 +110,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
-                  to the deisred configuration
+                  to the desired configuration
         """
         commands = []
         return commands
@@ -121,7 +121,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
-                  to the deisred configuration
+                  to the desired configuration
         """
         commands = []
         return commands
