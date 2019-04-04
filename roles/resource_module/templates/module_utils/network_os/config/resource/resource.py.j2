@@ -45,7 +45,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         """ Execute the module
 
         :rtype: A dictionary
-        :returns: The result from moduel execution
+        :returns: The result from module execution
         """
         result = {'changed': False}
         commands = list()
@@ -73,7 +73,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
-                  to the deisred configuration
+                  to the desired configuration
         """
         want = self._module.params['config']
         have = self.get_{{ resource }}_facts()
@@ -87,7 +87,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         :param have: the current configuration as a dictionary
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
-                  to the deisred configuration
+                  to the desired configuration
         """
         state = self._module.params['state']
         if state == 'overridden':
@@ -105,29 +105,29 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         return commands
 
     @staticmethod
-    def _state_replaced(self, **kwargs):
+    def _state_replaced(**kwargs):
         """ The command generator when state is replaced
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
-                  to the deisred configuration
+                  to the desired configuration
         """
         commands = []
         return commands
 
     @staticmethod
-    def _state_overridden(self, **kwargs):
+    def _state_overridden(**kwargs):
         """ The command generator when state is overridden
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
-                  to the deisred configuration
+                  to the desired configuration
         """
         commands = []
         return commands
 
     @staticmethod
-    def _state_merged(self, **kwargs):
+    def _state_merged(**kwargs):
         """ The command generator when state is merged
 
         :rtype: A list
@@ -138,7 +138,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         return commands
 
     @staticmethod
-    def _state_deleted(self, **kwargs):
+    def _state_deleted(**kwargs):
         """ The command generator when state is deleted
 
         :rtype: A list
