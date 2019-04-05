@@ -2,7 +2,7 @@
 
 ### Overview
 
-The resource module builder is an Ansible playbook that helps developers scaffold and maintain an Ansible network resource module.
+The resource module builder is an Ansible Playbook that helps developers scaffold and maintain an Ansible network resource module.
 
 **Capabilities**
 - Use a defined model to scaffold a resource module directory layout and initial class files.
