@@ -51,23 +51,24 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         commands = list()
         warnings = list()
 
-        commands.extend(self.set_config())
+        existing_{{ resource }}_facts = self.get_{{ resource }}_facts()
+        commands.extend(self.set_config(existing_{{ resource }}_facts))
         if commands:
             if not self._module.check_mode:
                 self._connection.edit_config(commands)
             result['changed'] = True
         result['commands'] = commands
 
-        {{ resource }}_facts = self.get_{{ resource }}_facts()
+        changed_{{ resource }}_facts = self.get_{{ resource }}_facts()
 
-        result['before'] = {{ resource }}_facts
+        result['before'] = existing_{{ resource }}_facts
         if result['changed']:
-            result['after'] = {{ resource }}_facts
+            result['after'] = changed_{{ resource }}_facts
 
         result['warnings'] = warnings
         return result
 
-    def set_config(self):
+    def set_config(self, existing_{{ resource }}_facts):
         """ Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
 
@@ -76,7 +77,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
                   to the desired configuration
         """
         want = self._module.params['config']
-        have = self.get_{{ resource }}_facts()
+        have = existing_{{ resource }}_facts
         resp = self.set_state(want, have)
         return to_list(resp)
 
