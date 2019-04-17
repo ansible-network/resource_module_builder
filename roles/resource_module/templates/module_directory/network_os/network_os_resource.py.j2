@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# {{ rm['metadata']['copyright_str'] }}
+# {{ rm['COPYRIGHT'] }}
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 ##############################################
@@ -28,47 +28,12 @@ The module file for {{ network_os }}_{{ resource }}
 """
 
 from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
+{{ rm|to_doc(model) }}
 from ansible.module_utils.basic import AnsibleModule
 from {{ import_path }}. \
      {{ network_os }}.config.{{ resource }}.{{ resource }} import {{ resource|capitalize }}
-
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': {{ rm['metadata']['status'] }},
-                    'supported_by': {{ rm['metadata']['supported_by'] }}}
-
-
-DOCUMENTATION = """
----
-module: {{ network_os }}_{{ resource }}
-version_added: {{ rm['info']['version_added'] }}
-short_description: {{ rm['info']['short_description'] }}
-description: {{ rm['info']['description'] }}
-author: {{ rm['info']['authors'] }}
-{{ rm|to_docoptions }}
-"""
-
-EXAMPLES = """
----
-{% for example in rm['examples'] %}
-{{ lookup('file', model|dirname + '/' +example) }}
-{% endfor %}
-"""
-
-RETURN = """
-before:
-  description: The configuration prior to the model invocation.
-  returned: always
-  sample: The configuration returned will always be in the same format of the parameters above.
-after:
-  description: The resulting configuration model invocation.
-  returned: when changed
-  sample: The configuration returned will always be in the same format of the parameters above.
-commands:
-  description: The set of commands pushed to the remote device.
-  returned: always
-  type: list
-  sample: ['command 1', 'command 2', 'command 3']
-"""
 
 
 def main():
@@ -82,6 +47,7 @@ def main():
 
     result = {{ resource|capitalize }}(module).execute_module()
     module.exit_json(**result)
+
 
 if __name__ == '__main__':
     main()

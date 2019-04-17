@@ -1,54 +1,58 @@
-# Copyright (c) 2018 Ansible Project
+# Copyright (c) 2019 Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import (absolute_import, division, print_function)
-import jsonref
-import json
-import pprint
-from ansible.module_utils.six import iteritems
-
 __metaclass__ = type
 
+import yaml
+import pprint
+
+from ansible.module_utils.six import iteritems
+from ansible.module_utils.six import string_types
+from ansible.utils.display import Display
 from ansible.errors import AnsibleFilterError
 
-def dive(obj, required=False):
-    result = {}
-    if not 'type' in obj:
-        raise AnsibleFilterError('missing type key')
-    if obj['type'] == 'object':
-        result['options'] = {}
-        if not 'properties' in obj:
-            raise AnsibleFilterError('missing properties key')
-        for propkey, propval in iteritems(obj['properties']):
-            required = bool('required' in obj and propkey in obj['required'])
-            result['options'][propkey] = dive(propval, required)
-    elif obj['type'] == 'array':
-        result['options'] = {}
-        if obj.get('elements'):
-            result['elements'] = obj['elements']
-        if not 'items' in obj:
-            raise AnsibleFilterError('missing items key in array')
-        if not 'properties' in obj['items']:
-            raise AnsibleFilterError('missing properties in items')
-        for propkey, propval in iteritems(obj['items']['properties']):
-            required = bool('required' in obj['items'] and propkey in obj['items']['required'])
-            result['options'][propkey] = dive(propval, required)
-            result['type'] = 'list'
-    elif obj['type'] in ['str', 'bool', 'int']:
-        if 'default' in obj:
-            result['default'] = obj['default']
-        if 'enum' in obj:
-            result['choices'] = obj['enum']
-        if 'version_added' in obj:
-            result['version_added'] = obj['version_added']
-        result['required'] = required
-        result['type'] = obj['type']
-    return result
+OPTIONS_METADATA = ('type', 'elements', 'default', 'choices', 'required')
+SUBOPTIONS_METADATA = ('mutually_exclusive', 'required_together', 'required_one_of', 'supports_check_mode', 'required_if')
 
-def to_argspec(value):
-    data = jsonref.loads(json.dumps(value))
-    result = dive(data['schema'])
-    return str(result['options'])
+display = Display()
+
+
+def retrieve_metadata(values, out):
+    for key in OPTIONS_METADATA:
+        if key in values:
+            data = values.get(key, None)
+            if data:
+                out[key] = data
+
+
+def dive(obj, result):
+    for k, v in iteritems(obj):
+        result[k] = dict()
+        retrieve_metadata(v, result[k])
+        suboptions = v.get('suboptions')
+        if suboptions:
+            for item in SUBOPTIONS_METADATA:
+                if item in v:
+                    result[k][item] = v[item]
+            result[k]['options'] = dict()
+            dive(suboptions, result[k]['options'])
+
+
+def to_argspec(spec):
+    if 'DOCUMENTATION' not in spec:
+        raise AnsibleFilterError("missing required element 'DOCUMENTATION' in model")
+
+    if not isinstance(spec['DOCUMENTATION'], string_types):
+        raise AnsibleFilterError("value of element 'DOCUMENTATION' should be of type string")
+    result = {}
+    doc = yaml.safe_load(spec['DOCUMENTATION'])
+
+    dive(doc['options'], result)
+
+    result = pprint.pformat(result, indent=1)
+    display.debug("Arguments: %s" % result)
+    return result
 
 
 class FilterModule(object):

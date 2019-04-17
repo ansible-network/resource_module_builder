@@ -15,6 +15,14 @@
     file: "{{ model }}"
     name: rm
 
+- name: Set the module documentation variable
+  set_fact:
+    rm_docmentation: "{{ rm['DOCUMENTATION']|from_yaml }}"
+
+- name: Set the module ansible_metada variable
+  set_fact:
+    rm_ansible_metadata: "{{ rm['ANSIBLE_METADATA']|from_yaml }}"
+
 - name: "Create the {{ structure }} directory structure"
   file:
     path: "{{ parent }}/{{ item }}"
@@ -23,7 +31,7 @@
 
 - name: Copy the license file to the parent directory
   copy:
-    src: "{{ rm['metadata']['license'] }}"
+    src: "{{ rm['LICENSE'] | default('gpl-3.0.txt') }}"
     dest: "{{ parent }}/LICENSE.txt"
 
 - name: Ensure the 'collection_org' is set when 'structure' is set to collection
