@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# {{ rm['metadata']['copyright_str'] }}
+# {{ rm['COPYRIGHT'] }}
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 #############################################
@@ -26,11 +26,13 @@
 The arg spec for the {{ network_os }}_{{ resource }} module
 """
 
-class {{ resource|capitalize }}Args(object): #pylint: disable=R0903
+
+class {{ resource|capitalize }}Args(object):  # pylint: disable=R0903
     """The arg spec for the {{ network_os }}_{{ resource }} module
     """
 
     def __init__(self, **kwargs):
         pass
 
-    argument_spec = {{ rm|to_argspec }} #pylint: disable=C0301
+    argument_spec = \
+    {{ rm|to_argspec }}  # pylint: disable=C0301
