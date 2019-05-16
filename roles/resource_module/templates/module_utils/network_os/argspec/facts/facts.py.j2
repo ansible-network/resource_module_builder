@@ -15,9 +15,10 @@ class FactsArgs(object): #pylint: disable=R0903
 
     choices = [
         'all',
-        'net_configuration_{{ resource }}',
+        '{{ resource }}',
     ]
 
     argument_spec = {
-        'gather_subset': dict(default=['all'], choices=choices, type='list')
+        'gather_subset': dict(default=['!config'], type='list'),
+        'gather_network_resources': dict(default=['all'], choices=choices, type='list'),
     }

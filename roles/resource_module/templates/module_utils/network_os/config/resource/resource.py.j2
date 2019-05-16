@@ -26,7 +26,12 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
     """
 
     gather_subset = [
-        'net_configuration_{{ resource }}',
+        '!all',
+        '!min',
+    ]
+
+    gather_network_resources = [
+        {{ resource }},
     ]
 
     def get_{{ resource }}_facts(self):
@@ -35,8 +40,12 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
-        facts = Facts().get_facts(self._module, self._connection, self.gather_subset)
-        {{ resource }}_facts = facts['net_configuration'].get('{{ resource }}')
+        result = Facts().get_facts(self._module, self._connection, self.gather_subset, self.gather_network_resources)
+        try:
+            facts = result[0]
+        except TypeError, KeyError:
+            facts = result
+        {{ resource }}_facts = facts['ansible_network_resources'].get('{{ resource }}')
         if not {{ resource }}_facts:
             return []
         return {{ resource }}_facts
