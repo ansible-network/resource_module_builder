@@ -31,7 +31,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
     ]
 
     gather_network_resources = [
-        {{ resource }},
+        '{{ resource }}',
     ]
 
     def get_{{ resource }}_facts(self):
