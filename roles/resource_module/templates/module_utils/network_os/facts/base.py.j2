@@ -105,6 +105,6 @@ class FactsBase(object): #pylint: disable=R0205
             return final_cfg
 
         for key, val in iteritems(cfg_dict):
-            if val is not None:
+            if val:
                 final_cfg.update({key:val})
         return final_cfg
