@@ -100,7 +100,7 @@ def main():
     try:
         ansible_facts, warning = result
         warnings.extend(warning)
-    except TypeError, KeyError:
+    except (TypeError, KeyError):
         ansible_facts = result
 
     module.exit_json(ansible_facts=ansible_facts, warnings=warnings)

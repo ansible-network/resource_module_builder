@@ -43,7 +43,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         result = Facts().get_facts(self._module, self._connection, self.gather_subset, self.gather_network_resources)
         try:
             facts = result[0]
-        except TypeError, KeyError:
+        except (TypeError, KeyError):
             facts = result
         {{ resource }}_facts = facts['ansible_network_resources'].get('{{ resource }}')
         if not {{ resource }}_facts:
