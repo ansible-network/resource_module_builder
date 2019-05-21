@@ -12,7 +12,7 @@ from ansible.module_utils.six import string_types, iteritems
 from {{ import_path }}. \
      {{ network_os }}.argspec.facts.facts import FactsArgs
 from {{ import_path }}. \
-     {{ network_os }}.argspec.interfaces.interfaces import {{ resource|capitalize }}Args
+     {{ network_os }}.argspec.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Args
 from {{ import_path }}. \
      {{ network_os }}.facts.base import FactsBase
 from {{ import_path }}. \
