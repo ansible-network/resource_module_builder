@@ -75,7 +75,8 @@ class Facts(FactsArgs, FactsBase): #pylint: disable=R0903
         :rtype: dict
         :returns: the facts gathered
         """
-	self.ansible_facts['gather_network_resources'] = list()
+        warnings = []
+        self.ansible_facts['gather_network_resources'] = list()
         self.ansible_facts['gather_subset'] = list()
 
         valid_network_resources_subsets = self.argument_spec['gather_network_resources'].get('choices', [])
