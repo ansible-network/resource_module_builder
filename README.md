@@ -180,7 +180,7 @@ ln -s ~/github/rm_example ~/.ansible/collections/ansible_collections/cidrblock/m
        var: result
    - cidrblock.my_collection.myos_facts:
    - debug:
-       var: net_configuration
+       var: ansible_network_resources
 
 ```
 
@@ -202,7 +202,7 @@ ln -s ~/github/rm_example ~/.ansible/collections/ansible_collections/cidrblock/m
       var: result
   - myos_facts:
   - debug:
-      var: net_configuration
+      var: ansible_network_resources
 ```
 
 ### Resource Module Structure/Workflow
