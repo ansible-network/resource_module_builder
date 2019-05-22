@@ -53,16 +53,16 @@ DOCUMENTATION: |
               description:
               - The property_01
               type: str
-        state:
-          description:
-          - The state the configuration should be left in
-          type: str
-          choices:
-          - merged
-          - replaced
-          - overridden
-          - deleted
-          default: merged
+    state:
+      description:
+      - The state the configuration should be left in
+      type: str
+      choices:
+      - merged
+      - replaced
+      - overridden
+      - deleted
+      default: merged
 EXAMPLES:
   - deleted_example_01.txt
   - merged_example_01.txt

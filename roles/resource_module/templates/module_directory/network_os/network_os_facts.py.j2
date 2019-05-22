@@ -96,12 +96,9 @@ def main():
     gather_subset = module.params['gather_subset']
     gather_network_resources = module.params['gather_network_resources']
     result = Facts().get_facts(module, connection, gather_subset, gather_network_resources)
-    
-    try:
-        ansible_facts, warning = result
-        warnings.extend(warning)
-    except (TypeError, KeyError):
-        ansible_facts = result
+
+    ansible_facts, additional_warnings = result
+    warnings.extend(additional_warnings)
 
     module.exit_json(ansible_facts=ansible_facts, warnings=warnings)
 

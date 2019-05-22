@@ -156,7 +156,6 @@ ansible-playbook -e parent=~/github/rm_example/roles/my_role \
 
 **Using the collection layout**
 
-Note: As of 3/26/2019, the following PR needs to be used:
 ```
 git clone git@github.com:ansible/ansible.git
 cd ansible
