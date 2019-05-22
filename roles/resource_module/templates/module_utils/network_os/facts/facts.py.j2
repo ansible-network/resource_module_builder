@@ -110,10 +110,8 @@ class Facts(FactsArgs, FactsBase): #pylint: disable=R0903
                     key = 'ansible_net_%s' % key
                     self.ansible_facts[key] = value
 
-        if warnings:
-            return self.ansible_facts, warnings
-        else:
-            return self.ansible_facts
+        return self.ansible_facts, warnings
+
 
 
     @staticmethod

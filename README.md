@@ -156,7 +156,6 @@ ansible-playbook -e parent=~/github/rm_example/roles/my_role \
 
 **Using the collection layout**
 
-Note: As of 3/26/2019, the following PR needs to be used:
 ```
 git clone git@github.com:ansible/ansible.git
 cd ansible
@@ -181,7 +180,7 @@ ln -s ~/github/rm_example ~/.ansible/collections/ansible_collections/cidrblock/m
        var: result
    - cidrblock.my_collection.myos_facts:
    - debug:
-       var: net_configuration
+       var: ansible_network_resources
 
 ```
 
@@ -203,7 +202,7 @@ ln -s ~/github/rm_example ~/.ansible/collections/ansible_collections/cidrblock/m
       var: result
   - myos_facts:
   - debug:
-      var: net_configuration
+      var: ansible_network_resources
 ```
 
 ### Resource Module Structure/Workflow
