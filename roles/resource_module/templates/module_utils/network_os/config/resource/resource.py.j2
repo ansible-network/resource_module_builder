@@ -40,11 +40,7 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
-        result = Facts().get_facts(self._module, self._connection, self.gather_subset, self.gather_network_resources)
-        try:
-            facts = result[0]
-        except (TypeError, KeyError):
-            facts = result
+        facts, warnings = Facts().get_facts(self._module, self._connection, self.gather_subset, self.gather_network_resources)
         {{ resource }}_facts = facts['ansible_network_resources'].get('{{ resource }}')
         if not {{ resource }}_facts:
             return []
