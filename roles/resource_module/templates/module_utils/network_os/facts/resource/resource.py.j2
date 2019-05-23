@@ -59,7 +59,6 @@ class {{ resource|capitalize }}Facts(FactsBase):
         self.ansible_facts['ansible_network_resources'].update(facts)
         return self.ansible_facts
 
-
     def render_config(self, spec, conf):
         """
         Render config as dictionary structure and delete keys from spec for null values
