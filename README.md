@@ -16,8 +16,7 @@ The resource module builder is an Ansible Playbook that helps developers scaffol
 ### Usage
 
 ```
-pip install ansible
-pip install jsonref
+pip install -r requirements.txt
 ```
 
 ```
