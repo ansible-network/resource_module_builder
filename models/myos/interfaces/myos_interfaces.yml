@@ -26,11 +26,14 @@ DOCUMENTATION: |
       type: list
       elements: dict
       suboptions:
+        name:
+          type: str
+          description: The name of the <resource>
         some_string:
           type: str
           description:
           - The some_string_01
-          chocies:
+          choices:
           - choice_a
           - choice_b
           - choice_c

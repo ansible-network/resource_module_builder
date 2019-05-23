@@ -1,0 +1,13 @@
+- name: Set a fact for the expect facts
+  set_fact:
+    expected:
+    - name: rsrc_a
+      some_bool: true
+      some_string: choice_a
+    - name: rscrc_b
+      some_dict:
+        property_01: value
+      some_int: 10
+- name: Check for accurate facts
+  assert:
+    that:  "{{ ansible_network_resources['interfaces'] == expected }}"

@@ -1,0 +1,15 @@
+all:
+  children:
+    eos:
+      hosts:
+        myos101:
+          ansible_host: vyos101
+      vars:
+        ansible_network_os: vyos
+        ansible_user: admin
+        ansible_connection: network_cli
+        ansible_password: password
+        ansible_become: True
+        ansible_become_method: enable
+        ansible_become_pass: password
+        ansible_facts_modules: myos_facts
