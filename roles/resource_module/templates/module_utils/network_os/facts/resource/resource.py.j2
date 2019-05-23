@@ -55,7 +55,7 @@ class {{ resource|capitalize }}Facts(FactsBase):
                     objs.append(obj)
         facts = {}
         if objs:
-            facts['{{ resource }}'] = objs	
+            facts['{{ resource }}'] = objs
         self.ansible_facts['ansible_network_resources'].update(facts)
         return self.ansible_facts
 
