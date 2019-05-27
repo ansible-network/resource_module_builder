@@ -106,5 +106,8 @@ class FactsBase(object): #pylint: disable=R0205
 
         for key, val in iteritems(cfg_dict):
             if val:
-                final_cfg.update({key:val})
+                if isinstance(val, dict):
+                    final_cfg.update(self.generate_final_config(val))
+                else:
+                    final_cfg.update({key:val})
         return final_cfg
