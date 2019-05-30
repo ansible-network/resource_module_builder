@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # {{ rm['COPYRIGHT'] }}
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
 The {{ network_os }}_{{ resource }} class
 It is in this file where the current configuration (as dict)
@@ -19,6 +20,7 @@ from {{ import_path }}. \
      config.base import ConfigBase
 from {{ import_path }}. \
      {{ network_os }}.facts.facts import Facts
+
 
 class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
     """
@@ -40,7 +42,10 @@ class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
-        facts, warnings = Facts().get_facts(self._module, self._connection, self.gather_subset, self.gather_network_resources)
+        facts, _warnings = Facts().get_facts(self._module,
+                                             self._connection,
+                                             self.gather_subset,
+                                             self.gather_network_resources)
         {{ resource }}_facts = facts['ansible_network_resources'].get('{{ resource }}')
         if not {{ resource }}_facts:
             return []

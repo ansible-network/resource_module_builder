@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
 The myos_interfaces class
 It is in this file where the current configuration (as dict)
@@ -19,6 +20,7 @@ from ansible.module_utils. \
      config.base import ConfigBase
 from ansible.module_utils. \
      myos.facts.facts import Facts
+
 
 class Interfaces(ConfigBase, InterfacesArgs):
     """
@@ -40,7 +42,10 @@ class Interfaces(ConfigBase, InterfacesArgs):
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
-        facts, warnings = Facts().get_facts(self._module, self._connection, self.gather_subset, self.gather_network_resources)
+        facts, _warnings = Facts().get_facts(self._module,
+                                             self._connection,
+                                             self.gather_subset,
+                                             self.gather_network_resources)
         interfaces_facts = facts['ansible_network_resources'].get('interfaces')
         if not interfaces_facts:
             return []

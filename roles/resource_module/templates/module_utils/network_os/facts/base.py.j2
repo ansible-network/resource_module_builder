@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # {{ rm['COPYRIGHT'] }}
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
 The {{ network_os }} facts base class
 this contains methods common to all facts subsets
@@ -78,7 +79,8 @@ class FactsBase(object):
         :param cfg: A text string which is a line of configuration.
         :param cmd: A text string which is the command to be matched
         :param res1: A text string to be returned if the command is present
-        :param res2: A text string to be returned if the negate command is present
+        :param res2: A text string to be returned if the negate command
+                     is present
         :rtype: A text string
         :returns: A text string if match is found
         """
