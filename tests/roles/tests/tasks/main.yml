@@ -1,0 +1,4 @@
+- include: "{{ item }}"
+  loop:
+  - facts.yml
+  - argspec.yml

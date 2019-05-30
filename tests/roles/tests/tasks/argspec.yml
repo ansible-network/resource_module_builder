@@ -1,0 +1,172 @@
+- name: Set the expected response as a fact
+  set_fact:
+    expected_response:
+      before:
+      - name: rsrc_a
+        some_bool: true
+        some_string: choice_a
+      - name: rscrc_b
+        some_dict:
+          property_01: value
+        some_int: 10
+      changed: false
+      commands: []
+      failed: false
+- name: Check for correct argspec and default state
+  myos_interfaces:
+    config: "{{ ansible_network_resources['interfaces'] }}"
+  register: result
+- debug:
+    var: result
+- name: Compare the module result to the expected response
+  assert:
+    that: "{{ result == expected_response }}"
+
+
+- name: Check for correct argspec (states)
+  myos_interfaces:
+    config:
+    - name: rsrc_a
+      some_string: choice_a
+    - name: rsrc_b
+      some_bool: False
+      some_int: 10
+    - name: rsrc_c
+      some_dict:
+        property_01: a_string
+    state: "{{ state }}"
+  loop:
+  - merged
+  - deleted
+  - overridden
+  - replaced
+  loop_control:
+    loop_var: state
+
+
+- name: Check for incorrect argspec (states)
+  myos_interfaces:
+    config:
+    - name: rsrc_a
+      some_string: choice_a
+    - name: rsrc_b
+      some_bool: False
+      some_int: 10
+    - name: rsrc_c
+      some_dict:
+        property_01: a_string
+    state: wrong
+  register: result
+  ignore_errors: True
+- name: Set a fact for the expected error message
+  set_fact:
+    error: 'value of state must be one of: merged, replaced, overridden, deleted'
+- name: Confirm the error message
+  assert:
+    that: "{{ error in result['msg'] }}"
+
+
+- name: Check for incorrect argspec (choice)
+  myos_interfaces:
+    config:
+    - name: rsrc_a
+      some_string: xxxxxx
+    - name: rsrc_b
+      some_bool: False
+      some_int: 10
+    - name: rsrc_c
+      some_dict:
+        property_01: a_string
+  register: result
+  ignore_errors: True
+- name: Set a fact for the expected error message
+  set_fact:
+    error: 'value of some_string must be one of: choice_a, choice_b, choice_c, got: xxxxxx found in config'
+- name: Confirm the error message
+  assert:
+    that: "{{ error in result['msg'] }}"
+
+
+- name: Check for incorrect argspec (bad bool)
+  myos_interfaces:
+    config:
+    - name: rsrc_a
+      some_string: choice_a
+    - name: rsrc_b
+      some_bool: NotABoolean
+      some_int: 10
+    - name: rsrc_c
+      some_dict:
+        property_01: a_string
+  register: result
+  ignore_errors: True
+- name: Set a fact for the expected error message
+  set_fact:
+    error: is not a valid boolean
+- name: Confirm the error message
+  assert:
+    that: "{{ error in result['msg'] }}"
+
+
+- name: Check for incorrect argspec (not int)
+  myos_interfaces:
+    config:
+    - name: rsrc_a
+      some_string: choice_a
+    - name: rsrc_b
+      some_bool: False
+      some_int: I'm a string
+    - name: rsrc_c
+      some_dict:
+        property_01: a_string
+  register: result
+  ignore_errors: True
+- name: Set a fact for the expected error message
+  set_fact:
+    error: unable to convert to int
+- name: Confirm the error message
+  assert:
+    that: "{{ error in result['msg'] }}"
+
+
+- name: Check for incorrect argspec (invalid key)
+  myos_interfaces:
+    config:
+    - name: rsrc_a
+      some_string: choice_a
+      wrong_key: error
+    - name: rsrc_b
+      some_bool: False
+      some_int: I'm a string
+    - name: rsrc_c
+      some_dict:
+        property_01: a_string
+  register: result
+  ignore_errors: True
+- name: Set a fact for the expected error message
+  set_fact:
+    error: Unsupported parameters
+- name: Confirm the error message
+  assert:
+    that: "{{ error in result['msg'] }}"
+
+
+- name: Check for incorrect argspec (invalid property)
+  myos_interfaces:
+    config:
+    - name: rsrc_a
+      some_string: choice_a
+    - name: rsrc_b
+      some_bool: False
+      some_int: 10
+    - name: rsrc_c
+      some_dict:
+        property_99: a_string
+  register: result
+  ignore_errors: True
+- name: Set a fact for the expected error message
+  set_fact:
+    error: Unsupported parameters
+- name: Confirm the error message
+  assert:
+    that: "{{ error in result['msg'] }}"

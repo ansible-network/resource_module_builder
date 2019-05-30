@@ -1,34 +1,34 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# {{ rm['COPYRIGHT'] }}
+# Copyright 2019 Red Hat
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
-The module file for {{ network_os }}_facts
+The module file for myos_facts
 """
 
 from __future__ import absolute_import, division, print_function
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
-from {{ import_path }}. \
-     {{ network_os }}.facts.facts import Facts
+from ansible.module_utils. \
+     myos.facts.facts import Facts
 
-ANSIBLE_METADATA = {'metadata_version': '{{rm_ansible_metadata['metadata_version']}}',
-                    'status': {{rm_ansible_metadata['status']}},
-                    'supported_by': '{{rm_ansible_metadata['supported_by']}}',}
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': '<support_group>',}
 
 
 DOCUMENTATION = """
 ---
-module: {{ network_os }}_facts
-version_added: {{ rm_docmentation['version_added'] }}
-short_description: Get facts about {{ network_os }} devices.
+module: myos_facts
+version_added: 2.9
+short_description: Get facts about myos devices.
 description:
-  - Collects facts from network devices running the {{ network_os }} operating
+  - Collects facts from network devices running the myos operating
     system. This module places the facts gathered in the fact tree keyed by the
     respective resource name.  The facts module will always collect a
     base set of facts from the device and can enable or disable
     collection of additional facts.
-author: {{ rm_docmentation['author'] }}
+author: Ansible Network Engineer
 options:
   gather_subset:
     description:
@@ -55,27 +55,27 @@ options:
 
 EXAMPLES = """
 # Gather all facts
-- {{ network_os }}_facts:
+- myos_facts:
     gather_subset: all
     gather_network_resources: all
 
-# Collect only the {{ resource }} facts
-- {{ network_os }}_facts:
+# Collect only the interfaces facts
+- myos_facts:
     gather_subset:
       - !all
       - !min
     gather_network_resources:
-      - {{ resource }}
+      - interfaces
 
-# Do not collect {{ resource }} facts
-- {{ network_os }}_facts:
+# Do not collect interfaces facts
+- myos_facts:
     gather_network_resources:
-      - "!{{ resource }}"
+      - "!interfaces"
 
-# Collect {{ resource }} and minimal default facts
-- {{ network_os }}_facts:
+# Collect interfaces and minimal default facts
+- myos_facts:
     gather_subset: min
-    gather_network_resources: {{ resource }}
+    gather_network_resources: interfaces
 """
 
 RETURN = """

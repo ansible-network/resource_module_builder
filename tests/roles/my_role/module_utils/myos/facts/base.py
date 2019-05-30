@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# {{ rm['COPYRIGHT'] }}
+# Copyright 2019 Red Hat
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
-The {{ network_os }} facts base class
+The myos facts base class
 this contains methods common to all facts subsets
 """
 
@@ -14,7 +14,7 @@ from ansible.module_utils.six import iteritems
 
 class FactsBase(object):
     """
-    The {{ network_os }} facts base class
+    The myos facts base class
     """
     generated_spec = {}
     ansible_facts = {'ansible_network_resources': {}}
