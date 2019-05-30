@@ -21,7 +21,7 @@ import_paths:
   role: ansible.module_utils
   collection: "ansible_collections.{{ collection_org|default('') }}.{{ collection_name|default('') }}.plugins.module_utils"
 
-import_path: "{{ import_paths[structure] }}"
+import_path: "{{ import_paths[structure] }}.network"
 
 # all the directories that need to be built
 resource_module_directories:
