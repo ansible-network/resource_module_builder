@@ -11,10 +11,10 @@ from __future__ import absolute_import, division, print_function
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 from ansible.module_utils. \
-     myos.facts.facts import Facts
+    myos.facts.facts import Facts
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': [u'preview'],
+                    'status': ['preview'],
                     'supported_by': '<support_group>'}
 
 

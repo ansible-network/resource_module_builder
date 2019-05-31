@@ -14,12 +14,12 @@ created
 from ansible.module_utils.network.common.utils import to_list
 
 from ansible.module_utils. \
-     myos.argspec.interfaces.interfaces import InterfacesArgs
+    myos.argspec.interfaces.interfaces import InterfacesArgs
 from ansible.module_utils. \
-     myos. \
-     config.base import ConfigBase
+    myos. \
+    config.base import ConfigBase
 from ansible.module_utils. \
-     myos.facts.facts import Facts
+    myos.facts.facts import Facts
 
 
 class Interfaces(ConfigBase, InterfacesArgs):

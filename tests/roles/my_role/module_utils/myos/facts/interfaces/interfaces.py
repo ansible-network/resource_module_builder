@@ -12,7 +12,7 @@ based on the configuration.
 import re
 from copy import deepcopy
 from ansible.module_utils. \
-     myos.facts.base import FactsBase
+    myos.facts.base import FactsBase
 
 
 class InterfacesFacts(FactsBase):

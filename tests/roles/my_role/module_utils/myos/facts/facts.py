@@ -9,15 +9,15 @@ this file validates each subset of facts and selectively
 calls the appropriate facts gathering function
 """
 
-from ansible.module_utils.six import string_types, iteritems
+from ansible.module_utils.six import iteritems
 from ansible.module_utils. \
-     myos.argspec.facts.facts import FactsArgs
+    myos.argspec.facts.facts import FactsArgs
 from ansible.module_utils. \
-     myos.argspec.interfaces.interfaces import InterfacesArgs
+    myos.argspec.interfaces.interfaces import InterfacesArgs
 from ansible.module_utils. \
-     myos.facts.base import FactsBase
+    myos.facts.base import FactsBase
 from ansible.module_utils. \
-     myos.facts.interfaces.interfaces import InterfacesFacts
+    myos.facts.interfaces.interfaces import InterfacesFacts
 
 
 FACT_SUBSETS = {}
@@ -56,8 +56,8 @@ class Facts(FactsArgs, FactsBase):  # pylint: disable=R0903
                     exclude_subsets.update(minimal_gather_subset)
                     continue
                 if subset == 'all':
-                    exclude_subsets.update(valid_subsets -
-                                           minimal_gather_subset)
+                    exclude_subsets.update(
+                        valid_subsets - minimal_gather_subset)
                     continue
                 exclude = True
             else:

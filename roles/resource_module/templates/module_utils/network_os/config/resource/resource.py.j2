@@ -14,12 +14,12 @@ created
 from ansible.module_utils.network.common.utils import to_list
 
 from {{ import_path }}. \
-     {{ network_os }}.argspec.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Args
+    {{ network_os }}.argspec.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Args
 from {{ import_path }}. \
-     {{ network_os }}. \
-     config.base import ConfigBase
+    {{ network_os }}. \
+    config.base import ConfigBase
 from {{ import_path }}. \
-     {{ network_os }}.facts.facts import Facts
+    {{ network_os }}.facts.facts import Facts
 
 
 class {{ resource|capitalize }}(ConfigBase, {{ resource|capitalize }}Args):
