@@ -1,4 +1,4 @@
-
+---
 - name: "Create the resource module directory structure"
   file:
     path: "{{ parent_directory }}/{{ item }}"

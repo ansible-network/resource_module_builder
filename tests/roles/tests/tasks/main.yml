@@ -1,3 +1,4 @@
+---
 - include: "{{ item }}"
   loop:
   - facts.yml
