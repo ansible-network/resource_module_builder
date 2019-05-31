@@ -2,4 +2,4 @@
   gather_facts: no
   roles:
   - init
-  - resource_module
+  - scaffold_rm_facts

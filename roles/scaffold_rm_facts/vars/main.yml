@@ -14,7 +14,7 @@ parent_directories:
   role: ''
   collection: /plugins
 
-parent_directory: "{{ parent }}{{ parent_directories[structure] }}"
+parent_directory: "{{ rm_dest }}{{ parent_directories[structure] }}"
 
 # set the iport path based on the structure
 import_paths:
@@ -41,7 +41,7 @@ resource_module_directories:
 # each of the files to be templated
 resource_module_templates:
 - source: README.md.j2
-  destination: "{{ parent }}/README.md"
+  destination: "{{ rm_dest }}/README.md"
   overwrite: False
 - source: module_directory/network_os/network_os_resource.py.j2
   destination: "{{ parent_directory }}/{{ module_directory }}/{{ network_os }}_{{ resource }}.py"

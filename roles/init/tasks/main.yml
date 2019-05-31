@@ -1,6 +1,6 @@
-- name: Ensure 'parent' variable is set (see README.md)
+- name: Ensure 'rm_dest' variable is set (see README.md)
   assert:
-    that: parent is defined
+    that: rm_dest is defined
 
 - name: Ensure 'structure' variable is set and one of 'role' or 'collection' (see README.md)
   assert:
@@ -25,14 +25,14 @@
 
 - name: "Create the {{ structure }} directory structure"
   file:
-    path: "{{ parent }}/{{ item }}"
+    path: "{{ rm_dest }}/{{ item }}"
     state: directory
   with_items: "{{ directories[structure] }}"
 
-- name: Copy the license file to the parent directory
+- name: Copy the license file to the resource module destination directory
   copy:
     src: "{{ rm['LICENSE'] | default('gpl-3.0.txt') }}"
-    dest: "{{ parent }}/LICENSE.txt"
+    dest: "{{ rm_dest }}/LICENSE.txt"
 
 - name: Ensure the 'collection_org' is set when 'structure' is set to collection
   assert:
