@@ -111,7 +111,7 @@ class FactsBase(object):
                 child_val = self.generate_final_config(val)
                 if child_val:
                     dct = {key: child_val}
-            elif val:
+            elif val is not None:
                 dct = {key: val}
             if dct:
                 final_cfg.update(dct)
