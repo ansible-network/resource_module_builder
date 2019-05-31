@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
 The myos interfaces fact class
 It is in this file the configuration is collected from the device
@@ -11,7 +12,8 @@ based on the configuration.
 import re
 from copy import deepcopy
 from ansible.module_utils. \
-     myos.facts.base import FactsBase
+    myos.facts.base import FactsBase
+
 
 class InterfacesFacts(FactsBase):
     """ The myos interfaces fact class
@@ -25,9 +27,9 @@ class InterfacesFacts(FactsBase):
         :rtype: dictionary
         :returns: facts
         """
-        if module: #just for linting purposes
+        if module:  # just for linting purposes, remove
             pass
-        if connection:  #just for linting purposes
+        if connection:  # just for linting purposes, remove
             pass
 
         if not data:
@@ -44,8 +46,11 @@ class InterfacesFacts(FactsBase):
 
         # split the config into instances of the resource
         resource_delim = 'resource'
-        find_pattern = r'(?:^|\n)%s.*?(?=(?:^|\n)%s|$)' % (resource_delim, resource_delim)
-        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
+        find_pattern = r'(?:^|\n)%s.*?(?=(?:^|\n)%s|$)' % (resource_delim,
+                                                           resource_delim)
+        resources = [p.strip() for p in re.findall(find_pattern,
+                                                   data,
+                                                   re.DOTALL)]
 
         objs = []
         for resource in resources:
@@ -59,10 +64,10 @@ class InterfacesFacts(FactsBase):
         self.ansible_facts['ansible_network_resources'].update(facts)
         return self.ansible_facts
 
-
     def render_config(self, spec, conf):
         """
-        Render config as dictionary structure and delete keys from spec for null values
+        Render config as dictionary structure and delete keys
+          from spec for null values
 
         :param spec: The facts tree, generated from the argspec
         :param conf: The configuration
@@ -74,7 +79,8 @@ class InterfacesFacts(FactsBase):
         config['name'] = self.parse_conf_arg(conf, 'resource')
         config['some_string'] = self.parse_conf_arg(conf, 'a_string')
 
-        match = re.match(r'.*key is property01 (\S+)', conf, re.MULTILINE|re.DOTALL)
+        match = re.match(r'.*key is property01 (\S+)',
+                         conf, re.MULTILINE | re.DOTALL)
         if match:
             config['some_dict']['property_01'] = match.groups()[0]
 

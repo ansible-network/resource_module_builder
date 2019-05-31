@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # {{ rm['COPYRIGHT'] }}
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
 The {{ network_os }} {{ resource }} fact class
 It is in this file the configuration is collected from the device
@@ -11,7 +12,8 @@ based on the configuration.
 import re
 from copy import deepcopy
 from {{ import_path }}. \
-     {{ network_os }}.facts.base import FactsBase
+    {{ network_os }}.facts.base import FactsBase
+
 
 class {{ resource|capitalize }}Facts(FactsBase):
     """ The {{ network_os }} {{ resource }} fact class
@@ -25,9 +27,9 @@ class {{ resource|capitalize }}Facts(FactsBase):
         :rtype: dictionary
         :returns: facts
         """
-        if module: #just for linting purposes
+        if module:  # just for linting purposes, remove
             pass
-        if connection:  #just for linting purposes
+        if connection:  # just for linting purposes, remove
             pass
 
         if not data:
@@ -44,8 +46,11 @@ class {{ resource|capitalize }}Facts(FactsBase):
 
         # split the config into instances of the resource
         resource_delim = 'resource'
-        find_pattern = r'(?:^|\n)%s.*?(?=(?:^|\n)%s|$)' % (resource_delim, resource_delim)
-        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
+        find_pattern = r'(?:^|\n)%s.*?(?=(?:^|\n)%s|$)' % (resource_delim,
+                                                           resource_delim)
+        resources = [p.strip() for p in re.findall(find_pattern,
+                                                   data,
+                                                   re.DOTALL)]
 
         objs = []
         for resource in resources:
@@ -61,7 +66,8 @@ class {{ resource|capitalize }}Facts(FactsBase):
 
     def render_config(self, spec, conf):
         """
-        Render config as dictionary structure and delete keys from spec for null values
+        Render config as dictionary structure and delete keys
+          from spec for null values
 
         :param spec: The facts tree, generated from the argspec
         :param conf: The configuration
@@ -73,7 +79,8 @@ class {{ resource|capitalize }}Facts(FactsBase):
         config['name'] = self.parse_conf_arg(conf, 'resource')
         config['some_string'] = self.parse_conf_arg(conf, 'a_string')
 
-        match = re.match(r'.*key is property01 (\S+)', conf, re.MULTILINE|re.DOTALL)
+        match = re.match(r'.*key is property01 (\S+)',
+                         conf, re.MULTILINE | re.DOTALL)
         if match:
             config['some_dict']['property_01'] = match.groups()[0]
 

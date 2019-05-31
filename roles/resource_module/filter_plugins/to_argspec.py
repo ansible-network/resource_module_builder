@@ -1,11 +1,12 @@
 # Copyright (c) 2019 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import (absolute_import, division, print_function)
-__metaclass__ = type
+__metaclass__ = type  # pylint: disable=C0103
 
-import yaml
 import pprint
+import yaml
 
 from ansible.module_utils.six import iteritems
 from ansible.module_utils.six import string_types
@@ -13,7 +14,8 @@ from ansible.utils.display import Display
 from ansible.errors import AnsibleFilterError
 
 OPTIONS_METADATA = ('type', 'elements', 'default', 'choices', 'required')
-SUBOPTIONS_METADATA = ('mutually_exclusive', 'required_together', 'required_one_of', 'supports_check_mode', 'required_if')
+SUBOPTIONS_METADATA = ('mutually_exclusive', 'required_together',
+                       'required_one_of', 'supports_check_mode', 'required_if')
 
 display = Display()
 
@@ -27,24 +29,25 @@ def retrieve_metadata(values, out):
 
 
 def dive(obj, result):
-    for k, v in iteritems(obj):
+    for k, val in iteritems(obj):
         result[k] = dict()
-        retrieve_metadata(v, result[k])
-        suboptions = v.get('suboptions')
+        retrieve_metadata(val, result[k])
+        suboptions = val.get('suboptions')
         if suboptions:
             for item in SUBOPTIONS_METADATA:
-                if item in v:
-                    result[k][item] = v[item]
+                if item in val:
+                    result[k][item] = val[item]
             result[k]['options'] = dict()
             dive(suboptions, result[k]['options'])
 
-
 def to_argspec(spec):
     if 'DOCUMENTATION' not in spec:
-        raise AnsibleFilterError("missing required element 'DOCUMENTATION' in model")
+        raise AnsibleFilterError("missing required element 'DOCUMENTATION'"
+                                 " in model")
 
     if not isinstance(spec['DOCUMENTATION'], string_types):
-        raise AnsibleFilterError("value of element 'DOCUMENTATION' should be of type string")
+        raise AnsibleFilterError("value of element 'DOCUMENTATION'"
+                                 " should be of type string")
     result = {}
     doc = yaml.safe_load(spec['DOCUMENTATION'])
 

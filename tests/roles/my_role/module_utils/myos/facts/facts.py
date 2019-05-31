@@ -1,33 +1,44 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
 The facts class for myos
 this file validates each subset of facts and selectively
 calls the appropriate facts gathering function
 """
 
-from ansible.module_utils.six import string_types, iteritems
+from ansible.module_utils.six import iteritems
 from ansible.module_utils. \
-     myos.argspec.facts.facts import FactsArgs
+    myos.argspec.facts.facts import FactsArgs
 from ansible.module_utils. \
-     myos.argspec.interfaces.interfaces import InterfacesArgs
+    myos.argspec.interfaces.interfaces import InterfacesArgs
 from ansible.module_utils. \
-     myos.facts.base import FactsBase
+    myos.facts.base import FactsBase
 from ansible.module_utils. \
-     myos.facts.interfaces.interfaces import InterfacesFacts
+    myos.facts.interfaces.interfaces import InterfacesFacts
 
 
 FACT_SUBSETS = {}
 
-class Facts(FactsArgs, FactsBase): #pylint: disable=R0903
+
+class Facts(FactsArgs, FactsBase):  # pylint: disable=R0903
     """ The fact class for myos
     """
 
     VALID_GATHER_SUBSETS = frozenset(FACT_SUBSETS.keys())
 
-    def generate_runable_subsets(self, module, subsets, valid_subsets):
+    @staticmethod
+    def gen_runable(module, subsets, valid_subsets):
+        """ Generate the runable subset
+
+        :param module: The module instance
+        :param subsets: The provided subsets
+        :param valid_subsets: The valid subsets
+        :rtype: list
+        :returns: The runable subsets
+        """
         runable_subsets = set()
         exclude_subsets = set()
         minimal_gather_subset = frozenset(['default'])
@@ -45,7 +56,8 @@ class Facts(FactsArgs, FactsBase): #pylint: disable=R0903
                     exclude_subsets.update(minimal_gather_subset)
                     continue
                 if subset == 'all':
-                    exclude_subsets.update(valid_subsets - minimal_gather_subset)
+                    exclude_subsets.update(
+                        valid_subsets - minimal_gather_subset)
                     continue
                 exclude = True
             else:
@@ -65,33 +77,43 @@ class Facts(FactsArgs, FactsBase): #pylint: disable=R0903
 
         return runable_subsets
 
-    def get_facts(self, module, connection, gather_subset=['!config'], gather_network_resources=['all']):
+    def get_facts(self, module, connection, gather_subset=None,
+                  gather_network_resources=None):
         """ Collect the facts for myos
 
         :param module: The module instance
         :param connection: The device connection
         :param gather_subset: The facts subset to collect
-	:param gather_network_resources: The resource subset to collect
+        :param gather_network_resources: The resource subset to collect
         :rtype: dict
         :returns: the facts gathered
         """
+        if not gather_subset:
+            gather_subset = ['!config']
+        if not gather_network_resources:
+            gather_network_resources = ['all']
         warnings = []
         self.ansible_facts['gather_network_resources'] = list()
         self.ansible_facts['gather_subset'] = list()
 
-        valid_network_resources_subsets = self.argument_spec['gather_network_resources'].get('choices', [])
-        if valid_network_resources_subsets and 'all' in valid_network_resources_subsets:
-            valid_network_resources_subsets.remove('all')
+        valnetres = self.argument_spec['gather_network_resources'].\
+            get('choices', [])
+        if valnetres:
+            if 'all' in valnetres:
+                valnetres.remove('all')
 
-        if valid_network_resources_subsets:
-            resources_runable_subsets = self.generate_runable_subsets(module, gather_network_resources, valid_network_resources_subsets)
-            if resources_runable_subsets:
-                self.ansible_facts['gather_network_resources'] = list(resources_runable_subsets)
-                for attr in resources_runable_subsets:
+        if valnetres:
+            restorun = self.gen_runable(module, gather_network_resources,
+                                        valnetres)
+            if restorun:
+                self.ansible_facts['gather_network_resources'] = list(restorun)
+                for attr in restorun:
                     getattr(self, '_get_%s' % attr, {})(module, connection)
 
         if self.VALID_GATHER_SUBSETS:
-            runable_subsets = self.generate_runable_subsets(module, gather_subset, self.VALID_GATHER_SUBSETS)
+            runable_subsets = self.gen_runable(module,
+                                               gather_subset,
+                                               self.VALID_GATHER_SUBSETS)
 
             if runable_subsets:
                 facts = dict()
@@ -112,9 +134,8 @@ class Facts(FactsArgs, FactsBase): #pylint: disable=R0903
 
         return self.ansible_facts, warnings
 
-
-
     @staticmethod
     def _get_interfaces(module, connection):
-        return InterfacesFacts(InterfacesArgs. \
-               argument_spec, 'config', 'options').populate_facts(module, connection)
+        return InterfacesFacts(
+            InterfacesArgs.argument_spec,
+            'config', 'options').populate_facts(module, connection)

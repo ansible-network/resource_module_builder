@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
 The module file for myos_facts
 """
@@ -10,11 +11,11 @@ from __future__ import absolute_import, division, print_function
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 from ansible.module_utils. \
-     myos.facts.facts import Facts
+    myos.facts.facts import Facts
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
-                    'supported_by': '<support_group>',}
+                    'supported_by': '<support_group>'}
 
 
 DOCUMENTATION = """
@@ -82,6 +83,7 @@ RETURN = """
 See the respective resource module parameters for the tree.
 """
 
+
 def main():
     """
     Main entry point for module execution
@@ -93,15 +95,17 @@ def main():
     warnings = ['default value for `gather_subset` \
                 will be changed to `min` from `!config` v2.11 onwards']
 
-    connection = Connection(module._socket_path) #pylint: disable=W0212
+    connection = Connection(module._socket_path)  # pylint: disable=W0212
     gather_subset = module.params['gather_subset']
     gather_network_resources = module.params['gather_network_resources']
-    result = Facts().get_facts(module, connection, gather_subset, gather_network_resources)
+    result = Facts().get_facts(module, connection, gather_subset,
+                               gather_network_resources)
 
     ansible_facts, additional_warnings = result
     warnings.extend(additional_warnings)
 
     module.exit_json(ansible_facts=ansible_facts, warnings=warnings)
+
 
 if __name__ == '__main__':
     main()
