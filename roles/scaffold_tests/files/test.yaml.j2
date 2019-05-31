@@ -1,0 +1,12 @@
+- hosts: all
+  module_defaults:
+    {{ facts_module }}:
+      gather_subset: min
+      gather_network_resources:
+      - {{ resource }}
+  gather_facts: true
+  pre_tasks:
+  - import_role:
+      name: "{{ rm_role_path }}"
+  roles:
+  - {{ module }}

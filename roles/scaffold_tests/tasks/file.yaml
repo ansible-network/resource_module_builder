@@ -1,0 +1,9 @@
+- name: Determine if the file is a template or just a file
+  set_fact:
+    kind: "{{ file['path'].endswith('.j2') }}"
+    fn_lookup:
+      true: is_template.yaml
+      false: is_file.yaml
+
+- name: Depending on the file type, include the tasks
+  include: "{{ fn_lookup[kind] }}"

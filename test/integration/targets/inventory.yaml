@@ -1,0 +1,12 @@
+all:
+  hosts:
+    <update appliance name>:
+      ansible_network_os: myos
+      ansible_user: "{{ lookup('env', 'ansible_ssh_user') }}"
+      ansible_user: "{{ lookup('env', 'ansible_ssh_user') }}"
+      ansible_password: "{{ lookup('env', 'ansible_ssh_pass') }}"
+      ansible_become_pass: "{{ lookup('env', 'ansible_become_pass') }}"
+      ansible_become: True
+      ansible_become_method: enable
+      ansible_facts_modules: myos_facts
+      ansible_connection: network_cli

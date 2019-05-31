@@ -1,0 +1,29 @@
+- name: "Create the test directory structure"
+  file:
+    path: "{{ parent_directory }}/{{ item }}"
+    state: directory
+  with_items: "{{ test_directories }}"
+
+- name: Collect all files in the files directory
+  find:
+    paths: "{{ role_path }}/files"
+    patterns:
+    - "*"
+    recurse: yes
+  register: files
+
+- name: Set a fact for the role directory when relative
+  set_fact:
+    rm_role_path: "{{ playbook_dir + '/' + rm_dest }}"
+  when: not rm_dest.startswith('/')
+
+- name: Set a fact for the role directory when absolute
+  set_fact:
+    rm_role_path: "{{ rm_dest }}"
+  when: rm_dest.startswith('/')
+
+- name: Include the tasks to process each file found
+  include: file.yaml
+  loop: "{{ files['files'] }}"
+  loop_control:
+    loop_var: file

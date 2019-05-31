@@ -1,0 +1,11 @@
+- name: Collect common test cases
+  find:
+    paths: "{{ role_path }}/tests/common"
+    patterns: "{{ testcase }}.yaml"
+    use_regex: true
+  connection: local
+  register: test_cases
+
+- include: cli.yaml
+  tags:
+  - 'cli'

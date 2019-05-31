@@ -1,0 +1,21 @@
+# basic vars to make the templates cleaner
+network_os: "{{ rm['NETWORK_OS'] }}"
+resource: "{{ rm['RESOURCE'] }}"
+
+module: "{{ network_os }}_{{ resource }}"
+facts_module: "{{ network_os }}_facts"
+
+test_root: "{{ network_os }}_{{ resource }}"
+
+parent_directory: "{{ test_dest }}"
+
+# all the directories that need to be built
+test_directories:
+- "{{ test_root }}/"
+- "{{ test_root }}/defaults"
+- "{{ test_root }}/meta"
+- "{{ test_root }}/tasks"
+- "{{ test_root }}/tests"
+- "{{ test_root }}/tests/common"
+
+test_templates: []

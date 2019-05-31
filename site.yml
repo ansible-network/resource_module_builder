@@ -3,3 +3,4 @@
   roles:
   - init
   - scaffold_rm_facts
+  - scaffold_tests

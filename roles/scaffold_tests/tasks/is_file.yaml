@@ -1,0 +1,14 @@
+- name: Set a fact for the dest file name
+  set_fact:
+    dest_fname: "{{ file['path'][(role_path + '/files/')|length:]|replace('module_name', module) }}"
+
+- name: Check to see if the file exists
+  stat:
+    path: "{{ test_root }}/{{ file['path'] }}"
+  register: file_stat
+
+- name: Create the file, if it doesn't exist already or override is set
+  copy:
+    src: "{{ file['path'] }}"
+    dest: "{{ parent_directory }}/{{ dest_fname }}"
+  when: not file_stat.stat.exists
