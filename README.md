@@ -76,33 +76,37 @@ ansible-playbook -e parent=~/github/rm_example \
 │   │   └── myos_interfaces.py
 │   └── module_utils
 │       ├── __init__.py
-│       └── myos
-│           ├── argspec
-│           │   ├── facts
-│           │   │   ├── facts.py
-│           │   │   └── __init__.py
-│           │   ├── __init__.py
-│           │   └── interfaces
-│           │       ├── __init__.py
-│           │       └── interfaces.py
-│           ├── config
-│           │   ├── base.py
-│           │   ├── __init__.py
-│           │   └── interfaces
-│           │       ├── __init__.py
-│           │       └── interfaces.py
-│           ├── facts
-│           │   ├── base.py
-│           │   ├── facts.py
-│           │   ├── __init__.py
-│           │   └── interfaces
-│           │       ├── __init__.py
-│           │       └── interfaces.py
+│       └── network
 │           ├── __init__.py
-│           └── utils
+│           └── myos
+│               ├── argspec
+│               │   ├── facts
+│               │   │   ├── facts.py
+│               │   │   └── __init__.py
+│               │   ├── __init__.py
+│               │   └── interfaces
+│               │       ├── __init__.py
+│               │       └── interfaces.py
+│               ├── config
+│               │   ├── base.py
+│               │   ├── __init__.py
+│               │   └── interfaces
+│               │       ├── __init__.py
+│               │       └── interfaces.py
+│               ├── facts
+│               │   ├── base.py
+│               │   ├── facts.py
+│               │   ├── __init__.py
+│               │   └── interfaces
+│               │       ├── __init__.py
+│               │       └── interfaces.py
 │               ├── __init__.py
-│               └── utils.py
-└── roles
+│               └── utils
+│                   ├── __init__.py
+│                   └── utils.py
+├── README.md
+├── roles
+
  
 ```
 **Role directory layout**
@@ -118,40 +122,44 @@ ansible-playbook -e parent=~/github/rm_example/roles/my_role \
 ```
 
 ```
-└── roles
-    └── my_role
-        ├── library
-        │   ├── __init__.py
-        │   ├── myos_facts.py
-        │   └── myos_interfaces.py
-        └── module_utils
-            ├── __init__.py
-            └── myos
-                ├── argspec
-                │   ├── facts
-                │   │   ├── facts.py
-                │   │   └── __init__.py
-                │   ├── __init__.py
-                │   └── interfaces
-                │       ├── __init__.py
-                │       └── interfaces.py
-                ├── config
-                │   ├── base.py
-                │   ├── __init__.py
-                │   └── interfaces
-                │       ├── __init__.py
-                │       └── interfaces.py
-                ├── facts
-                │   ├── base.py
-                │   ├── facts.py
-                │   ├── __init__.py
-                │   └── interfaces
-                │       ├── __init__.py
-                │       └── interfaces.py
-                ├── __init__.py
-                └── utils
-                    ├── __init__.py
-                    └── utils.py
+roles
+└── my_role
+    ├── library
+    │   ├── __init__.py
+    │   ├── myos_facts.py
+    │   └── myos_interfaces.py
+    ├── LICENSE.txt
+    ├── module_utils
+    │   ├── __init__.py
+    │   └── network
+    │       ├── __init__.py
+    │       └── myos
+    │           ├── argspec
+    │           │   ├── facts
+    │           │   │   ├── facts.py
+    │           │   │   └── __init__.py
+    │           │   ├── __init__.py
+    │           │   └── interfaces
+    │           │       ├── __init__.py
+    │           │       └── interfaces.py
+    │           ├── config
+    │           │   ├── base.py
+    │           │   ├── __init__.py
+    │           │   └── interfaces
+    │           │       ├── __init__.py
+    │           │       └── interfaces.py
+    │           ├── facts
+    │           │   ├── base.py
+    │           │   ├── facts.py
+    │           │   ├── __init__.py
+    │           │   └── interfaces
+    │           │       ├── __init__.py
+    │           │       └── interfaces.py
+    │           ├── __init__.py
+    │           └── utils
+    │               ├── __init__.py
+    │               └── utils.py
+    └── README.md
 ```
 
 **Using the collection layout**
