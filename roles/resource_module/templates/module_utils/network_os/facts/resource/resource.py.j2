@@ -84,9 +84,12 @@ class {{ resource|capitalize }}Facts(FactsBase):
         if match:
             config['some_dict']['property_01'] = match.groups()[0]
 
-        try:
-            config['some_bool'] = bool(self.parse_conf_arg(conf, 'a_bool'))
-        except TypeError:
+        a_bool = self.parse_conf_arg(conf, 'a_bool')
+        if a_bool == 'true':
+            config['some_bool'] = True
+        elif a_bool == 'false':
+            config['some_bool'] = False
+        else:
             config['some_bool'] = None
 
         try:
