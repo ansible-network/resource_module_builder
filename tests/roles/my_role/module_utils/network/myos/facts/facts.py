@@ -10,13 +10,13 @@ calls the appropriate facts gathering function
 """
 
 from ansible.module_utils.six import iteritems
-from ansible.module_utils. \
+from ansible.module_utils.network. \
     myos.argspec.facts.facts import FactsArgs
-from ansible.module_utils. \
+from ansible.module_utils.network. \
     myos.argspec.interfaces.interfaces import InterfacesArgs
-from ansible.module_utils. \
+from ansible.module_utils.network. \
     myos.facts.base import FactsBase
-from ansible.module_utils. \
+from ansible.module_utils.network. \
     myos.facts.interfaces.interfaces import InterfacesFacts
 
 

@@ -10,7 +10,7 @@ The module file for myos_facts
 from __future__ import absolute_import, division, print_function
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
-from ansible.module_utils. \
+from ansible.module_utils.network. \
     myos.facts.facts import Facts
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',

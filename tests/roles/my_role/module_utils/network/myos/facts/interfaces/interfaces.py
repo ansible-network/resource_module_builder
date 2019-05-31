@@ -11,7 +11,7 @@ based on the configuration.
 """
 import re
 from copy import deepcopy
-from ansible.module_utils. \
+from ansible.module_utils.network. \
     myos.facts.base import FactsBase
 
 
