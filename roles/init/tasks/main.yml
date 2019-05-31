@@ -1,8 +1,9 @@
+---
 - name: Ensure 'parent' variable is set (see README.md)
   assert:
     that: parent is defined
 
-- name: Ensure 'structure' variable is set and one of 'role' or 'collection' (see README.md)
+- name: Ensure 'structure' variable is 'role' or 'collection' (see README.md)
   assert:
     that: structure is defined and structure in ['role', 'collection']
 
@@ -34,12 +35,12 @@
     src: "{{ rm['LICENSE'] | default('gpl-3.0.txt') }}"
     dest: "{{ parent }}/LICENSE.txt"
 
-- name: Ensure the 'collection_org' is set when 'structure' is set to collection
+- name: Ensure the 'collection_org' is set when 'structure' is collection
   assert:
     that: collection_org is defined
   when: structure == 'collection'
 
-- name: Ensure the 'collection_name' is set when 'structure' is set to collection
+- name: Ensure the 'collection_name' is set when 'structure' is collection
   assert:
     that: collection_name is defined
   when: structure == 'collection'

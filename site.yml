@@ -1,5 +1,6 @@
+---
 - hosts: localhost
-  gather_facts: no
+  gather_facts: false
   roles:
-  - init
-  - resource_module
+    - init
+    - resource_module
