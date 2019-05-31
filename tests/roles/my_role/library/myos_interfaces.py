@@ -181,7 +181,7 @@ commands:
 
 # pylint: disable=C0413
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils. \
+from ansible.module_utils.network. \
     myos.config.interfaces.interfaces import Interfaces
 # pylint: enable=C0413
 

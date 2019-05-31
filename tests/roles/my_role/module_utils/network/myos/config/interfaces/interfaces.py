@@ -13,12 +13,12 @@ created
 
 from ansible.module_utils.network.common.utils import to_list
 
-from ansible.module_utils. \
+from ansible.module_utils.network. \
     myos.argspec.interfaces.interfaces import InterfacesArgs
-from ansible.module_utils. \
+from ansible.module_utils.network. \
     myos. \
     config.base import ConfigBase
-from ansible.module_utils. \
+from ansible.module_utils.network. \
     myos.facts.facts import Facts
 
 
