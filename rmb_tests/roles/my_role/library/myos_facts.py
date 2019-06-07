@@ -14,7 +14,7 @@ from ansible.module_utils.network. \
     myos.facts.facts import Facts
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': ['preview'],
+                    'status': [u'preview'],
                     'supported_by': '<support_group>'}
 
 
