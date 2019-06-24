@@ -10,19 +10,12 @@ is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to it's desired end-state is
 created
 """
-
+from ansible.module_utils.network.common.config.base import ConfigBase
 from ansible.module_utils.network.common.utils import to_list
-
-from ansible.module_utils.network. \
-    myos.argspec.interfaces.interfaces import InterfacesArgs
-from ansible.module_utils.network. \
-    myos. \
-    config.base import ConfigBase
-from ansible.module_utils.network. \
-    myos.facts.facts import Facts
+from ansible.module_utils.network.myos.facts.facts import Facts
 
 
-class Interfaces(ConfigBase, InterfacesArgs):
+class Interfaces(ConfigBase):
     """
     The myos_interfaces class
     """
@@ -36,16 +29,16 @@ class Interfaces(ConfigBase, InterfacesArgs):
         'interfaces',
     ]
 
+    def __init__(self, module):
+        super(Interfaces, self).__init__(module)
+
     def get_interfaces_facts(self):
         """ Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
-        facts, _warnings = Facts().get_facts(self._module,
-                                             self._connection,
-                                             self.gather_subset,
-                                             self.gather_network_resources)
+        facts, _warnings = Facts(self._module).get_facts(self.gather_subset, self.gather_network_resources)
         interfaces_facts = facts['ansible_network_resources'].get('interfaces')
         if not interfaces_facts:
             return []

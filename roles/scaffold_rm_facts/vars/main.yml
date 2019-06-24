@@ -55,14 +55,8 @@ resource_module_templates:
 - source: module_utils/network_os/argspec/resource/resource.py.j2
   destination: "{{ parent_directory }}/module_utils/network/{{ network_os }}/argspec/{{ resource }}/{{ resource }}.py"
   overwrite: True
-- source: module_utils/network_os/config/base.py.j2
-  destination: "{{ parent_directory }}/module_utils/network/{{ network_os }}/config/base.py"
-  overwrite: False
 - source: module_utils/network_os/config/resource/resource.py.j2
   destination: "{{ parent_directory }}/module_utils/network/{{ network_os }}/config/{{ resource }}/{{ resource }}.py"
-  overwrite: False
-- source: module_utils/network_os/facts/base.py.j2
-  destination: "{{ parent_directory }}/module_utils/network/{{ network_os }}/facts/base.py"
   overwrite: False
 - source: module_utils/network_os/facts/facts.py.j2
   destination: "{{ parent_directory}}/module_utils/network/{{ network_os }}/facts/facts.py"

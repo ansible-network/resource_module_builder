@@ -27,15 +27,13 @@ The module file for {{ network_os }}_{{ resource }}
 """
 
 from __future__ import absolute_import, division, print_function
-__metaclass__ = type  # pylint: disable=C0103
+__metaclass__ = type
 
 {{ rm|to_doc(model) }}
 
-# pylint: disable=C0413
 from ansible.module_utils.basic import AnsibleModule
-from {{ import_path }}. \
-    {{ network_os }}.config.{{ resource }}.{{ resource }} import {{ resource|capitalize }}
-# pylint: enable=C0413
+from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Args
+from {{ import_path }}.{{ network_os }}.config.{{ resource }}.{{ resource }} import {{ resource|capitalize }}
 
 
 def main():
@@ -44,7 +42,7 @@ def main():
 
     :returns: the result form module invocation
     """
-    module = AnsibleModule(argument_spec={{ resource|capitalize }}.argument_spec,
+    module = AnsibleModule(argument_spec={{ resource|capitalize }}Args.argument_spec,
                            supports_check_mode=True)
 
     result = {{ resource|capitalize }}(module).execute_module()
