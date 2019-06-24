@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#
 # -*- coding: utf-8 -*-
 # {{ rm['COPYRIGHT'] }}
 # GNU General Public License v3.0+
@@ -30,7 +30,7 @@ class {{ resource|capitalize }}(ConfigBase):
     ]
 
     def __init__(self, module):
-        super(Interfaces, self).__init__(module)
+        super({{ resource|capitalize }}, self).__init__(module)
 
     def get_{{ resource }}_facts(self):
         """ Get the 'facts' (the current configuration)
