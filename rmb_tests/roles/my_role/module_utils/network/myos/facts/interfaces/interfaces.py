@@ -112,4 +112,4 @@ class InterfacesFacts(object):
         except TypeError:
             config['some_int'] = None
 
-        return utils.generate_final_config(config)
+        return utils.remove_empties(config)
