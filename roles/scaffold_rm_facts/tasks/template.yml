@@ -1,6 +1,6 @@
 - name: Check to see if the file exists
   stat:
-    path: "{{ parent_directory}}/{{ template['destination'] }}"
+    path: "{{ template['destination'] }}"
   register: file_stat
 
 - name: Create the file, if it doesnt exist already or override is set
