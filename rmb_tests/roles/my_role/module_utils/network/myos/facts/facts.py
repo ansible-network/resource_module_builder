@@ -19,6 +19,7 @@ FACT_RESOURCE_SUBSETS = dict(
     interfaces=InterfacesFacts,
 )
 
+
 class Facts(FactsBase):
     """ The fact class for myos
     """

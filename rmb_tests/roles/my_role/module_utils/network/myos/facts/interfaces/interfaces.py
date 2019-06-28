@@ -22,7 +22,7 @@ class InterfacesFacts(object):
 
     def __init__(self, module, subspec='config', options='options'):
         self._module = module
-        self.argument_spec =  InterfacesArgs.argument_spec
+        self.argument_spec = InterfacesArgs.argument_spec
         spec = deepcopy(self.argument_spec)
         if subspec:
             if options:
