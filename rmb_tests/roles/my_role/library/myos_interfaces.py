@@ -27,7 +27,7 @@ The module file for myos_interfaces
 """
 
 from __future__ import absolute_import, division, print_function
-__metaclass__ = type  # pylint: disable=C0103
+__metaclass__ = type
 
 ANSIBLE_METADATA = {
     'metadata_version': '1.1',
@@ -179,11 +179,9 @@ commands:
 """
 
 
-# pylint: disable=C0413
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.network. \
-    myos.config.interfaces.interfaces import Interfaces
-# pylint: enable=C0413
+from ansible.module_utils.network.myos.argspec.interfaces.interfaces import InterfacesArgs
+from ansible.module_utils.network.myos.config.interfaces.interfaces import Interfaces
 
 
 def main():
@@ -192,7 +190,7 @@ def main():
 
     :returns: the result form module invocation
     """
-    module = AnsibleModule(argument_spec=Interfaces.argument_spec,
+    module = AnsibleModule(argument_spec=InterfacesArgs.argument_spec,
                            supports_check_mode=True)
 
     result = Interfaces(module).execute_module()
