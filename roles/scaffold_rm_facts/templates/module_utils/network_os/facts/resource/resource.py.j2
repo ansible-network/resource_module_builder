@@ -72,7 +72,7 @@ class {{ resource|capitalize }}Facts(object):
                 if obj:
                     objs.append(obj)
 
-        self.ansible_facts['ansible_network_resources'].pop('{{ resource }}', None)
+        ansible_facts['ansible_network_resources'].pop('{{ resource }}', None)
         facts = {}
         if objs:
             params = utils.validate_config(self.argument_spec, {'config': objs})
