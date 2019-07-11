@@ -13,6 +13,11 @@ created
 from ansible.module_utils.network.common.cfg.base import ConfigBase
 from ansible.module_utils.network.common.utils import to_list
 from {{ import_path }}.{{ network_os }}.facts.facts import Facts
+{% if transport.netconf %}
+from ansible.module_utils.network.netconf.netconf import locked_config
+from ansible.module_utils.network.common.netconf import (build_root_xml_node,
+                                                         build_child_xml_node)
+{% endif %}
 
 
 class {{ resource|capitalize }}(ConfigBase):
@@ -51,8 +56,29 @@ class {{ resource|capitalize }}(ConfigBase):
         :returns: The result from module execution
         """
         result = {'changed': False}
-        commands = list()
+{% if transport.netconf %}
+        existing_{{ resource }}_facts = self.get_{{ resource }}_facts()
+        config_xmls = self.set_config(existing_{{ resource }}_facts)
+
+        with locked_config(self._module):
+            for config_xml in to_list(config_xmls):
+                diff = self._module._connectionload_config(self._module, config_xml, [])
+
+            commit = not self._module.check_mode
+            if diff:
+                if commit:
+                    self._module._connection.commit_configuration(self._module)
+                else:
+                    self._module._connection.discard_changes(self._module)
+                result['changed'] = True
+
+                if self._module._diff:
+                    result['diff'] = {'prepared': diff}
+
+        result['xml'] = config_xmls
+{% else %}
         warnings = list()
+        commands = list()
 
         existing_{{ resource }}_facts = self.get_{{ resource }}_facts()
         commands.extend(self.set_config(existing_{{ resource }}_facts))
@@ -62,6 +88,7 @@ class {{ resource|capitalize }}(ConfigBase):
             result['changed'] = True
         result['commands'] = commands
 
+{% endif %}
         changed_{{ resource }}_facts = self.get_{{ resource }}_facts()
 
         result['before'] = existing_{{ resource }}_facts
@@ -93,6 +120,23 @@ class {{ resource|capitalize }}(ConfigBase):
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
+{% if transport.netconf %}
+        root = build_root_xml_node('{{ resource }}')
+        state = self._module.params['state']
+        if state == 'overridden':
+            config_xmls = self._state_overridden(want, have)
+        elif state == 'deleted':
+            config_xmls = self._state_deleted(want, have)
+        elif state == 'merged':
+            config_xmls = self._state_merged(want, have)
+        elif state == 'replaced':
+            config_xmls = self._state_replaced(want, have)
+
+        for xml in config_xmls:
+            root.append(xml)
+
+        return self._module._connection.tostring(root)
+{% else %}
         state = self._module.params['state']
         if state == 'overridden':
             kwargs = {}
@@ -107,7 +151,47 @@ class {{ resource|capitalize }}(ConfigBase):
             kwargs = {}
             commands = self._state_replaced(**kwargs)
         return commands
+{% endif %}
+{% if transport.netconf %}
+    def _state_replaced(self, want, have):
+        """ The command generator when state is replaced
 
+        :rtype: A list
+        :returns: the xml necessary to migrate the current configuration
+                  to the desired configuration
+        """
+        intf_xml = []
+        return intf_xml
+
+    def _state_overridden(self, want, have):
+        """ The command generator when state is overridden
+
+        :rtype: A list
+        :returns: the xml necessary to migrate the current configuration
+                  to the desired configuration
+        """
+        intf_xml = []
+        return intf_xml
+    def _state_deleted(self, want, have):
+        """ The command generator when state is deleted
+
+        :rtype: A list
+        :returns: the xml necessary to migrate the current configuration
+                  to the desired configuration
+        """
+        intf_xml = []
+        return intf_xml
+
+    def _state_merged(self, want, have):
+        """ The command generator when state is merged
+
+        :rtype: A list
+        :returns: the xml necessary to migrate the current configuration
+                  to the desired configuration
+        """
+        intf_xml = []
+        return intf_xml
+{% else %}
     @staticmethod
     def _state_replaced(**kwargs):
         """ The command generator when state is replaced
@@ -151,3 +235,4 @@ class {{ resource|capitalize }}(ConfigBase):
         """
         commands = []
         return commands
+{% endif %}
