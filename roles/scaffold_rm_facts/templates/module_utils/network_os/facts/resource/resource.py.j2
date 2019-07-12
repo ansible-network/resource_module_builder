@@ -9,11 +9,24 @@ It is in this file the configuration is collected from the device
 for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
+{% if not transport.netconf %}
 import re
+{% endif %}
 from copy import deepcopy
 
+{% if transport.netconf %}
+from ansible.module_utils._text import to_bytes
+{% endif %}
 from ansible.module_utils.network.common import utils
 from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Args
+{% if transport.netconf %}
+from ansible.module.utils.six import string_types
+try:
+    from lxml import etree
+    HAS_LXML = True
+except ImportError:
+    HAS_LXML = False
+{% endif %}
 
 
 class {{ resource|capitalize }}Facts(object):
@@ -42,6 +55,25 @@ class {{ resource|capitalize }}Facts(object):
         :rtype: dictionary
         :returns: facts
         """
+{% if transport.netconf %}
+        if not HAS_LXML:
+            self._module.fail_json(msg='lxml is not installed.')
+
+        if not data:
+            config_filter = """
+                <configuration>
+                  <resource>
+                  </resource>
+                </configuration>
+                """
+            data = connection.get_configuration(filter=config_filter)
+
+        if isinstance(data, string_types):
+            data = etree.fromstring(to_bytes(data,
+                                             errors='surrogate_then_replace'))
+
+        resources = data.xpath('configuration/resources/resource')
+{% else %}
         if connection:  # just for linting purposes, remove
             pass
 
@@ -64,6 +96,7 @@ class {{ resource|capitalize }}Facts(object):
         resources = [p.strip() for p in re.findall(find_pattern,
                                                    data,
                                                    re.DOTALL)]
+{% endif %}
 
         objs = []
         for resource in resources:
@@ -72,11 +105,21 @@ class {{ resource|capitalize }}Facts(object):
                 if obj:
                     objs.append(obj)
 
+{% if transport.netconf %}
+        facts = {}
+        if objs:
+            facts['resource'] = []
+            params = utils.validate_config(self.argument_spec,
+                                           {'config': objs})
+            for cfg in params['config']:
+                facts['resource'].append(utils.remove_empties(cfg))
+{% else %}
         ansible_facts['ansible_network_resources'].pop('{{ resource }}', None)
         facts = {}
         if objs:
             params = utils.validate_config(self.argument_spec, {'config': objs})
             facts['{{ resource }}'] = params['config']
+{% endif %}
 
         ansible_facts['ansible_network_resources'].update(facts)
         return ansible_facts
@@ -92,7 +135,10 @@ class {{ resource|capitalize }}Facts(object):
         :returns: The generated config
         """
         config = deepcopy(spec)
-
+{% if transport.netconf %}
+        config['name'] = utils.get_xml_conf_arg(conf, 'name')
+        config['some_value'] = utils.get_xml_conf_arg(conf, 'some_value')
+{% else %}
         config['name'] = utils.parse_conf_arg(conf, 'resource')
         config['some_string'] = utils.parse_conf_arg(conf, 'a_string')
 
@@ -113,5 +159,5 @@ class {{ resource|capitalize }}Facts(object):
             config['some_int'] = int(utils.parse_conf_arg(conf, 'an_int'))
         except TypeError:
             config['some_int'] = None
-
+{% endif %}
         return utils.remove_empties(config)
