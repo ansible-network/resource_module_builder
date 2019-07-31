@@ -9,17 +9,17 @@ It is in this file the configuration is collected from the device
 for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
-{% if not transport.netconf %}
+{% if not transport=='netconf' %}
 import re
 {% endif %}
 from copy import deepcopy
 
-{% if transport.netconf %}
+{% if transport=='netconf' %}
 from ansible.module_utils._text import to_bytes
 {% endif %}
 from ansible.module_utils.network.common import utils
 from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Args
-{% if transport.netconf %}
+{% if transport=='netconf' %}
 from ansible.module.utils.six import string_types
 try:
     from lxml import etree
@@ -55,7 +55,7 @@ class {{ resource|capitalize }}Facts(object):
         :rtype: dictionary
         :returns: facts
         """
-{% if transport.netconf %}
+{% if transport=='netconf' %}
         if not HAS_LXML:
             self._module.fail_json(msg='lxml is not installed.')
 
@@ -105,7 +105,7 @@ class {{ resource|capitalize }}Facts(object):
                 if obj:
                     objs.append(obj)
 
-{% if transport.netconf %}
+{% if transport=='netconf' %}
         facts = {}
         if objs:
             facts['resource'] = []
@@ -135,7 +135,7 @@ class {{ resource|capitalize }}Facts(object):
         :returns: The generated config
         """
         config = deepcopy(spec)
-{% if transport.netconf %}
+{% if transport=='netconf' %}
         config['name'] = utils.get_xml_conf_arg(conf, 'name')
         config['some_value'] = utils.get_xml_conf_arg(conf, 'some_value')
 {% else %}

@@ -2,6 +2,9 @@
 network_os: "{{ rm['NETWORK_OS'] }}"
 resource: "{{ rm['RESOURCE'] }}"
 
+# set transport to network_cli unless overridden in cli
+transport: network_cli
+
 # set the directory for modules based on the structure
 module_directories:
   role: library

@@ -13,7 +13,7 @@ created
 from ansible.module_utils.network.common.cfg.base import ConfigBase
 from ansible.module_utils.network.common.utils import to_list
 from {{ import_path }}.{{ network_os }}.facts.facts import Facts
-{% if transport.netconf %}
+{% if transport == 'netconf' %}
 from ansible.module_utils.network.netconf.netconf import locked_config
 from ansible.module_utils.network.common.netconf import (build_root_xml_node,
                                                          build_child_xml_node)
@@ -56,7 +56,7 @@ class {{ resource|capitalize }}(ConfigBase):
         :returns: The result from module execution
         """
         result = {'changed': False}
-{% if transport.netconf %}
+{% if transport == 'netconf' %}
         existing_{{ resource }}_facts = self.get_{{ resource }}_facts()
         config_xmls = self.set_config(existing_{{ resource }}_facts)
 
@@ -120,7 +120,7 @@ class {{ resource|capitalize }}(ConfigBase):
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
-{% if transport.netconf %}
+{% if transport == 'netconf' %}
         root = build_root_xml_node('{{ resource }}')
         state = self._module.params['state']
         if state == 'overridden':
@@ -152,7 +152,7 @@ class {{ resource|capitalize }}(ConfigBase):
             commands = self._state_replaced(**kwargs)
         return commands
 {% endif %}
-{% if transport.netconf %}
+{% if transport == 'netconf' %}
     def _state_replaced(self, want, have):
         """ The command generator when state is replaced
 
