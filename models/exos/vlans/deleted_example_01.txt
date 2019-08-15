@@ -1,0 +1,70 @@
+# Using deleted
+
+# Before state:
+# -------------
+#
+# {
+#   "openconfig-vlan:vlans": {
+#     "vlan": [
+#       {
+#         "config": {
+#           "name": "Default",
+#           "status": "ACTIVE",
+#           "tpid": "oc-vlan-types:TPID_0x8100",
+#           "vlan-id": 1
+#         },
+#       },
+#       {
+#         "config": {
+#           "name": "vlan_10",
+#           "status": "ACTIVE",
+#           "tpid": "oc-vlan-types:TPID_0x8100",
+#           "vlan-id": 10
+#         },
+#       },
+#       {
+#         "config": {
+#           "name": "vlan_20",
+#           "status": "ACTIVE",
+#           "tpid": "oc-vlan-types:TPID_0x8100",
+#           "vlan-id": 20
+#         },
+#       },
+#       {
+#         "config": {
+#           "name": "vlan_30",
+#           "status": "ACTIVE",
+#           "tpid": "oc-vlan-types:TPID_0x8100",
+#           "vlan-id": 30
+#         },
+#       }
+#     ]
+#   }
+# }
+
+- name: Delete attributes of given VLANs
+  exos_vlans:
+    config:
+      - vlan_id: 10
+      - vlan_id: 20
+      - vlan_id: 30
+    state: deleted
+
+# After state:
+# -------------
+#
+# {
+#   "openconfig-vlan:vlans": {
+#     "vlan": [
+#       {
+#         "config": {
+#           "name": "Default",
+#           "status": "ACTIVE",
+#           "tpid": "oc-vlan-types:TPID_0x8100",
+#           "vlan-id": 1
+#         },
+#       }
+#     ]
+#   }
+# }
+
