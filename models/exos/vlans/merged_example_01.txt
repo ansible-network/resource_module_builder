@@ -29,7 +29,7 @@
         state: present
       - name: vlan_30
         vlan_id: 30
-        state: absent
+        state: present
     state: merged
 
 # After state:
