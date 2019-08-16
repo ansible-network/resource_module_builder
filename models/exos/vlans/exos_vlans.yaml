@@ -9,7 +9,6 @@ ANSIBLE_METADATA: |
 NETWORK_OS: exos
 RESOURCE: vlans
 COPYRIGHT: Copyright 2019 Red Hat
-LICENSE: gpl-3.0.txt
 
 DOCUMENTATION: |
   module: exos_vlans
