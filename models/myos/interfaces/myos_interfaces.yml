@@ -15,8 +15,8 @@ LICENSE: gpl-3.0.txt
 DOCUMENTATION: |
   module: myos_interfaces
   version_added: 2.9
-  short_description: 'Manages <xxxx> attributes of <network_os> <resource>.'
-  description: 'Manages <xxxx> attributes of <network_os> <resource>'
+  short_description: 'Manages <xxxx> attributes of <network_os> <resource>'
+  description: 'Manages <xxxx> attributes of <network_os> <resource>.'
   author: Ansible Network Engineer
   notes:
     - 'Tested against <network_os> <version>'
