@@ -20,7 +20,7 @@ from ansible.module_utils._text import to_bytes
 from ansible.module_utils.network.common import utils
 from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Args
 {% if transport=='netconf' %}
-from ansible.module.utils.six import string_types
+from ansible.module_utils.six import string_types
 try:
     from lxml import etree
     HAS_LXML = True
