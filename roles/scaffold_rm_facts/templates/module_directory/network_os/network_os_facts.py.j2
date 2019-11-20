@@ -11,15 +11,16 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {'metadata_version': '{{rm_ansible_metadata['metadata_version']}}',
-                    'status': {{rm_ansible_metadata['status']}},
-                    'supported_by': '{{rm_ansible_metadata['supported_by']}}'}
+ANSIBLE_METADATA = {
+    'metadata_version': '{{rm_ansible_metadata['metadata_version']}}',
+    'status': {{rm_ansible_metadata['status']}},
+    'supported_by': '{{rm_ansible_metadata['supported_by']}}'}
 
 
 DOCUMENTATION = """
 ---
 module: {{ network_os }}_facts
-version_added: {{ rm_docmentation['version_added'] }}
+version_added: '{{ rm_docmentation['version_added'] }}'
 short_description: Get facts about {{ network_os }} devices.
 description:
   - Collects facts from network devices running the {{ network_os }} operating
