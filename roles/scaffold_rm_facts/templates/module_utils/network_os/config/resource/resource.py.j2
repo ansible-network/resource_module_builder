@@ -10,13 +10,34 @@ is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to it's desired end-state is
 created
 """
+{% if structure == 'collection' %}
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
+    ConfigBase,
+)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    to_list,
+)
+{% else %}
 from ansible.module_utils.network.common.cfg.base import ConfigBase
 from ansible.module_utils.network.common.utils import to_list
+{% endif %}
 from {{ import_path }}.{{ network_os }}.facts.facts import Facts
 {% if transport == 'netconf' %}
+{% if structure == 'collection' %}
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.netconf.netconf import (
+    locked_config,
+)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
+    build_root_xml_node,
+    build_child_xml_node,
+)
+{% else %}
 from ansible.module_utils.network.netconf.netconf import locked_config
-from ansible.module_utils.network.common.netconf import (build_root_xml_node,
-                                                         build_child_xml_node)
+from ansible.module_utils.network.common.netconf import (
+    build_root_xml_node,
+    build_child_xml_node,
+)
+{% endif %}
 {% endif %}
 
 
