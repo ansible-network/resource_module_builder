@@ -17,10 +17,16 @@ from copy import deepcopy
 {% if transport=='netconf' %}
 from ansible.module_utils._text import to_bytes
 {% endif %}
+{% if structure == 'collection' %}
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
+    utils,
+)
+{% else %}
 from ansible.module_utils.network.common import utils
+{% endif %}
 from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Args
 {% if transport=='netconf' %}
-from ansible.module.utils.six import string_types
+from ansible.module_utils.six import string_types
 try:
     from lxml import etree
     HAS_LXML = True
