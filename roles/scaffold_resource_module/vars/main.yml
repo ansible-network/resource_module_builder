@@ -25,6 +25,9 @@ resource_module_directories:
 - module_utils/network/{{ network_os }}/facts/{{ resource }}
 - module_utils/network/{{ network_os }}/rm_templates
 - module_utils/network/{{ network_os }}/utils
+- action
+- filter
+- inventory
 
 # each of the files to be templated
 resource_module_templates:

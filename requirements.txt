@@ -2,5 +2,5 @@
 # of appearance. Changing the order has an impact on the overall integration
 # process, which may cause wedges in the gate later.
 
-ansible>=2.8.0 # GPLv3
-jsonref>=0.2  # MIT
+ansible>=2.9.10 # GPLv3
+black==19.3b0

@@ -6,12 +6,11 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     convert_doc_to_ansible_module_kwargs,
 )
 
+
 def to_argspec(documentation):
     return convert_doc_to_ansible_module_kwargs(documentation)
 
 
 class FilterModule(object):
     def filters(self):
-        return {
-            "to_argspec": to_argspec,
-        }
+        return {"to_argspec": to_argspec}

@@ -4,14 +4,14 @@
 
 import ast
 
+
 def get_doc(module):
     for node in ast.walk(ast.parse(module)):
         if isinstance(node, ast.Assign):
             if node.targets[0].id == "DOCUMENTATION":
                 return node.value.s.strip()
 
+
 class FilterModule(object):
     def filters(self):
-        return {
-            'get_doc': get_doc,
-        }
+        return {"get_doc": get_doc}

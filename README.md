@@ -16,6 +16,7 @@ The resource module builder is an Ansible Playbook that helps developers scaffol
 
 ```
 pip install -r requirements.txt
+ansible-galaxy collection install ansible.netcommon
 ```
 
 #### Builing a new module/collection
@@ -23,7 +24,7 @@ pip install -r requirements.txt
 ansible-playbook -e rm_dest=<destination for modules and module utils> \
                  -e collection_org=<collection_org> \
                  -e collection_name=<collection_name> \
-                 -e docstring=<model> \
+                 -e docstring=</path/to/docstring> \
                  -e resource=<resource>
                  site.yml
 ```
@@ -44,9 +45,9 @@ ansible-playbook -e rm_dest=<destination for modules and module utils> \
 - `docstring`: The path to the file that contains docstring
 - `network_os`: The value of network_os (defaults to `collection_name`)
 
-### Model
+### Docstrings
 
-See the `models` directory for an example.
+See the `docstrings` directory for an example.
 
 ### Examples
 
@@ -56,75 +57,58 @@ See the `models` directory for an example.
 - `resource`: interfaces
 
 ```
+├── LICENSE
+├── README.md
 ├── docs
+├── meta
 ├── plugins
 │   ├── action
+│   │   └── __init__.py
 │   ├── filter
+│   │   └── __init__.py
 │   ├── inventory
-│   ├── modules
+│   │   └── __init__.py
+│   ├── module_utils
 │   │   ├── __init__.py
-│   │   ├── myos_facts.py
-│   │   └── myos_interfaces.py
-│   └── module_utils
+│   │   └── network
+│   │       ├── __init__.py
+│   │       └── nxos
+│   │           ├── __init__.py
+│   │           ├── argspec
+│   │           │   ├── __init__.py
+│   │           │   ├── facts
+│   │           │   │   ├── __init__.py
+│   │           │   │   └── facts.py
+│   │           │   └── interfaces
+│   │           │       ├── __init__.py
+│   │           │       └── interfaces.py
+│   │           ├── config
+│   │           │   ├── __init__.py
+│   │           │   └── interfaces
+│   │           │       ├── __init__.py
+│   │           │       └── interfaces.py
+│   │           ├── facts
+│   │           │   ├── __init__.py
+│   │           │   ├── facts.py
+│   │           │   └── interfaces
+│   │           │       ├── __init__.py
+│   │           │       └── interfaces.py
+│   │           ├── rm_templates
+│   │           │   ├── __init__.py
+│   │           │   └── interfaces.py
+│   │           └── utils
+│   │               ├── __init__.py
+│   │               └── utils.py
+│   └── modules
 │       ├── __init__.py
-│       └── network
-│           ├── __init__.py
-│           └── myos
-│               ├── argspec
-│               │   ├── facts
-│               │   │   ├── facts.py
-│               │   │   └── __init__.py
-│               │   ├── __init__.py
-│               │   └── interfaces
-│               │       ├── __init__.py
-│               │       └── interfaces.py
-│               ├── config
-│               │   ├── base.py
-│               │   ├── __init__.py
-│               │   └── interfaces
-│               │       ├── __init__.py
-│               │       └── interfaces.py
-│               ├── facts
-│               │   ├── base.py
-│               │   ├── facts.py
-│               │   ├── __init__.py
-│               │   └── interfaces
-│               │       ├── __init__.py
-│               │       └── interfaces.py
-│               ├── __init__.py
-│               └── utils
-│                   ├── __init__.py
-│                   └── utils.py
-├── README.md
-├── tests
-
-
-**Using the collection layout**
-
-```
-pip install ansible-base==2.10.0b1 --user
+│       ├── nxos_facts.py
+│       └── nxos_interfaces.py
+└── tests
 ```
 
-link the generated collection to `~/.ansible/collections/ansible_collections/<collection_org>/<collection_name>`
+### Using collections in a playbook
 
-```
-ln -s ~/github/rm_example ~/.ansible/collections/ansible_collections/cidrblock/my_collection
- ```
-
-`site.yml`
- ```
- - hosts: myos101
-   gather_facts: False
-   tasks:
-   - cidrblock.my_collection.myos_interfaces:
-     register: result
-   - debug:
-       var: result
-   - cidrblock.my_collection.myos_facts:
-   - debug:
-       var: ansible_network_resources
-
-```
+Please refer to [using collections in a playbook](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html#using-collections-in-a-playbook) guide for detailed information.
 
 ### Resource Module Structure/Workflow [TO-DO]
 
