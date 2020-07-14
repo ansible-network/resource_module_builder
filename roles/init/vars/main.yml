@@ -1,13 +1,11 @@
+path_to_module: '{{ rm_dest }}/plugins/modules/{{ network_os }}_{{ resource }}.py'
+
 directories:
-  collection:
   - plugins/modules
   - plugins/module_utils
   - plugins/filter
   - plugins/action
   - plugins/inventory
-  - playbooks
   - docs
-  - roles
-  role:
-  - library
-  - module_utils
+  - meta
+  - tests

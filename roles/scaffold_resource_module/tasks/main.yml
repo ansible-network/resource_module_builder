@@ -1,0 +1,43 @@
+
+- name: "Create the resource module directory structure"
+  file:
+    path: "{{ parent_directory }}/{{ item }}"
+    state: directory
+  with_items: "{{ resource_module_directories }}"
+
+- name: Touch the __init__.py in each directory
+  copy:
+    content: ""
+    dest: "{{ parent_directory }}/{{ item }}/__init__.py"
+    force: no
+  with_items: "{{ resource_module_directories }}"
+
+- name: Build argspec from documentation
+  set_fact:
+    argspec: "{{ rm_documentation|to_argspec }}"
+
+- name: Copy argspec to a temporary file to format
+  copy:
+    content: "{{ argspec['argument_spec'] }}"
+    dest: "{{ temp }}"
+  changed_when: False
+
+- name: Format dumped argspec using black with fixed line-length
+  command: "black -l 79 {{ temp }}"
+  changed_when: False
+
+- name: Load formatted argspec
+  set_fact:
+    formatted_argspec: "{{ lookup('file', '{{ temp }}')|string() }}"
+
+- name: Delete temp file
+  file:
+    path: "{{ temp }}"
+    state: absent
+  changed_when: False
+
+- name: Template each of the files
+  include: template.yml
+  with_items: "{{ resource_module_templates }}"
+  loop_control:
+    loop_var: template

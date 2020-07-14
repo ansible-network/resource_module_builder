@@ -1,0 +1,111 @@
+module: nxos_lacp_interfaces
+short_description: LACP interfaces resource module
+description: This module manages Link Aggregation Control Protocol (LACP) attributes
+  of NX-OS Interfaces.
+version_added: 1.0.0
+author: Trishna Guha (@trishnaguha)
+notes:
+- Tested against NXOS 7.3.(0)D1(1) on VIRL
+options:
+  running_config:
+    description:
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the NX-OS device
+      by executing the command B(show running-config | section ^interface).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
+    type: str
+  config:
+    description: A dictionary of LACP interfaces options.
+    type: list
+    elements: dict
+    suboptions:
+      name:
+        description:
+        - Name of the interface.
+        required: true
+        type: str
+      port_priority:
+        description:
+        - LACP port priority for the interface. Range 1-65535. Applicable only for
+          Ethernet.
+        type: int
+      rate:
+        description:
+        - Rate at which PDUs are sent by LACP. Applicable only for Ethernet. At fast
+          rate LACP is transmitted once every 1 second. At normal rate LACP is transmitted
+          every 30 seconds after the link is bundled.
+        type: str
+        choices:
+        - fast
+        - normal
+      links:
+        description:
+        - This dict contains configurable options related to max and min port-channel
+          links. Applicable only for Port-channel.
+        type: dict
+        suboptions:
+          max:
+            description:
+            - Port-channel max bundle.
+            type: int
+          min:
+            description:
+            - Port-channel min links.
+            type: int
+      mode:
+        description:
+        - LACP mode. Applicable only for Port-channel.
+        type: str
+        choices:
+        - delay
+      suspend_individual:
+        description:
+        - port-channel lacp state. Disabling this will cause lacp to put the port
+          to individual state and not suspend the port in case it does not get LACP
+          BPDU from the peer ports in the port-channel.
+        type: bool
+      convergence:
+        description:
+        - This dict contains configurable options related to convergence. Applicable
+          only for Port-channel.
+        type: dict
+        suboptions:
+          graceful:
+            description:
+            - port-channel lacp graceful convergence. Disable this only with lacp
+              ports connected to Non-Nexus peer. Disabling this with Nexus peer can
+              lead to port suspension.
+            type: bool
+          vpc:
+            description:
+            - Enable lacp convergence for vPC port channels.
+            type: bool
+  state:
+    description:
+    - The state of the configuration after module completion.
+    type: str
+    choices:
+    - merged
+    - replaced
+    - overridden
+    - deleted
+    - gathered
+    - rendered
+    - parsed
+    default: merged
+
+
+required_if:
+- ["state", "merged", ["config",]]
+- ["state", "replaced", ["config",]]
+- ["state", "overridden", ["config",]]
+- ["state", "rendered", ["config",]]
+- ["state", "parsed", ["running_config",]]
+
+mutually_exclusive:
+ - ["config", "running_config"]
+
+supports_check_mode: True
+
