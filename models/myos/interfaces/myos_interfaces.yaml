@@ -1,11 +1,10 @@
-module: nxos_lacp_interfaces
-short_description: LACP interfaces resource module
-description: This module manages Link Aggregation Control Protocol (LACP) attributes
-  of NX-OS Interfaces.
+module: myos_interfaces
+short_description: MyOS interfaces resource module
+description: This module manages attributes of MyOS Interfaces.
 version_added: 1.0.0
-author: Trishna Guha (@trishnaguha)
+author: Ansible Network Team
 notes:
-- Tested against NXOS 7.3.(0)D1(1) on VIRL
+- Tested against MyOS 7.3.(0)D1(1)
 options:
   running_config:
     description:

@@ -23,7 +23,7 @@ pip install -r requirements.txt
 ansible-playbook -e rm_dest=<destination for modules and module utils> \
                  -e collection_org=<collection_org> \
                  -e collection_name=<collection_name> \
-                 -e model=<model> \
+                 -e docstring=<model> \
                  -e resource=<resource>
                  site.yml
 ```
@@ -33,6 +33,7 @@ ansible-playbook -e rm_dest=<destination for modules and module utils> \
 ansible-playbook -e rm_dest=<destination for modules and module utils> \
                  -e collection_org=<collection_org> \
                  -e collection_name=<collection_name> \
+                 -e resource=<resource> \
                  site.yml
 ```
 
@@ -40,7 +41,7 @@ ansible-playbook -e rm_dest=<destination for modules and module utils> \
 - `collection_org`: The organization of the collection
 - `collection_name`: The name of the collection
 - `resource`: The network resource targeted by the module
-- `model`: The path to the model file
+- `docstring`: The path to the file that contains docstring
 - `network_os`: The value of network_os (defaults to `collection_name`)
 
 ### Model
@@ -53,14 +54,6 @@ See the `models` directory for an example.
 
 - `network_os`: myos
 - `resource`: interfaces
-
-```
-ansible-playbook -e rm_dest=~/github/rm_example \
-                 -e collection_org=cidrblock \
-                 -e collection_name=my_collection \
-                 -e model=models/myos/interfaces/myos_interfaces.yml \
-                 site.yml
-```
 
 ```
 ├── docs
