@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright 2019 Red Hat
+# Copyright 2020 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
@@ -11,23 +11,17 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {'metadata_version': '1.1',
-                    'status': [u'preview'],
-                    'supported_by': '<support_group>'}
-
-
 DOCUMENTATION = """
 ---
 module: myos_facts
-version_added: 2.9
 short_description: Get facts about myos devices.
+version_added: "1.0.0"
 description:
   - Collects facts from network devices running the myos operating
     system. This module places the facts gathered in the fact tree keyed by the
     respective resource name.  The facts module will always collect a
     base set of facts from the device and can enable or disable
     collection of additional facts.
-author: Ansible Network Engineer
 options:
   gather_subset:
     description:
@@ -82,8 +76,8 @@ See the respective resource module parameters for the tree.
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.network.myos.argspec.facts.facts import FactsArgs
-from ansible.module_utils.network.myos.facts.facts import Facts
+from ansible_collections.myorg.myos.plugins.module_utils.network.myos.argspec.facts.facts import FactsArgs
+from ansible_collections.myorg.myos.plugins.module_utils.network.myos.facts.facts import Facts
 
 
 def main():

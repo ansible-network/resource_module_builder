@@ -1,17 +1,18 @@
-#
 # -*- coding: utf-8 -*-
-# Copyright 2019 Red Hat
+# Copyright 2020 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
 """
 The facts class for myos
 this file validates each subset of facts and selectively
 calls the appropriate facts gathering function
 """
 
-from ansible.module_utils.network.myos.argspec.facts.facts import FactsArgs
-from ansible.module_utils.network.common.facts.facts import FactsBase
-from ansible.module_utils.network.myos.facts.interfaces.interfaces import InterfacesFacts
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts import (
+    FactsBase,
+)
+from ansible_collections.myorg.myos.plugins.module_utils.network.myos.facts.interfaces.interfaces import InterfacesFacts
 
 
 FACT_LEGACY_SUBSETS = {}
@@ -39,9 +40,8 @@ class Facts(FactsBase):
         :rtype: dict
         :return: the facts gathered
         """
-        netres_choices = FactsArgs.argument_spec['gather_network_resources'].get('choices', [])
         if self.VALID_RESOURCE_SUBSETS:
-            self.get_network_resources_facts(netres_choices, FACT_RESOURCE_SUBSETS, resource_facts_type, data)
+            self.get_network_resources_facts(FACT_RESOURCE_SUBSETS, resource_facts_type, data)
 
         if self.VALID_LEGACY_GATHER_SUBSETS:
             self.get_network_legacy_facts(FACT_LEGACY_SUBSETS, legacy_facts_type)

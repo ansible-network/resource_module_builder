@@ -1,89 +1,49 @@
 module: myos_interfaces
-short_description: MyOS interfaces resource module
-description: This module manages attributes of MyOS Interfaces.
+short_description: 'Manages <xxxx> attributes of <network_os> <resource>.'
+description: 'Manages <xxxx> attributes of <network_os> <resource>'
 version_added: 1.0.0
-author: Ansible Network Team
+author: Ansible Network Engineer
 notes:
-- Tested against MyOS 7.3.(0)D1(1)
+  - 'Tested against <network_os> <version>'
 options:
-  running_config:
-    description:
-    - This option is used only with state I(parsed).
-    - The value of this option should be the output received from the NX-OS device
-      by executing the command B(show running-config | section ^interface).
-    - The state I(parsed) reads the configuration from C(running_config) option and
-      transforms it into Ansible structured data as per the resource module's argspec
-      and the value is then returned in the I(parsed) key within the result.
-    type: str
   config:
-    description: A dictionary of LACP interfaces options.
+    description: The provided configuration
     type: list
     elements: dict
     suboptions:
       name:
-        description:
-        - Name of the interface.
-        required: true
         type: str
-      port_priority:
-        description:
-        - LACP port priority for the interface. Range 1-65535. Applicable only for
-          Ethernet.
-        type: int
-      rate:
-        description:
-        - Rate at which PDUs are sent by LACP. Applicable only for Ethernet. At fast
-          rate LACP is transmitted once every 1 second. At normal rate LACP is transmitted
-          every 30 seconds after the link is bundled.
+        description: The name of the <resource>
+      some_string:
         type: str
+        description:
+        - The some_string_01
         choices:
-        - fast
-        - normal
-      links:
+        - choice_a
+        - choice_b
+        - choice_c
+        default: choice_a
+      some_bool:
         description:
-        - This dict contains configurable options related to max and min port-channel
-          links. Applicable only for Port-channel.
-        type: dict
-        suboptions:
-          max:
-            description:
-            - Port-channel max bundle.
-            type: int
-          min:
-            description:
-            - Port-channel min links.
-            type: int
-      mode:
-        description:
-        - LACP mode. Applicable only for Port-channel.
-        type: str
-        choices:
-        - delay
-      suspend_individual:
-        description:
-        - port-channel lacp state. Disabling this will cause lacp to put the port
-          to individual state and not suspend the port in case it does not get LACP
-          BPDU from the peer ports in the port-channel.
+        - The some_bool.
         type: bool
-      convergence:
+      some_int:
         description:
-        - This dict contains configurable options related to convergence. Applicable
-          only for Port-channel.
+        - The some_int.
+        type: int
+        version_added: '1.1'
+      some_dict:
         type: dict
+        description:
+        - The some_dict.
         suboptions:
-          graceful:
+          property_01:
             description:
-            - port-channel lacp graceful convergence. Disable this only with lacp
-              ports connected to Non-Nexus peer. Disabling this with Nexus peer can
-              lead to port suspension.
-            type: bool
-          vpc:
-            description:
-            - Enable lacp convergence for vPC port channels.
-            type: bool
+            - The property_01
+            type: str
   state:
     description:
-    - The state of the configuration after module completion.
+    - The state the configuration should be left in
     type: str
     choices:
     - merged
