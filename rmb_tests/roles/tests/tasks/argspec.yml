@@ -13,7 +13,7 @@
       commands: []
       failed: false
 - name: Check for correct argspec and default state
-  myos_interfaces:
+  myorg.myos.myos_interfaces:
     config: "{{ ansible_network_resources['interfaces'] }}"
   register: result
 - debug:
@@ -24,7 +24,7 @@
 
 
 - name: Check for correct argspec (states)
-  myos_interfaces:
+  myorg.myos.myos_interfaces:
     config:
     - name: rsrc_a
       some_string: choice_a
@@ -45,7 +45,7 @@
 
 
 - name: Check for incorrect argspec (states)
-  myos_interfaces:
+  myorg.myos.myos_interfaces:
     config:
     - name: rsrc_a
       some_string: choice_a
@@ -60,14 +60,14 @@
   ignore_errors: True
 - name: Set a fact for the expected error message
   set_fact:
-    error: 'value of state must be one of: merged, replaced, overridden, deleted'
+    error: 'value of state must be one of: merged, replaced, overridden, deleted, gathered, rendered, parsed, got: wrong'
 - name: Confirm the error message
   assert:
     that: "{{ error in result['msg'] }}"
 
 
 - name: Check for incorrect argspec (choice)
-  myos_interfaces:
+  myorg.myos.myos_interfaces:
     config:
     - name: rsrc_a
       some_string: xxxxxx
@@ -88,7 +88,7 @@
 
 
 - name: Check for incorrect argspec (bad bool)
-  myos_interfaces:
+  myorg.myos.myos_interfaces:
     config:
     - name: rsrc_a
       some_string: choice_a
@@ -109,7 +109,7 @@
 
 
 - name: Check for incorrect argspec (not int)
-  myos_interfaces:
+  myorg.myos.myos_interfaces:
     config:
     - name: rsrc_a
       some_string: choice_a
@@ -130,7 +130,7 @@
 
 
 - name: Check for incorrect argspec (invalid key)
-  myos_interfaces:
+  myorg.myos.myos_interfaces:
     config:
     - name: rsrc_a
       some_string: choice_a
@@ -152,7 +152,7 @@
 
 
 - name: Check for incorrect argspec (invalid property)
-  myos_interfaces:
+  myorg.myos.myos_interfaces:
     config:
     - name: rsrc_a
       some_string: choice_a

@@ -209,7 +209,7 @@ To generate the role after changes:
 ```
 rm -rf rmb_tests/roles/my_role
 ansible-playbook -e docstring=docstrings/myos_interfaces.yaml \
-                 -e rm_dest=./rmb_tests/roles/my_role \
+                 -e rm_dest=./rmb_tests/collections/ansible_collections/myorg/myos \
                  -e resource=interfaces \
                  -e collection_org=myorg \
                  -e collection_name=myos \
