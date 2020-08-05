@@ -2,13 +2,12 @@
 
 ### Overview
 
-The resource module builder is an Ansible Playbook that helps developers scaffold and maintain an Ansible network resource module.
+The resource module builder is an Ansible Playbook that helps developers scaffold and maintain an Ansible network resource modules.
 
 **Capabilities**
-- Use a defined model to scaffold a resource module directory layout and initial class files.
-- Scaffold an Ansible collection.
-- Subsequent uses of the Resource Module Builder (RMB) will only update the module arspec and file containing the module doc string.
-- Maintain the module DOCUMENTATION as the source of truth for the module and use RMB to update the source files as needed.
+- Use a pre-defined docstring to scaffold a resource module directory layout and initial class files in an Ansible Collection.
+- Subsequent uses of the Resource Module Builder (RMB) will only update the module argspec and doc string.
+- Maintain the module `DOCUMENTATION` as the source of truth for the module argspec and use RMB to update the source files as needed.
 - Generates working sample modules for both `<network_os>_<resource>` and `<network_os>_facts`
 
 
@@ -29,7 +28,7 @@ ansible-playbook -e rm_dest=<destination for modules and module utils> \
                  site.yml
 ```
 
-#### Updating an existing module
+#### Updating an existing module (regenerate argspec from docstring)
 ```
 ansible-playbook -e rm_dest=<destination for modules and module utils> \
                  -e collection_org=<collection_org> \
@@ -72,7 +71,7 @@ See the `docstrings` directory for an example.
 │   │   ├── __init__.py
 │   │   └── network
 │   │       ├── __init__.py
-│   │       └── nxos
+│   │       └── myos
 │   │           ├── __init__.py
 │   │           ├── argspec
 │   │           │   ├── __init__.py
@@ -101,8 +100,8 @@ See the `docstrings` directory for an example.
 │   │               └── utils.py
 │   └── modules
 │       ├── __init__.py
-│       ├── nxos_facts.py
-│       └── nxos_interfaces.py
+│       ├── myos_facts.py
+│       └── myos_interfaces.py
 └── tests
 ```
 
@@ -110,7 +109,109 @@ See the `docstrings` directory for an example.
 
 Please refer to [using collections in a playbook](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html#using-collections-in-a-playbook) guide for detailed information.
 
-### Resource Module Structure/Workflow [TO-DO]
+### Resource Module Structure/Workflow
 
+**Module**
 
-### Developer Notes [TO-DO]
+`plugins/modules/<ansible_network_os>_<resource>.py`
+
+- Import `module_utils` resource package and calls `execute_module` API
+```
+def main():
+    result = <resource_package>(module).execute_module()
+```
+
+**Module Argspec**
+
+`module_utils/network/<ansible_network_os>/argspec/<resource>/`
+
+- Argspec for the resource. 
+- The recommended way of updating the argspec is by updating the module docstring 
+  first and then running the Resource Module Builder to update the argspec. This ensures
+  that both the artifacts are always in sync.
+
+**Facts**
+
+`module_utils/network/<ansible_network_os>/facts/<resource>/`
+
+- Populate facts for the resource.
+- Entry in `module_utils/network/<ansible_network_os>/facts/facts.py` for `get_facts` API to keep
+  `<ansible_network_os>_facts` module and facts gathered for the resource module in sync
+  for every subset.
+
+**Parser Templates**
+
+`module_utils/network/<ansible_network_os>/rm_templates/<resource>`
+
+- Define a list of parser templates that the `NetworkTemplate` parent class in `ansible.netcommon` 
+  uses to converts native configuration to Ansible structured data and vice versa.
+
+- Example parser template:
+```
+    {  
+        "name": "auto_cost",
+        "getval": re.compile(
+            r"""
+            \s+auto-cost\sreference-bandwidth\s
+            (?P<acrb>\d+)\s(?P<unit>\S+)$""",
+            re.VERBOSE,
+        ),
+        "setval": (
+            "auto-cost reference-bandwidth"
+            " {{ auto_cost.reference_bandwidth }}"
+            " {{ auto_cost.unit }}"
+        ),
+        "result": {
+            "vrfs": {
+                '{{ "vrf_" + vrf|d() }}': {
+                    "auto_cost": {
+                        "reference_bandwidth": "{{ acrb }}",
+                        "unit": "{{ unit }}",
+                    }
+                }
+            }
+        },
+    }
+```
+
+**Resource Config Package in module_utils**
+
+`module_utils/network/<ansible_network_os>/<config>/<resource>/`
+
+- Implement `execute_module` API that uses the existing device configuration (`have`), 
+  the task input (`want`), and the `compare` functionality provided by the 
+  parent class `ResourceModule` in `ansible.netcommon` to render and push 
+  configuration commands to the target device.
+
+- The task run result contains the following keys:
+     - `before`: state of the `<resource>` in target device before module execution (as structured data)
+     - `after`: state of the `<resource>` in target device after module execution (as structured data)
+     - `commands`: list of commands sent to the target device
+     - `changed`: `True` or `False` depending on whether the task run was idempotent
+     - `gathered`: state of the `<resource>` in target device (as structured data) [only when `state`: `gathered`]
+     - `parsed`: configuration passed through the `running_config` option as structured data [only when `state`: `parsed`]
+     - `rendered`: provided configuration in the task as device native config lines [only when `state`: `rendered`]
+
+    ***Note***: Please refer to [Network resource module states](https://docs.ansible.com/ansible/latest/network/user_guide/network_resource_modules.html#network-resource-module-states) for more information.
+
+**Utils**
+
+`module_utils/<ansible_network_os>/utils`.
+
+- Utilities for the` <ansible_network_os>` platform.
+
+### Developer Notes
+
+The tests rely on a role generated by the resource module builder. 
+After changes to the resource module builder, the role should be regenerated and the tests modified and run as needed. 
+To generate the role after changes:
+
+```
+rm -rf rmb_tests/roles/my_role
+ansible-playbook -e docstring=docstrings/myos_interfaces.yaml \
+                 -e rm_dest=./rmb_tests/roles/my_role \
+                 -e resource=interfaces \
+                 -e collection_org=myorg \
+                 -e collection_name=myos \
+                 site.yml
+```
