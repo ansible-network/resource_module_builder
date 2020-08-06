@@ -1,0 +1,8 @@
+- myorg.myos.myos_facts:
+    gather_network_resources:
+      - 'interfaces'
+
+- include: "{{ item }}"
+  loop:
+  - facts.yml
+  - argspec.yml

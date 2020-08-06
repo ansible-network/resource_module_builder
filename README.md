@@ -2,10 +2,10 @@
 
 ### Overview
 
-The resource module builder is an Ansible Playbook that helps developers scaffold and maintain an Ansible network resource modules.
+The resource module builder is an Ansible Collection that helps developers scaffold and maintain an Ansible network resource modules.
 
 **Capabilities**
-- Use a pre-defined docstring to scaffold a resource module directory layout and initial class files in an Ansible Collection.
+- Use a pre-defined docstring (in YAML) to scaffold a resource module directory layout and initial class files in an Ansible Collection.
 - Subsequent uses of the Resource Module Builder (RMB) will only update the module argspec and doc string.
 - Maintain the module `DOCUMENTATION` as the source of truth for the module argspec and use RMB to update the source files as needed.
 - Generates working sample modules for both `<network_os>_<resource>` and `<network_os>_facts`
@@ -17,6 +17,15 @@ The resource module builder is an Ansible Playbook that helps developers scaffol
 pip install -r requirements.txt
 ansible-galaxy collection install ansible.netcommon
 ```
+```yaml
+run.yml
+---
+- hosts: localhost
+  gather_facts: yes
+  roles:
+    - ansible_network.resource_module_builder.run
+```
+
 
 #### Builing a new module/collection
 ```
@@ -25,7 +34,7 @@ ansible-playbook -e rm_dest=<destination for modules and module utils> \
                  -e collection_name=<collection_name> \
                  -e docstring=</path/to/docstring> \
                  -e resource=<resource>
-                 site.yml
+                 run.yml
 ```
 
 #### Updating an existing module (regenerate argspec from docstring)
@@ -34,14 +43,14 @@ ansible-playbook -e rm_dest=<destination for modules and module utils> \
                  -e collection_org=<collection_org> \
                  -e collection_name=<collection_name> \
                  -e resource=<resource> \
-                 site.yml
+                 run.yml
 ```
 
 - `rm_dest`: The directory in which the files and directories for the resource module and facts modules should be placed
 - `collection_org`: The organization of the collection
 - `collection_name`: The name of the collection
 - `resource`: The network resource targeted by the module
-- `docstring`: The path to the file that contains docstring
+- `docstring`: The path to the file that contains docstring (in YAML)
 - `network_os`: The value of network_os (defaults to `collection_name`)
 
 ### Docstrings
@@ -208,10 +217,10 @@ To generate the role after changes:
 
 ```
 rm -rf rmb_tests/roles/my_role
-ansible-playbook -e docstring=docstrings/myos_interfaces.yaml \
-                 -e rm_dest=./rmb_tests/collections/ansible_collections/myorg/myos \
+ansible-playbook -e docstring=docs/examples/docstrings/myos_interfaces.yaml \
+                 -e rm_dest=tests/rmb_tests/collections/ansible_collections/myorg/myos \
                  -e resource=interfaces \
                  -e collection_org=myorg \
                  -e collection_name=myos \
-                 site.yml
+                 run.yml
 ```

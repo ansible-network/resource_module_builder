@@ -14,7 +14,7 @@
 
 - name: Build argspec from documentation
   set_fact:
-    argspec: "{{ rm_documentation|to_argspec }}"
+    argspec: "{{ rm_documentation|ansible_network.resource_module_builder.to_argspec }}"
 
 - name: Copy argspec to a temporary file to format
   copy:

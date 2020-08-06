@@ -1,6 +1,6 @@
 #
 # -*- coding: utf-8 -*-
-# {{ copyright }}
+# Copyright 2020 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 #
@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 """
-The {{ network_os }}_{{ resource }} config file.
+The myos_interfaces config file.
 It is in this file where the current configuration (as dict)
 is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to its desired end-state is
@@ -25,26 +25,26 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
     ResourceModule,
 )
-from {{ import_path }}.{{ network_os }}.facts.facts import (
+from ansible_collections.myorg.myos.plugins.module_utils.network.myos.facts.facts import (
     Facts,
 )
-from {{ import_path }}.{{ network_os }}.rm_templates.{{ resource }} import (
-    {{ resource|capitalize }}Template,
+from ansible_collections.myorg.myos.plugins.module_utils.network.myos.rm_templates.interfaces import (
+    InterfacesTemplate,
 )
 
 
-class {{ resource|capitalize }}(ResourceModule):
+class Interfaces(ResourceModule):
     """
-    The {{ network_os }}_{{ resource }} config class
+    The myos_interfaces config class
     """
 
     def __init__(self, module):
-        super({{ resource|capitalize }}, self).__init__(
+        super(Interfaces, self).__init__(
             empty_fact_val={},
             facts_module=Facts(module),
             module=module,
-            resource="{{ resource }}",
-            tmplt={{ resource|capitalize }}Template(),
+            resource="interfaces",
+            tmplt=InterfacesTemplate(),
         )
         self.parsers = [
         ]
@@ -91,6 +91,6 @@ class {{ resource|capitalize }}(ResourceModule):
         """Leverages the base class `compare()` method and
            populates the list of commands to be run by comparing
            the `want` and `have` data with the `parsers` defined
-           for the {{ resource|capitalize }} network resource.
+           for the Interfaces network resource.
         """
         self.compare(parsers=self.parsers, want=want, have=have)

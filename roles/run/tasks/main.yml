@@ -1,0 +1,8 @@
+# tasks file for run
+- include_role:
+    name: "{{ builder_roles }}"
+  loop:
+    - init
+    - scaffold_resource_module
+  loop_control:
+    loop_var: builder_roles

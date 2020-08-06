@@ -37,7 +37,7 @@
     
     - name: Extract DOCUMENTATION from Resource Module (for existing module)
       set_fact:
-        rm_documentation: "{{ lookup('file', '{{ path_to_module }}')|get_doc }}"
+        rm_documentation: "{{ lookup('file', '{{ path_to_module }}')|ansible_network.resource_module_builder.get_doc }}"
     
     - assert:
         that: rm_documentation != ''

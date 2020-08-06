@@ -1,5 +1,0 @@
-- hosts: localhost
-  gather_facts: yes
-  roles:
-  - init
-  - scaffold_resource_module
