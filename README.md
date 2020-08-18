@@ -4,6 +4,9 @@
 
 The resource module builder is an Ansible Playbook that helps developers scaffold and maintain an Ansible network resource module.
 
+***Note***: 
+For scaffolding cli-based Resource Modules that leverage the new network parsing engine please use the [CLI_RM_BUILDER](https://github.com/ansible-network/cli_rm_builder) collection. 
+
 **Capabilities**
 - Use a defined model to scaffold a resource module directory layout and initial class files.
 - Scaffold either an Ansible role or a collection.
