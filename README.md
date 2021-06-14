@@ -241,6 +241,11 @@ def main():
 - Entry in `module_utils/<ansible_network_os>/facts/facts.py` for `get_facts` API to keep
   `<ansible_network_os>_facts` module and facts gathered for the resource module in sync
   for every subset.
+- Entry under the imports to register the Module's fact class- 
+  `from ansible_collections.<ansible_network_org>.<ansible_network_os>.plugins.module_utils.network.
+  <ansible_network_os>.facts.<resource>.<resource> import (<Resource>Facts,)`
+- An entry in the global variable `FACT_RESOURCE_SUBSETS` is required in order to add it to the resource
+  subsets as `<resource>=<Resource>Facts`.
 
 **Module Package in module_utils**
 
