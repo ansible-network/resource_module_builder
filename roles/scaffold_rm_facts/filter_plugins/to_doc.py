@@ -36,11 +36,11 @@ after:
   sample: >
     The configuration returned will always be in the same format
      of the parameters above.
-commands:
-  description: The set of commands pushed to the remote device.
+xml:
+  description: The set of xml commands pushed to the remote device.
   returned: always
   type: list
-  sample: ['command 1', 'command 2', 'command 3']
+  sample: ['<system xmlns="http://openconfig.net/yang/system"><config><hostname>foo</hostname></config></system>']
 """
 
 output = StringIO()

@@ -29,11 +29,6 @@
     state: directory
   with_items: "{{ directories[structure] }}"
 
-- name: Copy the license file to the resource module destination directory
-  copy:
-    src: "{{ rm['LICENSE'] | default('gpl-3.0.txt') }}"
-    dest: "{{ rm_dest }}/LICENSE.txt"
-
 - name: Ensure the 'collection_org' is set when 'structure' is set to collection
   assert:
     that: collection_org is defined

@@ -30,13 +30,26 @@ ansible-playbook -e rm_dest=<destination for modules and module utils> \
 ```
 or
 ```
-ansible-playbook -e rm_dest=<destination for modules and module utils> \
+ansible-playbook -e rm_dest=/home/jgroom/src/ansible_collections/ciena/waveserverai/ \
                  -e structure=collection \
-                 -e collection_org=<collection_org> \
-                 -e collection_name=<collection_name> \
-                 -e model=<model> \
+                 -e collection_org=ciena \
+                 -e collection_name=waveserverai \
+                 -e model=/home/jgroom/src/ansible_collections/ciena/waveserverai/resource_module_models/xcvr/waveserverai_xcvr.yml \
+                 -e transport=netconf \
                  site.yml
 ```
+
+```
+PATH_TO_ANSIBLE_COLLECTIONS_DIR=/home/$USER/src/ansible_collections/ciena/saos10
+ansible-playbook -e rm_dest=saos10 \
+                 -e structure=collection \
+                 -e collection_org=ciena \
+                 -e collection_name=saos10 \
+                 -e model=$PATH_TO_ANSIBLE_COLLECTIONS_DIR/resource_module_models/classifiers/saos10_classifiers.yml \
+                 -e transport=netconf \
+                 site.yml
+```
+
 - `rm_dest`: The directory in which the files and directories for the resource module and facts modules should be placed
 - `structure`: The directory layout to be generated (role|collection)
   - `role`: Generate a role directory layout
