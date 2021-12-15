@@ -1,0 +1,10 @@
+
+# Using merged
+
+- name: Configure interfaces
+  ciena.waveserverai.waveserverai_xcvrs:
+    config:
+      - name: 1-1
+        properties:
+          mode: 56-400
+    operation: merged

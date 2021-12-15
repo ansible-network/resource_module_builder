@@ -1,0 +1,76 @@
+---
+GENERATOR_VERSION: "1.0"
+
+ANSIBLE_METADATA: |
+  {
+    'metadata_version': '1.1',
+    'status': ['preview'],
+    'supported_by': 'network'
+  }
+NETWORK_OS: waveserverai
+RESOURCE: xcvrs
+COPYRIGHT: Copyright 2021 Ciena
+
+DOCUMENTATION: |
+  module: waveserverai_xcvrs
+  version_added: 2.9
+  short_description: Manage XCVR on Ciena Waveserver Ai devices
+  description: This module provides declarative management of a transceiver
+  author: Ciena
+  options:
+    config:
+      description: A dictionary of XVCR options
+      type: list
+      elements: dict
+      suboptions:
+        xcvr-id:
+          description:
+          - Full name of xcvr, e.g. 1-1.
+          type: str
+          required: True
+        properties:
+          description:
+          - A dictionary of properties to be configured on the xcvr.
+          type: dict
+          suboptions:
+            mode:
+              description:
+                - Mode C(unit) should be of type string.
+              choices:
+                - 100GE
+                - OTL4.4
+                - 56-100
+                - 56-150
+                - 56-200
+                - 56-250
+                - 56-300
+                - 56-350
+                - 56-400
+                - 35-100
+                - 35-150
+                - 35-250
+                - OCH
+                - OTM
+                - 4x10GE
+                - 35-200
+                - OSC
+                - OTLC.4
+                - OSC-ADD-DROP
+              type: str
+    state:
+      choices:
+      - merged
+      default: merged
+      description:
+      - The state the configuration should be left in
+      type: str
+requirements:
+  - ncclient (>=v0.6.4)
+notes:
+  - This module requires the netconf system service be enabled on
+    the remote device being managed.
+  - Tested against Waveserver Ai 1.5
+  - This module works with connection C(netconf)
+
+EXAMPLES:
+  - merged_example_01.txt
