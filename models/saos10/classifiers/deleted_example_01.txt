@@ -6,4 +6,4 @@
     config:
       - name: untagged
       - name: foo-100
-    operation: deleted
+    state: deleted

@@ -14,4 +14,4 @@
             vtags:
               - tag: 1
                 vlan-id: 100
-    operation: overridden
+    state: overridden

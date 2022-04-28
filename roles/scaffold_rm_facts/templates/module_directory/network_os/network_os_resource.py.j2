@@ -32,8 +32,12 @@ __metaclass__ = type
 {{ rm|to_doc(model) }}
 
 from ansible.module_utils.basic import AnsibleModule
-from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Args
-from {{ import_path }}.{{ network_os }}.config.{{ resource }}.{{ resource }} import {{ resource|capitalize }}
+from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} import (
+    {{ resource|capitalize }}Args,
+)
+from {{ import_path }}.{{ network_os }}.config.{{ resource }}.{{ resource }} import (
+    {{ resource|capitalize }},
+)
 
 
 def main():
@@ -42,12 +46,13 @@ def main():
 
     :returns: the result form module invocation
     """
-    module = AnsibleModule(argument_spec={{ resource|capitalize }}Args.argument_spec,
-                           supports_check_mode=True)
+    module = AnsibleModule(
+        argument_spec={{ resource|capitalize }}Args.argument_spec, supports_check_mode=True
+    )
 
     result = {{ resource|capitalize }}(module).execute_module()
     module.exit_json(**result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -27,9 +27,11 @@ from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} im
 
 try:
     from lxml.etree import tostring as xml_to_string, fromstring
+
     HAS_LXML = True
 except ImportError:
     from xml.etree.ElementTree import fromstring, tostring as xml_to_string
+
     HAS_LXML = False
 
 
@@ -81,9 +83,7 @@ class {{ resource|capitalize }}Facts(object):
         facts = {}
         if objs:
             facts["{{ resource }}"] = []
-            params = utils.validate_config(
-                self.argument_spec, {"config": objs}
-            )
+            params = utils.validate_config(self.argument_spec, {"config": objs})
             for cfg in params["config"]:
                 facts["{{ resource }}"].append(utils.remove_empties(cfg))
 
