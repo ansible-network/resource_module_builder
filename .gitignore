@@ -2,5 +2,5 @@ venv
 *.pyc
 env
 output/**
-saos10
-waveserverai
+saos10/
+waveserverai/

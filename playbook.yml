@@ -33,22 +33,28 @@
         transport: netconf
       with_items: "{{ saos10.modules }}"
     - name: Copy modules
-      ansible.builtin.copy:
-        src: saos10/plugins/modules/saos10_{{ item }}.py
-        dest: "{{ saos10.location }}/plugins/modules/saos10_{{ item }}.py"
-      with_items: "{{ saos10.modules }}"
-    - name: Copy config
-      ansible.builtin.copy:
-        src: saos10/plugins/module_utils/network/saos10/config/{{ item }}/{{ item }}.py
-        dest: "{{ saos10.location }}/plugins/module_utils/network/saos10/config/{{ item }}/{{ item }}.py"
-      with_items: "{{ saos10.modules }}"
-    - name: Copy argspec
-      ansible.builtin.copy:
-        src: saos10/plugins/module_utils/network/saos10/argspec/{{ item }}/{{ item }}.py
-        dest: "{{ saos10.location }}/plugins/module_utils/network/saos10/argspec/{{ item }}/{{ item }}.py"
-      with_items: "{{ saos10.modules }}"
-    - name: Copy facts gather
-      ansible.builtin.copy:
-        src: saos10/plugins/module_utils/network/saos10/facts/{{ item }}/{{ item }}.py
-        dest: "{{ saos10.location }}/plugins/module_utils/network/saos10/facts/{{ item }}/{{ item }}.py"
-      with_items: "{{ saos10.modules }}"
+      block:
+        - name: Copy modules
+          ansible.builtin.copy:
+            src: saos10/plugins/modules/saos10_{{ item }}.py
+            dest: "{{ saos10.location }}/plugins/modules/saos10_{{ item }}.py"
+          with_items: "{{ saos10.modules }}"
+        - name: Copy config
+          ansible.builtin.copy:
+            src: saos10/plugins/module_utils/network/saos10/config/{{ item }}/{{ item }}.py
+            dest: "{{ saos10.location }}/plugins/module_utils/network/saos10/config/{{ item }}/{{ item }}.py"
+          with_items: "{{ saos10.modules }}"
+        - name: Copy argspec
+          ansible.builtin.copy:
+            src: saos10/plugins/module_utils/network/saos10/argspec/{{ item }}/{{ item }}.py
+            dest: "{{ saos10.location }}/plugins/module_utils/network/saos10/argspec/{{ item }}/{{ item }}.py"
+          with_items: "{{ saos10.modules }}"
+        - name: Copy facts gather
+          ansible.builtin.copy:
+            src: saos10/plugins/module_utils/network/saos10/facts/{{ item }}/{{ item }}.py
+            dest: "{{ saos10.location }}/plugins/module_utils/network/saos10/facts/{{ item }}/{{ item }}.py"
+          with_items: "{{ saos10.modules }}"
+    - name: Run black
+      ansible.builtin.command: black .
+      args:
+        chdir: "{{ saos10.location }}/plugins"

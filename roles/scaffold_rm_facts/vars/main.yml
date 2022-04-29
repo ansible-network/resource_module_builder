@@ -1,6 +1,8 @@
 # basic vars to make the templates cleaner
 network_os: "{{ rm['NETWORK_OS'] }}"
 resource: "{{ rm['RESOURCE'] }}"
+resource_key: "{{ rm['RESOURCE_KEY'] }}"
+resource_singular: "{{ rm['RESOURCE_SINGULAR'] }}"
 
 # set transport to network_cli unless overridden in cli
 transport: network_cli

@@ -1,5 +1,5 @@
 
-# Using overridden
+# Using merged
 
 - name: Configure interfaces
   ciena.saos10.saos10_classifiers:
@@ -14,4 +14,4 @@
             vtags:
               - tag: 1
                 vlan-id: 100
-    state: overridden
+    state: merged

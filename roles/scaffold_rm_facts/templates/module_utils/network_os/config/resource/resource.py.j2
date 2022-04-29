@@ -144,6 +144,8 @@ class {{ resource|capitalize }}(ConfigBase):
                   to the desired configuration
         """
         {{ resource }}_xml = []
+        {{ resource }}_xml.extend(self._state_deleted(want, have))
+        {{ resource }}_xml.extend(self._state_merged(want, have))
         return {{ resource }}_xml
 
     def _state_overridden(self, want, have):
@@ -154,6 +156,8 @@ class {{ resource|capitalize }}(ConfigBase):
                   to the desired configuration
         """
         {{ resource }}_xml = []
+        {{ resource }}_xml.extend(self._state_deleted(have, have))
+        {{ resource }}_xml.extend(self._state_merged(want, have))
         return {{ resource }}_xml
 
     def _state_deleted(self, want, have):
@@ -164,6 +168,14 @@ class {{ resource|capitalize }}(ConfigBase):
                   to the desired configuration
         """
         {{ resource }}_xml = []
+        if not want:
+            want = have
+        delete = dict(delete="delete")
+        for config in want:
+            {{ resource_singular }}_root = build_root_xml_node("{{ resource_singular }}")
+            build_child_xml_node({{ resource_singular }}_root, "{{ resource_singular }}", config["{{ resource_key }}"])
+            {{ resource_singular }}_root.attrib.update(delete)
+            {{ resource }}_xml.append({{ resource_singular }}_root)
         return {{ resource }}_xml
 
     def _state_merged(self, want, have):
@@ -176,13 +188,11 @@ class {{ resource|capitalize }}(ConfigBase):
         {{ resource }}_xml = []
         for child in want:
             {{ resource }}_root = build_root_xml_node("{{ resource }}")
-            {{ resource }} = build_child_xml_node({{ resource }}_root, "{{ resource }}")
-            build_child_xml_node(
-                {{ resource }}, "name", child["name"]
-            )  # name is the primary key
+            {{ resource_singular }} = build_child_xml_node({{ resource }}_root, "{{ resource_singular }}")
+            build_child_xml_node({{ resource_singular }}, "{{ resource_key }}", child["{{ resource_key }}"])
             # properties = build_child_xml_node({{ resource }}, "properties")
             # build_child_xml_node(
             #    properties, "foo", child["properties"]["foo"]
             # )
-            {{ resource }}_xml.append({{ resource }})
+            {{ resource }}_xml.append({{ resource_singular }})
         return {{ resource }}_xml
