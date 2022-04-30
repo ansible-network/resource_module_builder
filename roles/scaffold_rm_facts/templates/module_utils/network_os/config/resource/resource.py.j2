@@ -9,6 +9,8 @@ for {{ resource_singular }} in want:
 {% for key, value in config.suboptions.items() %}
 {% if value.type == "list" %}
     {{ build_list(resource_singular + "_node", key, value) | indent }}{% endif %}
+{% if value.type == "dict" %}
+    {{ build_list(resource_singular + "_node", key, value) | indent }}{% endif %}
 {% if value.type == "str" and key != resource_key %}
     {{ build_str(resource_singular + "_node", key) | indent }}{% endif %}
 {% endfor %}
