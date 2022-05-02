@@ -12,16 +12,7 @@ Usage:
 
 ```bash
 pip install -r requirements.txt
+pip install git+https://github.com/ansible-network/collection_prep
 # modify vars in playbook.yml
 ansible-playbook playbook.yml
-```
-
-```bash
-ansible-playbook -e rm_dest=waveserverai \
-                 -e structure=collection \
-                 -e collection_org=ciena \
-                 -e collection_name=waveserverai \
-                 -e model=models/waveserverai/xcvrs/waveserverai_xcvrs.yml \
-                 -e transport=netconf \
-                 site.yml
 ```

@@ -1,0 +1,8 @@
+
+# Using deleted
+
+- name: Configure interfaces
+  ciena.saos10.saos10_classifiers:
+    config:
+      - name: remote-fd
+    state: deleted

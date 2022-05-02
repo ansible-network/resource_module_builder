@@ -1,0 +1,15 @@
+
+# Using merged
+
+- name: Configure interfaces
+  ciena.saos10.saos10_classifiers:
+    config:
+      - name: remote-fd
+        mode: vpls
+        initiate-l2-transform:
+          vlan-stack:
+            - tag: 1
+              push-tpid: tpid-8100
+              push-pcp: map
+              push-vid: 127
+    state: merged
