@@ -1,3 +1,56 @@
+{% set doc = rm['DOCUMENTATION'] | from_yaml %}
+{% set config = doc.options.config %}
+
+{% macro build_config(config) %}
+{% if config.type == "list" %}
+{% for key, value in config.suboptions.items() %}
+{% if value.type == "str" and key != resource_key %}
+{{ build_str(resource_singular, key, "config") }}{% endif %}
+{% if value.type == "int" and key != resource_key %}
+{{ build_int(resource_singular, key, "config") }}{% endif %}
+{% if value.type == "list" %}
+{{ build_list(resource_singular, key, value, "config", config.suboptions) }}{% endif %}
+{# {% if value.type == "dict" %}
+    {{ build_dict(resource_singular + "_node", key, value) | indent }}{% endif %} #}
+{% endfor %}
+
+{%- endif %}
+{% endmacro %}
+
+{% macro build_list(parent, key, value, config_parent, schema) %}
+if {{ parent }}["{{ key }}"]:
+    {{ config_parent }}["{{ key }}"] = []
+    if not isinstance({{ parent }}["{{ key }}"], list):
+        {{ key | replace("-","_") }}s = [{{ parent }}["{{ key }}"]]
+    else:
+        {{ key | replace("-","_") }}s = {{ parent }}["{{ key }}"]
+
+    for {{ key | replace("-","_") }} in {{ key | replace("-","_") }}s:
+        {{ key | replace("-", "_") }}_result = {}
+{% for k, v in schema[key].suboptions.items() %}
+{% if v.type == "str" %}
+        {{ build_str(key | replace("-", "_"), k, key | replace("-", "_") + "_result") | indent | indent }}{% endif %}
+{% if v.type == "int" %}
+        {{ build_int(key | replace("-", "_"), k, key | replace("-", "_") + "_result") | indent | indent }}{% endif %}
+{% if v.type == "list" %}
+        {{ build_list(key | replace("-", "_"), k, v, key | replace("-", "_") + "_result", schema[key].suboptions) | indent | indent }}
+{% endif %}
+{% endfor %}
+        {{ config_parent }}["{{ key }}"].append({{ key | replace("-", "_") }}_result)
+
+{% endmacro %}
+
+{% macro build_str(parent, key, config_parent) %}
+if "{{ key }}" in {{ parent }}:
+    {{ config_parent }}["{{ key }}"] = re.sub('^[a-z]+\:', '',{{ parent }}["{{ key }}"]) # regex to remove namespace declaration in values
+{% endmacro %}
+
+{% macro build_int(parent, key, config_parent) %}
+if "{{ key }}" in {{ parent }}:
+    {{ config_parent }}["{{ key }}"] = {{ parent }}["{{ key }}"]
+{% endmacro %}
+
+
 #
 # -*- coding: utf-8 -*-
 # {{ rm["COPYRIGHT"] }}
@@ -11,7 +64,9 @@ based on the configuration.
 """
 from copy import deepcopy
 
+import re
 from ansible.module_utils._text import to_text, to_bytes
+from ansible.module_utils.basic import missing_required_lib
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
     remove_namespaces,
 )
@@ -26,6 +81,7 @@ from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} im
 )
 
 try:
+    from lxml import etree
     from lxml.etree import tostring as xml_to_string, fromstring
 
     HAS_LXML = True
@@ -33,6 +89,13 @@ except ImportError:
     from xml.etree.ElementTree import fromstring, tostring as xml_to_string
 
     HAS_LXML = False
+
+try:
+    import xmltodict
+
+    HAS_XMLTODICT = True
+except ImportError:
+    HAS_XMLTODICT = False
 
 
 class {{ resource|capitalize }}Facts(object):
@@ -101,7 +164,14 @@ class {{ resource|capitalize }}Facts(object):
         :returns: The generated config
         """
         config = deepcopy(spec)
+        {{ resource_singular }} = self._get_xml_dict(conf)["{{ resource_singular }}"]
         config["{{ resource_key }}"] = utils.get_xml_conf_arg(conf, "{{ resource_key }}")
-        config["some_value"] = utils.get_xml_conf_arg(conf, "some_value")
+        {{ build_config(config) | indent | indent }}
 
         return utils.remove_empties(config)
+
+    def _get_xml_dict(self, xml_root):
+        if not HAS_XMLTODICT:
+            self._module.fail_json(msg=missing_required_lib("xmltodict"))
+        xml_dict = xmltodict.parse(etree.tostring(xml_root), dict_constructor=dict)
+        return xml_dict

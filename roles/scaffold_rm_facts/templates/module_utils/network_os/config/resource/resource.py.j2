@@ -13,6 +13,8 @@ for {{ resource_singular }} in want:
     {{ build_dict(resource_singular + "_node", key, value) | indent }}{% endif %}
 {% if value.type == "str" and key != resource_key %}
     {{ build_str(resource_singular + "_node", key) | indent }}{% endif %}
+{% if value.type == "int" and key != resource_key %}
+    {{ build_int(resource_singular + "_node", key) | indent }}{% endif %}
 {% endfor %}
     {{ resource }}_xml.append({{ resource_singular }}_node)
 {%- endif %}
@@ -43,11 +45,11 @@ for {{ key | replace("-", "_") }} in {{ parent | replace("_node","" ) }}["{{ key
     {{ key | replace("-", "_") }}_node = build_child_xml_node({{ parent }}, "{{ key }}")
 {% for k, v in value.suboptions.items() %}
 {% if v.type == "str" %}
-    if {{ key | replace("-", "_") }}["{{ k }}"]:
+    if "{{ k }}" in {{ key | replace("-", "_") }}:
         build_child_xml_node({{ key | replace("-", "_")}}_node, "{{ k }}", {{ key | replace("-", "_") }}["{{ k }}"])
 {% endif %}
 {% if v.type == "int" %}
-    if {{ key | replace("-", "_") }}["{{ k }}"]:
+    if "{{ k }}" in {{ key | replace("-", "_") }}:
         build_child_xml_node({{ key | replace("-", "_")}}_node, "{{ k }}", {{ key | replace("-", "_") }}["{{ k }}"])
 {% endif %}
 {% if v.type == "list" %}
@@ -60,9 +62,14 @@ for {{ key | replace("-", "_") }} in {{ parent | replace("_node","" ) }}["{{ key
 {% endmacro %}
 
 {% macro build_str(parent, key) %}
-if {{ parent | replace("_node","" ) }}["{{ key }}"]:
+if "{{ key }}" in {{ parent | replace("_node","" ) }}:
     build_child_xml_node({{ parent }}, "{{ key }}", {{ parent | replace("_node","" ) }}["{{ key }}"])
 {% endmacro %}
+{% macro build_int(parent, key) %}
+if "{{ key }}" in {{ parent | replace("_node","" ) }}:
+    build_child_xml_node({{ parent }}, "{{ key }}", {{ parent | replace("_node","" ) }}["{{ key }}"])
+{% endmacro %}
+
 #
 # -*- coding: utf-8 -*-
 # {{ rm['COPYRIGHT'] }}
