@@ -71,7 +71,7 @@ class {{ resource|capitalize }}Facts(object):
         stripped = remove_namespaces(xml_to_string(data))
         data = fromstring(to_bytes(stripped, errors="surrogate_then_replace"))
 
-        resources = data.xpath("/data/{{ resource }}/{{ resource[:-1] }}")
+        resources = data.xpath("/data/{{ resource }}/{{ resource_singular }}")
 
         objs = []
         for resource in resources:
@@ -101,7 +101,7 @@ class {{ resource|capitalize }}Facts(object):
         :returns: The generated config
         """
         config = deepcopy(spec)
-        config["name"] = utils.get_xml_conf_arg(conf, "name")
+        config["{{ resource_key }}"] = utils.get_xml_conf_arg(conf, "{{ resource_key }}")
         config["some_value"] = utils.get_xml_conf_arg(conf, "some_value")
 
         return utils.remove_empties(config)

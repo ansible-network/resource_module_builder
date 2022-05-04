@@ -10,7 +10,7 @@ for {{ resource_singular }} in want:
 {% if value.type == "list" %}
     {{ build_list(resource_singular + "_node", key, value) | indent }}{% endif %}
 {% if value.type == "dict" %}
-    {{ build_list(resource_singular + "_node", key, value) | indent }}{% endif %}
+    {{ build_dict(resource_singular + "_node", key, value) | indent }}{% endif %}
 {% if value.type == "str" and key != resource_key %}
     {{ build_str(resource_singular + "_node", key) | indent }}{% endif %}
 {% endfor %}
@@ -18,6 +18,26 @@ for {{ resource_singular }} in want:
 {%- endif %}
 {% endmacro %}
 
+{% macro build_dict(parent, key, value) %}
+{{ key | replace("-", "_") }} = {{ parent | replace("_node","" ) }}["{{ key }}"]
+{{ key | replace("-", "_") }}_node = build_child_xml_node({{ parent }}, "{{ key }}")
+{% for k, v in value.suboptions.items() %}
+{% if v.type == "str" %}
+if {{ key | replace("-", "_") }}["{{ k }}"]:
+    build_child_xml_node({{ key | replace("-", "_")}}_node, "{{ k }}", {{ key | replace("-", "_") }}["{{ k }}"])
+{% endif %}
+{% if v.type == "int" %}
+if {{ key | replace("-", "_") }}["{{ k }}"]:
+    build_child_xml_node({{ key | replace("-", "_")}}_node, "{{ k }}", {{ key | replace("-", "_") }}["{{ k }}"])
+{% endif %}
+{% if v.type == "list" %}
+{{ build_list( key | replace('-', '_') + "_node", k, v) | indent }}
+{% endif %}
+{% if v.type == "dict" %}
+{{ build_dict( key | replace('-', '_') + "_node", k, v) | indent }}
+{% endif %}
+{% endfor %}
+{% endmacro %}
 {% macro build_list(parent, key, value) %}
 for {{ key | replace("-", "_") }} in {{ parent | replace("_node","" ) }}["{{ key }}"]:
     {{ key | replace("-", "_") }}_node = build_child_xml_node({{ parent }}, "{{ key }}")
@@ -32,6 +52,9 @@ for {{ key | replace("-", "_") }} in {{ parent | replace("_node","" ) }}["{{ key
 {% endif %}
 {% if v.type == "list" %}
     {{ build_list( key | replace('-', '_') + "_node", k, v) | indent }}
+{% endif %}
+{% if v.type == "dict" %}
+    {{ build_dict( key | replace('-', '_') + "_node", k, v) | indent }}
 {% endif %}
 {% endfor %}
 {% endmacro %}
