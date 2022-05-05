@@ -20,6 +20,6 @@
       args:
         chdir: "{{ saos10.location }}/plugins"
     - name: Run doc gen
-      ansible.builtin.command: collection_prep_add_docs -p .
+      ansible.builtin.command: collection_prep_add_docs -b master -p .
       args:
         chdir: "{{ saos10.location }}"
