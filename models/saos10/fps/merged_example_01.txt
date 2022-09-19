@@ -1,7 +1,7 @@
 
 # Using merged
 
-- name: Configure interfaces
+- name: Configure flow point
   ciena.saos10.saos10_fps:
     config:
       - name: fp1

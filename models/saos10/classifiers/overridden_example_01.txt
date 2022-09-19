@@ -1,7 +1,7 @@
 
 # Using overridden
 
-- name: Configure interfaces
+- name: Configure classifier
   ciena.saos10.saos10_classifiers:
     config:
       - name: untagged

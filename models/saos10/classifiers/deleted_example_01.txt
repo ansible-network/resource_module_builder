@@ -1,7 +1,7 @@
 
 # Using deleted
 
-- name: Configure interfaces
+- name: Delete classifier
   ciena.saos10.saos10_classifiers:
     config:
       - name: untagged

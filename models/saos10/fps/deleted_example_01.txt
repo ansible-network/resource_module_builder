@@ -1,7 +1,7 @@
 
 # Using deleted
 
-- name: Configure interfaces
+- name: delete flow point
   ciena.saos10.saos10_fps:
     config:
       - name: fp1
