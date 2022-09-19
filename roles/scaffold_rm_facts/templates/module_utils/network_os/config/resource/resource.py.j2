@@ -45,11 +45,11 @@ for {{ key | replace("-", "_") }} in {{ parent | replace("_node","" ) }}["{{ key
     {{ key | replace("-", "_") }}_node = build_child_xml_node({{ parent }}, "{{ key }}")
 {% for k, v in value.suboptions.items() %}
 {% if v.type == "str" %}
-    if "{{ k }}" in {{ key | replace("-", "_") }}:
+    if {{ key | replace("-", "_") }}["{{ k }}"]:
         build_child_xml_node({{ key | replace("-", "_")}}_node, "{{ k }}", {{ key | replace("-", "_") }}["{{ k }}"])
 {% endif %}
 {% if v.type == "int" %}
-    if "{{ k }}" in {{ key | replace("-", "_") }}:
+    if {{ key | replace("-", "_") }}["{{ k }}"]:
         build_child_xml_node({{ key | replace("-", "_")}}_node, "{{ k }}", {{ key | replace("-", "_") }}["{{ k }}"])
 {% endif %}
 {% if v.type == "list" %}
@@ -62,11 +62,11 @@ for {{ key | replace("-", "_") }} in {{ parent | replace("_node","" ) }}["{{ key
 {% endmacro %}
 
 {% macro build_str(parent, key) %}
-if "{{ key }}" in {{ parent | replace("_node","" ) }}:
+if {{ parent | replace("_node","" ) }}["{{ key }}"]:
     build_child_xml_node({{ parent }}, "{{ key }}", {{ parent | replace("_node","" ) }}["{{ key }}"])
 {% endmacro %}
 {% macro build_int(parent, key) %}
-if "{{ key }}" in {{ parent | replace("_node","" ) }}:
+if {{ parent | replace("_node","" ) }}["{{ key }}"]:
     build_child_xml_node({{ parent }}, "{{ key }}", {{ parent | replace("_node","" ) }}["{{ key }}"])
 {% endmacro %}
 
@@ -242,11 +242,10 @@ class {{ resource|capitalize }}(ConfigBase):
         {{ resource }}_xml = []
         if not want:
             want = have
-        delete = dict(delete="delete")
         for config in want:
             {{ resource_singular }}_root = build_root_xml_node("{{ resource_singular }}")
-            build_child_xml_node({{ resource_singular }}_root, "{{ resource_singular }}", config["{{ resource_key }}"])
-            {{ resource_singular }}_root.attrib.update(delete)
+            build_child_xml_node({{ resource_singular }}_root, "{{ resource_key }}", config["{{ resource_key }}"])
+            {{ resource_singular }}_root.attrib['operation'] = 'remove'
             {{ resource }}_xml.append({{ resource_singular }}_root)
         return {{ resource }}_xml
 

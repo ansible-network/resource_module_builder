@@ -1,0 +1,10 @@
+
+# Using overridden
+
+- name: Configure interfaces
+  ciena.saos10.saos10_fps:
+    config:
+      - name: fp1
+        fd-name: foo
+        logical-port: 1
+    state: overridden

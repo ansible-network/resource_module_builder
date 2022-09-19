@@ -6,6 +6,7 @@
       modules:
         - classifiers
         - fds
+        - fps
     overwrite: true
   tasks:
     - name: remove saos10 directory

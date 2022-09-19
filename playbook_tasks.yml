@@ -29,14 +29,26 @@
       ansible.builtin.copy:
         src: build/saos10/plugins/modules/saos10_{{ item }}.py
         dest: "{{ saos10.location }}/plugins/modules/saos10_{{ item }}.py"
+    - name: Creates directory
+      file:
+        path: "{{ saos10.location }}/plugins/module_utils/network/saos10/config/{{ item }}"
+        state: directory
     - name: Copy config
       ansible.builtin.copy:
         src: build/saos10/plugins/module_utils/network/saos10/config/{{ item }}/{{ item }}.py
         dest: "{{ saos10.location }}/plugins/module_utils/network/saos10/config/{{ item }}/{{ item }}.py"
+    - name: Creates directory
+      file:
+        path: "{{ saos10.location }}/plugins/module_utils/network/saos10/argspec/{{ item }}"
+        state: directory
     - name: Copy argspec
       ansible.builtin.copy:
         src: build/saos10/plugins/module_utils/network/saos10/argspec/{{ item }}/{{ item }}.py
         dest: "{{ saos10.location }}/plugins/module_utils/network/saos10/argspec/{{ item }}/{{ item }}.py"
+    - name: Creates directory
+      file:
+        path: "{{ saos10.location }}/plugins/module_utils/network/saos10/facts/{{ item }}"
+        state: directory
     - name: Copy facts gather
       ansible.builtin.copy:
         src: build/saos10/plugins/module_utils/network/saos10/facts/{{ item }}/{{ item }}.py

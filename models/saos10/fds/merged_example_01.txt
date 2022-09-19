@@ -2,7 +2,7 @@
 # Using merged
 
 - name: Configure interfaces
-  ciena.saos10.saos10_classifiers:
+  ciena.saos10.saos10_fds:
     config:
       - name: remote-fd
         mode: vpls

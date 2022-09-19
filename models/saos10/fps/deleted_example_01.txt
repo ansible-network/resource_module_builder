@@ -2,7 +2,7 @@
 # Using deleted
 
 - name: Configure interfaces
-  ciena.saos10.saos10_fds:
+  ciena.saos10.saos10_fps:
     config:
-      - name: remote-fd
+      - name: fp1
     state: deleted
