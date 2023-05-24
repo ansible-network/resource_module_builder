@@ -18,6 +18,11 @@ Usage:
 ```bash
 pipenv shell
 pipenv install git+https://github.com/ansible-network/collection_prep#egg=collection_prep
-# modify vars in playbook.yml
-ansible-playbook playbook.yml
+# Download some yangs for the device type you are working on
+ansible-playbook yang_get.yml
+# Convert the yangs to json schema
+ansible-playbook yang_convert_to_json.yml
+# Create the models for the device type you are working on
+# Generate the module code
+ansible-playbook generate_saos10.yml
 ```

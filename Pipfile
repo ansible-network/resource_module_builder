@@ -8,6 +8,7 @@ ansible = ">=2.13.0"
 jsonref = ">=0.2"
 ansible-core = "*"
 collection-prep = {git = "https://github.com/ansible-network/collection_prep"}
+pyang = "*"
 
 [dev-packages]
 
