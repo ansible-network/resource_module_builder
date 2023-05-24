@@ -1,0 +1,9 @@
+
+# Using deleted
+
+- name: Delete classifier
+  ciena.saos10.saos10_classifiers:
+    config:
+      - name: untagged
+      - name: foo-100
+    state: deleted

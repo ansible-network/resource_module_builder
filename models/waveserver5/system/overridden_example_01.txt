@@ -1,0 +1,17 @@
+
+# Using overridden
+
+- name: Configure classifier
+  ciena.saos10.saos10_classifiers:
+    config:
+      - name: untagged
+        filter-entry:
+          - filter-parameter: vtag-stack
+            untagged-exclude-priority-tagged: false
+      - name: foo-100
+        filter-entry:
+          - filter-parameter: vtag-stack
+            vtags:
+              - tag: 1
+                vlan-id: 100
+    state: overridden
