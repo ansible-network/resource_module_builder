@@ -1,0 +1,15 @@
+---
+- hosts: WS5-1
+  gather_facts: false
+  connection: ansible.netcommon.netconf
+
+  tasks:
+    # - name: assert host is 10x
+    #   assert:
+    #     that: hostvars[inventory_hostname].ansible_network_os == "ciena.saos10.saos10"
+    #     quiet: yes
+    - name: "Fetch all yang model and all the dependent models from remote host"
+      community.yang.fetch:
+        name: all
+        dir: "yangs/ws5"
+        continue_on_failure: yes

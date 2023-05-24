@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  vars:
+    ansible_collection_root: /home/{{ansible_user_id}}/src/ansible_collections
+    saos10:
+      modules:
+        - classifiers
+        - fds
+        - fps
+    overwrite: true
+  tasks:
+    - name: remove saos10 directory
+      ansible.builtin.file:
+        path: build/saos10
+        state: absent
+    - name: run execution
+      include_tasks: playbook_tasks.yml
+      with_items: "{{ saos10.modules }}"
+    - name: Run black
+      ansible.builtin.command: black .
+      args:
+        chdir: "{{ ansible_collection_root }}/ciena/saos10/plugins"
+    - name: Run doc gen
+      ansible.builtin.command: collection_prep_add_docs -b master -p .
+      args:
+        chdir: "{{ ansible_collection_root }}/ciena/saos10"

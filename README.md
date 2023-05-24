@@ -2,11 +2,16 @@
 
 ### Overview
 
-Waveserver Ai and SAOS 10 models
+Generates modules for:
+
+* Waveserver Ai
+* SAOS 10
+* Waveserver 5
+* RLS
 
 ### Resource Module Builder
 
-The modules in this project were built using the resource module builder.
+The playbooks in this project generate modules for Ciena collections using the resource module builder.
 
 Usage:
 
