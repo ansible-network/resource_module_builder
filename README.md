@@ -20,9 +20,11 @@ pipenv shell
 pipenv install git+https://github.com/ansible-network/collection_prep#egg=collection_prep
 # Download some yangs for the device type you are working on
 ansible-playbook yang_get.yml
-# Convert the yangs to json schema
-ansible-playbook yang_convert_to_json.yml
-# Create the models for the device type you are working on
+# Convert the yangs to RMB json
+export PYANG_PLUGINPATH=$PWD/pyang-plugin
+cd yangs/ws5
+pyang -f ansible ciena-waveserver-aaa.yang
+# Paste the output of that into the model's yml file
 # Generate the module code
 ansible-playbook generate_saos10.yml
 ```
