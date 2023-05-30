@@ -40,21 +40,24 @@ class AnsiblePlugin(plugin.PyangPlugin):
         data = {}
         for child in yang_module.i_children:
             if child.keyword in ["leaf", "leaf-list"]:
-                data[child.arg] = {
-                    'description': ' '.join(child.search_one('description').arg.split('\n')) if child.search_one('description') else '',
-                    "type": child.search_one("type").arg if child.search_one("type") else "",
-                    "required": not bool(child.search_one("default")),
-                }
+                if child.i_config:
+                    data[child.arg] = {
+                        'description': ' '.join(child.search_one('description').arg.split('\n')) if child.search_one('description') else '',
+                        "type": child.search_one("type").arg if child.search_one("type") else "",
+                        "required": not bool(child.search_one("default")),
+                    }
             elif child.keyword in ["container", "list"]:
-                data[child.arg] = {
-                    'description': ' '.join(child.search_one('description').arg.split('\n')) if child.search_one('description') else '',
-                    "type": "list" if child.keyword == "list" else "dict",
-                    "suboptions": self.yang_to_dict(child, path),
-                }
+                if child.i_config:
+                    data[child.arg] = {
+                        'description': ' '.join(child.search_one('description').arg.split('\n')) if child.search_one('description') else '',
+                        "type": "list" if child.keyword == "list" else "dict",
+                        "suboptions": self.yang_to_dict(child, path),
+                    }
             elif child.keyword == 'choice':
-                data[child.arg] = {
-                    'description': ' '.join(child.search_one('description').arg.split('\n')) if child.search_one('description') else '',
-                    'type': 'str',
-                    'choices': [case.arg for case in child.i_children],
-                }
+                if child.i_config:
+                    data[child.arg] = {
+                        'description': ' '.join(child.search_one('description').arg.split('\n')) if child.search_one('description') else '',
+                        'type': 'str',
+                        'choices': [case.arg for case in child.i_children],
+                    }
         return data
