@@ -1,0 +1,12 @@
+all:
+  hosts:
+    WS5-1:
+      ansible_host: x.x.x.x
+      ansible_user: su
+      ansible_password: xxxxx
+      yang_dir: ws5
+    RLS-1:
+      ansible_host: x.x.x.x
+      ansible_user: su
+      ansible_password: xxxxx
+      yang_dir: rls
