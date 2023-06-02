@@ -1,0 +1,11 @@
+waveserver-system:
+  description: Waveserver System configuration data and operational data.
+  suboptions:
+    host-name:
+      description: Waveserver system host name attributes.
+      suboptions:
+        config-host-name:
+          description: User configured host name.
+          required: true
+          type: cienawstypes:string-maxl-64
+      type: dict
