@@ -23,7 +23,7 @@ ansible-playbook yang_get.yml
 # Convert the yangs to RMB json
 export PYANG_PLUGINPATH=$PWD/pyang-plugin
 cd yangs/ws5
-pyang -f ansible ciena-waveserver-aaa.yang
+pyang -f ansible ciena-waveserver-aaa.yang > ../../models/waveserver5/aaa.yml
 # Paste the output of that into the model's yml file
 # Generate the module code
 ansible-playbook generate_saos10.yml
