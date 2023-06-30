@@ -33,7 +33,6 @@ class SchemaStore(object):
         self._all_schema_list = None
         self._all_schema_identifier_list = []
         self._debug = debug
-        self._latest_revision_dates = {}  # Store the latest revision dates
 
     def get_schema_description(self):
         if not HAS_XMLTODICT:
@@ -42,6 +41,7 @@ class SchemaStore(object):
                 "but does not appear to be installed. "
                 "It can be installed using `pip install xmltodict`"
             )
+
         get_filter = """
         <filter xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" type="subtree">
           <netconf-state xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring">
@@ -65,43 +65,43 @@ class SchemaStore(object):
             ]["schema"]
 
         for index, schema_list in enumerate(self._all_schema_list):
-            identifier = schema_list["identifier"]
-            self._all_schema_identifier_list.append(identifier)
-
-            # Store the latest revision date
-            if 'version' in schema_list:
-                self._latest_revision_dates[identifier] = schema_list['version']
-
+            self._all_schema_identifier_list.append(schema_list["identifier"])
         return self._all_schema_identifier_list
 
-    def get_one_schema(self, schema_id, revision_date, result, continue_on_error=False):
-        print(f"Fetching schema {schema_id} with revision {revision_date}")  # Debug print
+    def get_one_schema(self, schema_id, result, continue_on_error=False):
         if self._all_schema_list is None:
             self.get_schema_description()
 
         found = False
         data_model = None
 
+        # Search for schema that are supported by device.
+        # Also get namespace for retrieval
         schema_cache_entry = {}
         for index, schema_list in enumerate(self._all_schema_list):
             if schema_id == schema_list["identifier"]:
-                # Add a check for the revision date
-                if 'version' in schema_list and schema_list['version'] == revision_date:
-                    found = True
-                    break
+                version = schema_list["version"]
+                found = True
+                break
 
         if schema_id in self._all_schema_identifier_list:
-            print(f"Found schema {schema_id}. {revision_date}")
-            xml_request = f'<get-schema xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring"><identifier>{schema_id}</identifier><version>{revision_date}</version></get-schema>'
+            content = "<identifier>%s</identifier><version>%s</version>" % (
+                schema_id,
+                version,
+            )
+            xmlns = "urn:ietf:params:xml:ns:yang:ietf-netconf-monitoring"
+            xml_request = '<%s xmlns="%s"> %s </%s>' % (
+                "get-schema",
+                xmlns,
+                content,
+                "get-schema",
+            )
             try:
                 response = self._conn.dispatch(xml_request)
             except ConnectionError as e:
                 raise ValueError(to_text(e))
             res_json = xmltodict.parse(response, dict_constructor=dict)
-            if "rpc-reply" in res_json:
-                data_model = res_json["rpc-reply"]["data"]["#text"]
-            if "nc:rpc-reply" in res_json:
-                data_model = res_json["nc:rpc-reply"]["data"]["#text"]
+            data_model = res_json["rpc-reply"]["data"]["#text"]
             if self._debug:
                 self._debug("Fetched '%s' yang model" % schema_id)
             result["fetched"][schema_id] = data_model
@@ -119,13 +119,9 @@ class SchemaStore(object):
     def get_schema_and_dependants(
         self, schema_id, result, continue_on_failure=False
     ):
-        # Get the latest revision date for this schema
-        revision_date = self._latest_revision_dates.get(schema_id)
-        print(f"Fetching schema and dependants for {schema_id} with revision {revision_date}")  # Debug print
-
         try:
             found, data_model = self.get_one_schema(
-                schema_id, revision_date, result, continue_on_failure
+                schema_id, result, continue_on_failure
             )
         except ValueError as exc:
             raise ValueError(exc)
@@ -141,16 +137,13 @@ class SchemaStore(object):
             return []
 
     def run(self, schema_id, result, continue_on_failure=False):
-        # Get the latest revision date for this schema
-        revision_date = self._latest_revision_dates.get(schema_id)
-
         changed = False
         counter = 1
         sq = queue.Queue()
-        sq.put((schema_id, revision_date))  # Include the revision date in the queue
+        sq.put(schema_id)
 
         while sq.empty() is not True:
-            schema_id, revision_date = sq.get()  # Extract the schema_id and revision_date from the queue
+            schema_id = sq.get()
             if schema_id in result["fetched"]:
                 counter -= 1
                 continue
@@ -159,10 +152,8 @@ class SchemaStore(object):
                 schema_id, result, continue_on_failure
             )
             for schema_id in schema_dlist:
-                # Get the latest revision date for this schema
-                revision_date = self._latest_revision_dates.get(schema_id)
                 if schema_id not in result["fetched"]:
-                    sq.put((schema_id, revision_date))  # Include the revision date in the queue
+                    sq.put(schema_id)
                     changed = True
                     counter += 1
 
