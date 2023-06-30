@@ -7,5 +7,5 @@
     - name: "Fetch all yang model and all the dependent models from remote host"
       community.yang.fetch:
         name: all
-        dir: "{{ hostvars[inventory_hostname].yang_dir }}"
+        dir: "yangs/{{ hostvars[inventory_hostname].yang_dir }}"
         continue_on_failure: yes

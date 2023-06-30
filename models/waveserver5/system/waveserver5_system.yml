@@ -28,10 +28,10 @@ DOCUMENTATION: |
       description: A dictionary of system options
       type: dict
       suboptions:
-        host-name:
+        config:
           description: Waveserver system host name attributes.
           suboptions:
-            config-host-name:
+            hostname:
               description: User configured host name.
               required: true
               type: str
