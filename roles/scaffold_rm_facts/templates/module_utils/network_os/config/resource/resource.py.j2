@@ -145,7 +145,7 @@ class {{ resource|capitalize }}(ConfigBase):
         config_xmls = self.set_config(existing_{{ resource }}_facts)
 
         for config_xml in to_list(config_xmls):
-            config = f'<config>{config_xml.decode("utf-8")}</config>'
+            config = f'<nc:config xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">{config_xml.decode("utf-8")}</nc:config>'
             kwargs = {
                 "config": config,
                 "target": "running",
@@ -256,6 +256,29 @@ class {{ resource|capitalize }}(ConfigBase):
         :returns: the xml necessary to migrate the current configuration
                   to the desired configuration
         """
+{# THIS IS FOR SAOS 10 config builds
         {{ resource }}_xml = []
         {{ build_config(config) | indent | indent }}
-        return {{ resource }}_xml
+        return {{ resource }}_xml 
+#}
+        # Create an empty list to hold the XML elements
+        xml_elements = []
+
+        # Iterate over the 'want' dictionary
+        for key, value in want.items():
+            if isinstance(value, dict):
+                # If the value is a dictionary, create a new element and recursively add its children
+                element = etree.Element(key)
+                if isinstance(want.get(key), dict):
+                    element.extend(self._state_merged(value, want.get(key)))
+                else:
+                    element.extend(self._state_merged(value, {}))
+            else:
+                # If the value is not a dictionary, create a new element and set its text
+                element = etree.Element(key)
+                element.text = str(value)
+
+            # Add the element to the list
+            xml_elements.append(element)
+
+        return xml_elements
