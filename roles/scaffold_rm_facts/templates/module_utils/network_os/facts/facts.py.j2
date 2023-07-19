@@ -8,6 +8,8 @@ The facts class for {{ network_os }}
 this file validates each subset of facts and selectively
 calls the appropriate facts gathering function
 """
+from __future__ import absolute_import, division, print_function
+
 
 from {{ import_path }}.{{ network_os }}.argspec.facts.facts import FactsArgs
 {% if structure == 'collection' %}

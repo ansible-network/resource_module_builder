@@ -27,4 +27,5 @@ pyang -f ansible ciena-waveserver-aaa.yang > ../../models/waveserver5/aaa.yml
 # Paste the output of that into the model's yml file
 # Generate the module code
 ansible-playbook generate_saos10.yml
+ansible-playbook generate_waveserver5.yml
 ```

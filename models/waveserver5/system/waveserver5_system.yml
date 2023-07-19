@@ -16,10 +16,10 @@ COPYRIGHT: Copyright 2023 Ciena
 
 DOCUMENTATION: |
   module: system
-  version_added: 2.9
+  version_added: 0.0.1
   short_description: Waveserver System configuration data and operational data.
   description: Waveserver System configuration data and operational data.
-  author: jgroom@ciena.com
+  author: Jeff Groom (jgroom@ciena.com)
   requirements:
     - ncclient (>=v0.6.4)
     - xmltodict (>=0.12.0)
