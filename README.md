@@ -16,8 +16,7 @@ The playbooks in this project generate modules for Ciena collections using the r
 Usage:
 
 ```bash
-pipenv shell
-pipenv install git+https://github.com/ansible-network/collection_prep#egg=collection_prep
+pip install git+https://github.com/ansible-network/collection_prep.git
 # Download some yangs for the device type you are working on
 ansible-playbook yang_get.yml
 # Convert the yangs to RMB json
