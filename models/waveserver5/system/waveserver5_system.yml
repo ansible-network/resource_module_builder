@@ -15,7 +15,7 @@ RESOURCE_KEY: name
 COPYRIGHT: Copyright 2023 Ciena
 
 DOCUMENTATION: |
-  module: system
+  module: waveserver5_system
   version_added: 0.0.1
   short_description: Waveserver System configuration data and operational data.
   description: Waveserver System configuration data and operational data.
