@@ -12,7 +12,7 @@ module_directories:
   role: library
   collection: modules
 
-module_directory: "{{ module_directories[structure] }}"
+module_directory: "modules"
 
 # set the parent directory based on the structure
 parent_directories:
@@ -48,10 +48,10 @@ resource_module_templates:
 - source: README.md.j2
   destination: "{{ rm_dest }}/README.md"
   overwrite: False
-- source: module_directory/network_os/network_os_resource.py.j2
+- source: modules/network_os_resource.py.j2
   destination: "{{ parent_directory }}/{{ module_directory }}/{{ network_os }}_{{ resource }}.py"
   overwrite: True
-- source: module_directory/network_os/network_os_facts.py.j2
+- source: modules/network_os_facts.py.j2
   destination: "{{ parent_directory }}/{{ module_directory }}/{{ network_os }}_facts.py"
   overwrite: False
 - source: module_utils/network_os/argspec/facts/facts.py.j2

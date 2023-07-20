@@ -57,7 +57,7 @@
       ansible.builtin.command: black .
       args:
         chdir: "{{ ansible_collection_root }}/ciena/{{ product }}/plugins"
-    # - name: Run doc gen
-    #   ansible.builtin.command: collection_prep_add_docs -b master -p .
-    #   args:
-    #     chdir: "{{ ansible_collection_root }}/ciena/{{ product }}"
+    - name: Run doc gen
+      ansible.builtin.command: collection_prep_add_docs -b master -p .
+      args:
+        chdir: "{{ ansible_collection_root }}/ciena/{{ product }}"
