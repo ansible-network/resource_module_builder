@@ -220,8 +220,8 @@ class {{ resource|capitalize }}(ConfigBase):
 
         for xml in config_xmls:
             root.append(xml)
-
-        return tostring(root)
+        response = tostring(root)
+        return response
 
     def _state_replaced(self, want, have):
         """ The command generator when state is replaced
