@@ -4,6 +4,6 @@
 - name: Configure system hostname
   ciena.waveserver5.waveserver5_system:
     config:
-      config:
-        hostname: foo
+      host-name:
+        config-host-name: foo
     state: merged
