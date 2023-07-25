@@ -3,6 +3,8 @@ network_os: "{{ rm['NETWORK_OS'] }}"
 resource: "{{ rm['RESOURCE'] }}"
 resource_key: "{{ rm['RESOURCE_KEY'] }}"
 resource_singular: "{{ rm['RESOURCE_SINGULAR'] }}"
+xml_namespace: "{{ rm['XML_NAMESPACE'] }}"
+xml_resource: "{{ rm['XML_RESOURCE'] }}"
 
 # set transport to network_cli unless overridden in cli
 transport: network_cli

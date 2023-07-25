@@ -13,6 +13,8 @@ RESOURCE: system
 RESOURCE_SINGULAR: system
 RESOURCE_KEY: name
 COPYRIGHT: Copyright 2023 Ciena
+XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-system"
+XML_RESOURCE: waveserver-system
 
 DOCUMENTATION: |
   module: waveserver5_system

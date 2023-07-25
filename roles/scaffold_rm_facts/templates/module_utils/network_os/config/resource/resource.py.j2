@@ -207,7 +207,18 @@ class {{ resource|capitalize }}(ConfigBase):
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
-        root = build_root_xml_node("{{ resource }}")
+{% if xml_resource %}
+        key = "{{ xml_resource }}"
+{% else %}
+        key = "{{ resource }}"
+{% endif %}
+{% if xml_namespace %}
+        namespace = '{{ xml_namespace }}'
+        nsmap = {None: namespace}
+        root = etree.Element("{{ '{%s}%s' }}" % (namespace, key), nsmap=nsmap)
+{% else %}
+        root = etree.Element(key)
+{% endif %}
         state = self._module.params["state"]
         if state == "overridden":
             config_xmls = self._state_overridden(want, have)
