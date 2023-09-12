@@ -140,8 +140,8 @@ class {{ resource|capitalize }}Facts(object):
         stripped = remove_namespaces(xml_to_string(data))
         data = fromstring(to_bytes(stripped, errors="surrogate_then_replace"))
 
-        resources = data.xpath("/rpc-reply/data/{{ xml_resource }}/{{ resource_singular }}")[0]
-
+{% if config.type == "list" %}
+        resources = data.xpath("/rpc-reply/data/{{ xml_resource }}/{{ resource }}")
         objs = []
         for resource in resources:
             if resource:
@@ -156,8 +156,35 @@ class {{ resource|capitalize }}Facts(object):
             for cfg in params["config"]:
                 facts["{{ resource }}"].append(utils.remove_empties(cfg))
 
+{% elif config.type == "dict" %}
+        resource = data.xpath("/rpc-reply/data/{{ xml_resource }}")[0]
+        obj = self.render_config(self.generated_spec, resource)
+
+        facts = {}
+        facts["{{ resource }}"] = {}
+        params = utils.validate_config(self.argument_spec, {"config": obj})
+        facts["{{ resource }}"] = params["config"]
+
+{% endif %}
         ansible_facts["ansible_network_resources"].update(facts)
         return ansible_facts
+
+    def get_xml_value(self, xml_obj, xpath):
+        result = xml_obj.xpath(xpath)
+        return result[0].text if result else None
+
+    def recursive_config_fill(self, config, conf, spec, xml_base_path=""):
+        for key, _ in spec.items():
+            modified_key = key.replace('_', '-')
+            new_base_path = f"{xml_base_path}/{modified_key}" if xml_base_path else modified_key
+
+            if isinstance(spec[key], dict):
+                config[key] = {}
+                self.recursive_config_fill(config[key], conf, spec[key], new_base_path)
+            else:
+                extracted_value = self.get_xml_value(conf, new_base_path)
+                if extracted_value is not None:
+                    config[key] = extracted_value
 
     def render_config(self, spec, conf):
         """
@@ -169,15 +196,8 @@ class {{ resource|capitalize }}Facts(object):
         :rtype: dictionary
         :returns: The generated config
         """
-        config = deepcopy(spec)
-        {{ resource_singular }} = self._get_xml_dict(conf)["{{ resource_singular }}"]
-        config["{{ resource_key }}"] = utils.get_xml_conf_arg(conf, "{{ resource_key }}")
-        {{ build_config(config) | indent | indent }}
-
+        if isinstance(conf, str):
+            conf = etree.fromstring(conf)
+        config = {}
+        self.recursive_config_fill(config, conf, spec)
         return utils.remove_empties(config)
-
-    def _get_xml_dict(self, xml_root):
-        if not HAS_XMLTODICT:
-            self._module.fail_json(msg=missing_required_lib("xmltodict"))
-        xml_dict = xmltodict.parse(etree.tostring(xml_root), dict_constructor=dict)
-        return xml_dict

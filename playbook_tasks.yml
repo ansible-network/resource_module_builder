@@ -54,7 +54,7 @@
         src: build/{{ product }}/plugins/module_utils/network/{{ product }}/facts/{{ item }}/{{ item }}.py
         dest: "{{ansible_collection_root}}/ciena/{{ product }}/plugins/module_utils/network/{{ product }}/facts/{{ item }}/{{ item }}.py"
     - name: Run black
-      ansible.builtin.command: black .
+      ansible.builtin.command: black . -l 120
       args:
         chdir: "{{ ansible_collection_root }}/ciena/{{ product }}/plugins"
     - name: Run doc gen

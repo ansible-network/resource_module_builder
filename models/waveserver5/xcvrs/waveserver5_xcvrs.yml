@@ -14,7 +14,7 @@ RESOURCE_SINGULAR: xcvr
 RESOURCE_KEY: xcvr_id
 COPYRIGHT: Copyright 2023 Ciena
 XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-xcvr"
-XML_RESOURCE: waveserver-xcvr
+XML_RESOURCE: waveserver-xcvrs
 
 DOCUMENTATION: |
   module: waveserver5_xcvr
@@ -42,7 +42,7 @@ DOCUMENTATION: |
         state:
           description: State information of this XCVR instance.
           suboptions:
-            admin-state:
+            admin_state:
               description: Whether Admin State is enabled or disabled for this XCVR's
                 PTP.
               required: true
