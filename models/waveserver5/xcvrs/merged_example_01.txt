@@ -1,0 +1,9 @@
+
+# Using merged
+
+- name: Configure xcvr
+  ciena.waveserver5.waveserver5_xcvr:
+    config:
+      host-name:
+        config-host-name: foo
+    state: merged

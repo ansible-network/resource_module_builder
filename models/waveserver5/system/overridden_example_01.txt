@@ -4,6 +4,6 @@
 - name: Configure system hostname
   ciena.waveserver5.waveserver5_system:
     config:
-      host-name:
-        config-host-name: foo
+      host_name:
+        config_host_name: foo
     state: overridden

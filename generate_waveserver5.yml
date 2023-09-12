@@ -5,6 +5,7 @@
     waveserver5:
       modules:
         - system
+        - xcvrs
     overwrite: true
   tasks:
     - name: run execution

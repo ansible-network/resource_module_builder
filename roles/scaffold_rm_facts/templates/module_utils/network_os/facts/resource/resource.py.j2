@@ -132,15 +132,15 @@ class {{ resource|capitalize }}Facts(object):
 
         if not data:
             config_filter = """
-                <{{ resource }}>
-                </{{ resource }}>
+                <{{ xml_resource }} xmlns="{{ xml_namespace }}">
+                </{{ xml_resource }}>
                 """
             data = get(self._module, filter=("subtree", config_filter))
 
         stripped = remove_namespaces(xml_to_string(data))
         data = fromstring(to_bytes(stripped, errors="surrogate_then_replace"))
 
-        resources = data.xpath("/data/{{ resource }}/{{ resource_singular }}")
+        resources = data.xpath("/rpc-reply/data/{{ xml_resource }}/{{ resource_singular }}")[0]
 
         objs = []
         for resource in resources:

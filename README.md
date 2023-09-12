@@ -23,6 +23,8 @@ ansible-playbook yang_get.yml
 export PYANG_PLUGINPATH=$PWD/pyang-plugin
 cd yangs/ws5
 pyang -f ansible ciena-waveserver-system.yang > ../../models/waveserver5/system.yml
+pyang -f ansible ciena-waveserver-xcvrs.yang > ../../models/waveserver5/xcvrs.yml
+pyang -f ansible ciena-waveserver-interfaces.yang > ../../models/waveserver5/interfaces.yml
 # Paste the output of that into the model's yml file
 # Generate the module code
 ansible-playbook generate_saos10.yml

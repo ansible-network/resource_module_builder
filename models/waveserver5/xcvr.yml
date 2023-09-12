@@ -1,0 +1,129 @@
+waveserver-xcvrs:
+  description: Waveserver transceivers (XCVR) configuration and operational data.
+  suboptions:
+    xcvr-profiles:
+      description: List of XCVR profiles.
+      suboptions:
+        description:
+          description: The description of the profile to uniquely identify the XCVR
+            and its profile.
+          required: true
+          type: cienawstypes:string-maxl-254
+        id:
+          description: Identification information of this XCVR Profile instance.
+          suboptions:
+            vendor-name:
+              description: Name of the XCVR vendor.
+              required: true
+              type: cienawstypes:string-maxl-32
+            vendor-oui:
+              description: OUI of the XCVR vendor.
+              required: true
+              type: string
+            vendor-pn:
+              description: XCVR vendor part number.
+              required: true
+              type: cienawstypes:string-maxl-32
+            vendor-rev:
+              description: XCVR vendor revision.
+              required: true
+              type: cienawstypes:string-maxl-32
+          type: dict
+        properties:
+          description: Configurable attributes of the XCVR profile.
+          suboptions:
+            rx-thresholds:
+              description: Receiver power thresholds of the XCVR profile. These threshold
+                attributes will not affect the traffic. Modifying these thresholds
+                to values which are different from the manufacture recommended values
+                will impact the XCVR optical power alarms/warnings.
+              suboptions:
+                high-alarm-threshold:
+                  description: Optical power high alarm threshold, in dBm. If it is
+                    modem Tx-power, the threshold can change based on provisioned
+                    tx power. High threshold = target power + 3.
+                  required: true
+                  type: cienawstypes:decimal-2-dig
+                high-warning-threshold:
+                  description: Optical power high warning threshold, in dBm.
+                  required: true
+                  type: cienawstypes:decimal-2-dig
+                low-alarm-threshold:
+                  description: Optical power low alarm threshold, in dBm. If it is
+                    modem Tx-power, the threshold can change based on provisioned
+                    tx power. Low threshold = target power - 10.
+                  required: true
+                  type: cienawstypes:decimal-2-dig
+                low-warning-threshold:
+                  description: Optical power low warning threshold, in dBm.
+                  required: true
+                  type: cienawstypes:decimal-2-dig
+              type: dict
+            tx-optical-power-monitoring-override:
+              description: To override the transmit power monitor for plugs even though
+                the setting of the transmit power monitor capability in EEPROM of
+                the plug is not to allow monitoring. True means to allow monitoring
+                irrespective of the EEPROM setting. And, False means no override.
+              required: true
+              type: boolean
+            tx-thresholds:
+              description: Transmit power thresholds of the XCVR profile. These threshold
+                attributes will not affect the traffic. Modifying these thresholds
+                to values which are different from the manufacture recommended values
+                will impact the XCVR optical power alarms/warnings.
+              suboptions:
+                high-alarm-threshold:
+                  description: Optical power high alarm threshold, in dBm. If it is
+                    modem Tx-power, the threshold can change based on provisioned
+                    tx power. High threshold = target power + 3.
+                  required: true
+                  type: cienawstypes:decimal-2-dig
+                high-warning-threshold:
+                  description: Optical power high warning threshold, in dBm.
+                  required: true
+                  type: cienawstypes:decimal-2-dig
+                low-alarm-threshold:
+                  description: Optical power low alarm threshold, in dBm. If it is
+                    modem Tx-power, the threshold can change based on provisioned
+                    tx power. Low threshold = target power - 10.
+                  required: true
+                  type: cienawstypes:decimal-2-dig
+                low-warning-threshold:
+                  description: Optical power low warning threshold, in dBm.
+                  required: true
+                  type: cienawstypes:decimal-2-dig
+              type: dict
+          type: dict
+        xcvr-profile-index:
+          description: XCVR tranceiver profile index, unique, key value for the XCVR
+            Profile List.
+          required: true
+          type: xcvr-profile-id
+      type: list
+    xcvrs:
+      description: Waveserver transceiver (XCVR) list.
+      suboptions:
+        properties:
+          description: All the Configurable and operational data of this XCVR instance.
+          suboptions:
+            mode:
+              description: Mode of the XCVR.
+              required: true
+              type: cienawstypes:xcvr-mode
+          type: dict
+        state:
+          description: State information of this XCVR instance.
+          suboptions:
+            admin-state:
+              description: Whether Admin State is enabled or disabled for this XCVR's
+                PTP.
+              required: true
+              type: cienawstypes:enabled-disabled-enum
+          type: dict
+        xcvr-id:
+          description: Unique, access identifier string of the XCVR (e.g. '1-1').
+            Key value for the XCVR List.
+          required: true
+          type: cienawstypes:name-string
+      type: list
+  type: dict

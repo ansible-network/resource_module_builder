@@ -89,23 +89,17 @@ __metaclass__ = type
 
 try:
     from lxml import etree
-    from lxml.etree import tostring as xml_to_string, fromstring
 
     HAS_LXML = True
 except ImportError:
-    from xml.etree.ElementTree import fromstring, tostring as xml_to_string
-
     HAS_LXML = False
 
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
-from ansible.module_utils._text import to_bytes
 
 from ansible_collections.ciena.{{ network_os }}.plugins.module_utils.network.{{ network_os }}.{{ network_os }} import (
-    xml_to_string,
-    fromstring,
     tostring,
 )
 
@@ -116,7 +110,6 @@ from ansible_collections.ciena.{{ network_os }}.plugins.module_utils.network.{{ 
     Facts,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.netconf import (
-    remove_namespaces,
     build_root_xml_node,
     build_child_xml_node,
 )
@@ -161,27 +154,31 @@ class {{ resource|capitalize }}(ConfigBase):
         existing_{{ resource }}_facts = self.get_{{ resource }}_facts()
         config_xmls = self.set_config(existing_{{ resource }}_facts)
 
-        for config_xml in to_list(config_xmls):
-            config = f'<config>{config_xml}</config>'
-            kwargs = {
-                "config": config,
-                "target": "running",
-                "default_operation": "merge",
-                "format": "xml",
-            }
+        if config_xmls and self.state in self.ACTION_STATES:
+            for config_xml in to_list(config_xmls):
+                config = f'<config>{config_xml}</config>'
+                kwargs = {
+                    "config": config,
+                    "target": "running",
+                    "default_operation": "merge",
+                    "format": "xml",
+                }
+                self._module._connection.edit_config(**kwargs)
+            result["changed"] = True
+            result["xml"] = config_xmls
 
-            self._module._connection.edit_config(**kwargs)
-
-        result["xml"] = config_xmls
         changed_{{ resource }}_facts = self.get_{{ resource }}_facts()
 
-        result["changed"] = config_is_diff(
-            existing_{{ resource }}_facts, changed_{{ resource }}_facts
-        )
+        result["changed"] = config_is_diff(existing_{{ resource }}_facts, changed_{{ resource }}_facts)
 
         result["before"] = existing_{{ resource }}_facts
-        if result["changed"]:
-            result["after"] = changed_{{ resource }}_facts
+        if self.state in self.ACTION_STATES:
+            result["before"] = existing_{{ resource }}_facts
+            if result["changed"]:
+                result["after"] = changed_{{ resource }}_facts
+
+        elif self.state == "gathered":
+            result["gathered"] = existing_{{ resource }}_facts
 
         return result
 
@@ -220,19 +217,19 @@ class {{ resource|capitalize }}(ConfigBase):
         root = etree.Element(key)
 {% endif %}
         state = self._module.params["state"]
-        if state == "overridden":
-            config_xmls = self._state_overridden(want, have)
-        elif state == "deleted":
-            config_xmls = self._state_deleted(want, have)
-        elif state == "merged":
-            config_xmls = self._state_merged(want, have)
-        elif state == "replaced":
-            config_xmls = self._state_replaced(want, have)
-
+        state_methods = {
+            "overridden": self._state_overridden,
+            "deleted": self._state_deleted,
+            "merged": self._state_merged,
+            "replaced": self._state_replaced,
+        }
+        config_xmls = []
+        if state in state_methods:
+            config_xmls = state_methods.get(state)(want, have)
         for xml in config_xmls:
             root.append(xml)
-        response = tostring(root)
-        return response
+
+        return tostring(root)
 
     def _state_replaced(self, want, have):
         """ The command generator when state is replaced
@@ -292,6 +289,7 @@ class {{ resource|capitalize }}(ConfigBase):
 
         # Iterate over the 'want' dictionary
         for key, value in want.items():
+            key = key.replace("_", "-")
             if isinstance(value, dict):
                 # If the value is a dictionary, create a new element and recursively add its children
                 element = etree.Element(key)

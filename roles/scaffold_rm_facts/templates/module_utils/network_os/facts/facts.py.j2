@@ -12,13 +12,9 @@ from __future__ import absolute_import, division, print_function
 
 
 from {{ import_path }}.{{ network_os }}.argspec.facts.facts import FactsArgs
-{% if structure == 'collection' %}
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts import (
     FactsBase,
 )
-{% else %}
-from ansible.module_utils.network.common.facts.facts import FactsBase
-{% endif %}
 from {{ import_path }}.{{ network_os }}.facts.{{ resource }}.{{ resource }} import {{ resource|capitalize }}Facts
 
 

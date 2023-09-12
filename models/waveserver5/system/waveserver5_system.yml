@@ -32,10 +32,10 @@ DOCUMENTATION: |
       description: A dictionary of system options
       type: dict
       suboptions:
-        host-name:
+        host_name:
           description: Waveserver system host name attributes.
           suboptions:
-            config-host-name:
+            config_host_name:
               description: User configured host name.
               required: true
               type: str
@@ -44,6 +44,7 @@ DOCUMENTATION: |
       choices:
       - merged
       - overridden
+      - gathered
       default: merged
       description:
       - The state the configuration should be left in
