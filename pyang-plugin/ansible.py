@@ -178,6 +178,10 @@ class AnsiblePlugin(plugin.PyangPlugin):
     def yang_to_dict(self, yang_module, path):
         data = {}
         for child in yang_module.i_children:
+            status_node = child.search_one("status")
+            if status_node and status_node.arg == "deprecated":
+                logging.warning(f"Skipping deprecated leaf: {child.arg}")
+                continue  # Skip this leaf but continue processing siblings
             key_name = child.arg.replace("-", "_")
 
             if child.keyword in ["leaf", "leaf-list"]:

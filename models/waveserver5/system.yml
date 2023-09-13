@@ -628,14 +628,6 @@ waveserver_system:
                   type: dict
               type: dict
           type: dict
-        grpc_server_state:
-          choices:
-          - disabled
-          - enabled
-          description: Indicate whether gRPC server is enabled. This leaf is deprecated,
-            replaced by admin-state in grpc container.
-          required: true
-          type: str
         https:
           description: HTTPS server configuration.
           suboptions:
@@ -838,28 +830,10 @@ waveserver_system:
               required: true
               type: int
           type: dict
-        web_server_state:
-          choices:
-          - disabled
-          - enabled
-          description: Indicate whether web server is enabled, HTTPS only. This leaf
-            is deprecated, replaced by admin-state in https container.
-          required: true
-          type: str
       type: dict
     shell:
       description: Waveserver system CLI shell/session attributes.
       suboptions:
-        inactivity_timeout:
-          description: Leafref to global session inactivity timeout period, in minutes.
-            This attribute is deprecated. Has been moved to server-config container.
-          required: true
-          type: str
-        inactivity_timer:
-          description: Leafref to global session inactivity timer state. This attribute
-            is deprecated. Has been moved to server-config container.
-          required: true
-          type: str
         login_authentication_message:
           choices:
           - disabled
