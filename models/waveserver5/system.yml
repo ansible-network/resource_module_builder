@@ -1,178 +1,209 @@
-waveserver-system:
+waveserver_system:
   description: Waveserver System configuration data and operational data.
   suboptions:
-    auto-config-recovery:
+    auto_config_recovery:
       description: Waveserver system automatic configuration recovery for CP replacement
         attributes.
       suboptions:
-        admin-state:
+        admin_state:
+          choices:
+          - disabled
+          - enabled
           description: Indicate whether auto config recovery is enabled.
           required: true
-          type: cienawstypes:enabled-disabled-enum
-        audit-interval:
+          type: str
+        audit_interval:
           description: Audit Interval in minutes.
           required: true
-          type: uint16
-        config-mismatch-detection-state:
+          type: int
+        config_mismatch_detection_state:
+          choices:
+          - disabled
+          - enabled
           description: Indicate whether config mismatch detection for CP replacement
             is enabled.
           required: true
-          type: cienawstypes:enabled-disabled-enum
+          type: str
         passphrase:
           description: 'Passphrase used for backup encryption (Default: none, use
             builtin key).'
           required: true
-          type: string
+          type: str
       type: dict
-    client-config:
+    client_config:
       description: Waveserver client configuration attributes.
       suboptions:
         dhcp:
           description: Waveserver DHCP client configuration attributes.
           suboptions:
-            admin-state:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: DHCP client administrative atate
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            discovery-interval:
+              type: str
+            discovery_interval:
               description: DHCP client discovery interval in seconds.
               required: true
-              type: uint32
-            interface-type:
+              type: int
+            interface_type:
+              choices:
+              - remote
+              - active
               description: DHCP client interface type.
               required: true
-              type: enumeration
+              type: str
             options:
               description: DHCP Options. A list of the enabled/requested options configured
                 on the DHCP client.
               suboptions:
-                bootfile-name:
+                bootfile_name:
                   description: DHCP Option 67 - Bootfile Name.
                   required: true
-                  type: boolean
-                domain-name:
+                  type: bool
+                domain_name:
                   description: DHCP Option 15 - Domain Name.
                   required: true
-                  type: boolean
-                domain-server:
+                  type: bool
+                domain_server:
                   description: DHCP Option 6 - Domain Name Server.
                   required: true
-                  type: boolean
-                host-name:
+                  type: bool
+                host_name:
                   description: DHCP Option 12 - Host Name.
                   required: true
-                  type: boolean
-                lease-time:
+                  type: bool
+                lease_time:
                   description: DHCP Option 51 - Lease Time.
                   required: true
-                  type: boolean
-                log-server:
+                  type: bool
+                log_server:
                   description: DHCP Option 7 - Log Server.
                   required: true
-                  type: boolean
-                ntp-servers:
+                  type: bool
+                ntp_servers:
                   description: DHCP Option 42 - Network Time Protocol Servers.
                   required: true
-                  type: boolean
+                  type: bool
                 router:
                   description: DHCP Option 3 - Router.
                   required: true
-                  type: boolean
-                subnet-mask:
+                  type: bool
+                subnet_mask:
                   description: DHCP Option 1 - Subnet Mask.
                   required: true
-                  type: boolean
-                tftp-server-name:
+                  type: bool
+                tftp_server_name:
                   description: DHCP Option 66 - TFTP Server Name.
                   required: true
-                  type: boolean
-                time-offset:
+                  type: bool
+                time_offset:
                   description: DHCP Option 2 - Time Offset.
                   required: true
-                  type: boolean
+                  type: bool
               type: dict
-            requested-lease-time:
+            requested_lease_time:
               description: DHCP client requested lease time in seconds.
               required: true
-              type: uint32
+              type: int
           type: dict
         dns:
           description: Waveserver DNS client configuration attributes.
           suboptions:
-            admin-state:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: DNS client administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             server:
               description: List of DNS servers to use for domain name resolution.
                 DNS servers can be manually created by the user, or dynamically created
                 by via DHCP. Waveserver supports up to 3 manually provisioned DNS
                 servers and up to 2 DHCP-assigned servers.
               suboptions:
-                admin-state:
+                admin_state:
+                  choices:
+                  - disabled
+                  - enabled
                   description: DNS remote server administrative state.
                   required: true
-                  type: cienawstypes:enabled-disabled-enum
-                ip-address:
+                  type: str
+                ip_address:
                   description: IP address associated with the remote DNS server.
                   required: true
-                  type: cienawstypes:ip-address
-                user-priority:
+                  type: str
+                user_priority:
                   description: User-assigned DNS server priority. Only applicable
                     when server source is 'user' or 'both'. Ignored otherwise.
                   required: true
-                  type: uint8
+                  type: int
               type: list
           type: dict
         ntp:
           description: Waveserver NTP client configuration attributes.
           suboptions:
-            admin-state:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: NTP client administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            authentication-state:
+              type: str
+            authentication_state:
+              choices:
+              - disabled
+              - enabled
               description: NTP client authentication state. When enabled, only MD5
                 authenticated packets will be used to synchronize the time.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            autokey-authentication-state:
+              type: str
+            autokey_authentication_state:
+              choices:
+              - disabled
+              - enabled
               description: NTP client autokey authentication state. A RSA host key
                 and an X509 certificate (RSA-SHA1) will be created (if not exist)
                 and saved. The host key and certificate will be loaded to NTP daemon
                 only if the NTP autokey is enabled on Waveserver
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             mode:
+              choices:
+              - polling
+              - broadcast
+              - multicast
               description: NTP client mode.
               required: true
-              type: enumeration
-            multicast-server:
+              type: str
+            multicast_server:
               description: List of NTP multicast servers to use for time synchronization.
               suboptions:
-                ip-address:
+                ip_address:
                   description: Configured IPv6 address for NTP Multicast server.
                   required: true
-                  type: cienawstypes:ipv6-address
+                  type: str
               type: list
-            ntp-key:
+            ntp_key:
               description: List of NTP authentication keys.
               suboptions:
-                key-id:
+                key_id:
                   description: Unique index value for the NTP authentication key.
                   required: true
-                  type: uint16
-                key-value:
+                  type: int
+                key_value:
                   description: NTP authentication key value.
                   required: true
-                  type: string
+                  type: str
               type: list
-            polling-interval:
+            polling_interval:
               description: The NTP client polling interval, in seconds. Applicable
                 only when NTP client mode is set to 'polling'. This is a global setting
                 that applies to all configured NTP peer servers.
               required: true
-              type: uint32
+              type: int
             server:
               description: List of NTP servers to use for time synchronization.
               suboptions:
@@ -180,25 +211,31 @@ waveserver-system:
                   description: Configured IP address or Domain Name of the remote
                     NTP server.
                   required: true
-                  type: cienawstypes:ipaddr-or-hostname
-                admin-state:
+                  type: str
+                admin_state:
+                  choices:
+                  - disabled
+                  - enabled
                   description: NTP remote server administrative state.
                   required: true
-                  type: cienawstypes:enabled-disabled-enum
-                autokey-authentication:
+                  type: str
+                autokey_authentication:
+                  choices:
+                  - disabled
+                  - enabled
                   description: Whether autokey authentication method is enabled for
                     the server. The 'enabled' state will only be effective when the
                     'ntp/authentication-state' is 'enabled'.
                   required: true
-                  type: cienawstypes:enabled-disabled-enum
-                key-id:
+                  type: str
+                key_id:
                   description: Leafref to 'ntp-key' list 'key-id' values.
                   required: true
-                  type: leafref
+                  type: str
               type: list
           type: dict
       type: dict
-    default-settings:
+    default_settings:
       description: Waveserver system default configuration values.
       suboptions:
         conditioning:
@@ -210,27 +247,33 @@ waveserver-system:
               description: Number of milliseconds the failure must be present before
                 applying Egress UNI port consequent action for an EPL service.
               required: true
-              type: cienawstypes:conditioning-holdoff
+              type: int
             type:
+              choices:
+              - none
+              - laser-off
+              - ethernet
+              - otn
+              - protocol-specific
               description: Egress UNI port consequent action for an EPL service to
                 be applied on a far-end ingress UNI failure or network failure.
               required: true
-              type: cienawstypes:conditioning-type
+              type: str
           type: dict
-        terrestrial-reach-limit:
+        terrestrial_reach_limit:
           description: The maximum reach allowed in km. The possible values are [250,
             500, 1000, 2000, 2100, 3000, 4000, 5000, 8000] for terrestrial modem class.
             [0] if the value is unknown/unavailable or inapplicable.
           required: true
-          type: int16
+          type: int
       type: dict
-    domain-name:
+    domain_name:
       description: Waveserver system domain name attributes.
       suboptions:
-        config-domain-name:
+        config_domain_name:
           description: User configured domain name.
           required: true
-          type: cienawstypes:string-maxl-64
+          type: str
       type: dict
     environment:
       description: Waveserver system linux environment attributes.
@@ -240,14 +283,17 @@ waveserver-system:
             users.
           suboptions:
             shell:
+              choices:
+              - cli
+              - system
               description: The default shell session type for authenticated diag users.
               required: true
-              type: enumeration
+              type: str
             sudo:
               description: Specifies whether or not diag users will be automatically
                 added to the sudoers list. Default is disabled.
               required: true
-              type: boolean
+              type: bool
           type: dict
         root:
           description: Waveserver system user root configuration.
@@ -255,21 +301,24 @@ waveserver-system:
             password:
               description: User root password string.
               required: true
-              type: cienawstypes:string-maxl-128
+              type: str
             secret:
               description: The encrypted user password string, supplied as a hashed
                 value.
               required: true
-              type: cienawstypes:string-maxl-256
+              type: str
           type: dict
       type: dict
-    global-provisioning:
+    global_provisioning:
       description: Waveserver system global provisioning attributes.
       suboptions:
-        line-config:
+        line_config:
           description: Waveserver system line configuration.
           suboptions:
-            line-protection:
+            line_protection:
+              choices:
+              - unprotected
+              - trunk-ops
               description: Line protection settings. If line protection is enabled,
                 this means that the photonic line the Waveserver is connected to has
                 protection enabled. In the event of a line side fault, the protection
@@ -278,16 +327,16 @@ waveserver-system:
                 is occuring, link state messaging will be disabled to the clients
                 so that the connected devices do not attempt a switch or a restoration.
               required: true
-              type: line-protection-enum
+              type: str
           type: dict
       type: dict
-    host-name:
+    host_name:
       description: Waveserver system host name attributes.
       suboptions:
-        config-host-name:
+        config_host_name:
           description: User configured host name.
           required: true
-          type: cienawstypes:string-maxl-64
+          type: str
       type: dict
     id:
       description: Waveserver system identification attributes.
@@ -298,51 +347,54 @@ waveserver-system:
             description:
               description: 'A description for the group of Waveservers. '
               required: true
-              type: string
+              type: str
             id:
               description: An integer to uniquely identify a group of Waveservers
                 within a site.
               required: true
-              type: uint8
+              type: int
             name:
               description: A name for the group of Waveservers.
               required: true
-              type: string
+              type: str
           type: dict
         member:
           description: Waveserver system member attributes.
           suboptions:
-            cluster-enrollment:
+            cluster_enrollment:
+              choices:
+              - disabled
+              - enabled
               description: Attribute indicating if the waveserver member is enrolled
                 into culster.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             description:
               description: A description for the Waveserver chassis.
               required: true
-              type: string
-            frame-identification:
+              type: str
+            frame_identification:
               description: A description to identify the location of the Waveserver
                 chassis within the data center. For example, the building, floor,
                 aisle, frame number, etc.
               required: true
-              type: string
+              type: str
             id:
               description: An integer to uniquely identify a Waveserver chassis within
                 a group of Waveservers.
               required: true
-              type: uint8
+              type: int
             name:
               description: A name for the Waveserver chassis. Set to the host name
                 by default.
               required: true
-              type: string
-            rack-unit-number:
+              type: str
+            rack_unit_number:
               description: A logical identifier for the location of the Waveserver
                 within the frame or rack. For example, the device at the top could
                 be labeled unit 1.
               required: true
-              type: uint8
+              type: int
           type: dict
         network:
           description: Waveserver system network attributes.
@@ -350,16 +402,16 @@ waveserver-system:
             description:
               description: A description for the sub-network domain.
               required: true
-              type: string
+              type: str
             id:
               description: An integer to uniquely identify the sub-network domain
                 in which this Waveserver chassis is managed.
               required: true
-              type: uint8
+              type: int
             name:
               description: A name for the sub-network domain.
               required: true
-              type: string
+              type: str
           type: dict
         site:
           description: Waveserver system site attributes.
@@ -367,96 +419,103 @@ waveserver-system:
             address:
               description: The street address of the site.
               required: true
-              type: string
+              type: str
             description:
               description: The site description
               required: true
-              type: string
+              type: str
             id:
               description: 'An integer to uniquely identify the site where this Waveserver
                 is located. This is used to help group Waveservers together with line
                 system equipment. All equipment in a common site should share the
                 same site identifier. '
               required: true
-              type: uint16
+              type: int
             latitude:
               description: Geographic coordinate for the site location in degrees.
               required: true
-              type: decimal64
+              type: float
             longitude:
               description: Geographic coordinate for the site location in degrees.
               required: true
-              type: decimal64
+              type: float
             name:
               description: The name for the site where the Waveserver is located.
               required: true
-              type: string
+              type: str
           type: dict
       type: dict
-    lamp-test:
+    lamp_test:
       description: Waveserver lamp test attributes.
       suboptions:
-        admin-state:
+        admin_state:
+          choices:
+          - disabled
+          - enabled
           description: Enable or disable the system lamp test. The lamp-test admin-state
             will be automatically disabled once the timeout period has expired.
           required: true
-          type: cienawstypes:enabled-disabled-enum
-        target-id:
+          type: str
+        target_id:
           description: Lamp testing target ID string. Must be specified when target-type
             is 'slot' or 'port'. When the target-type is 'slot' the target-id should
             be a slot number (e.g. 1, 2, or 3). When the target-type is 'port' the
             target-id should be a port-id (e.g. '1-1') or comma-separated list of
             port-id's (e.g. '1-1,1-2,1-3').
           required: true
-          type: cienawstypes:string-maxl-128
-        target-type:
+          type: str
+        target_type:
+          choices:
+          - chassis
+          - slot
+          - port
           description: Lamp testing target type. It can be chassis, slot, or port.
             The default type is chassis. When the target-type is slot or port, the
             slot/port identifier should also be set for the selected target(s) to
             be tested.
           required: true
-          type: enumeration
+          type: str
         timeout:
           description: The number of seconds the lamp flash testing will be operating
             when enabled.
           required: true
-          type: uint32
+          type: int
       type: dict
     management:
       description: Waveserver system management configuration attributes.
       suboptions:
-        query-limits:
+        query_limits:
           description: Run time query limits for get operations on management interfaces.
           suboptions:
             gnmi:
               description: gNMI protocol source type.
               suboptions:
-                pm-history-bins:
+                pm_history_bins:
                   description: Maximum query limit for PM history bins in gNMI get
                     responses.
                   required: true
-                  type: uint8
+                  type: int
               type: dict
             netconf:
               description: NETCONF protocol source type.
               suboptions:
-                pm-history-bins:
+                pm_history_bins:
                   description: Maximum query limit for PM history bins in NETCONF
                     get responses.
                   required: true
-                  type: uint8
+                  type: int
               type: dict
             rest:
               description: REST protocol source type.
               suboptions:
-                pm-history-bins:
+                pm_history_bins:
                   description: Maximum query limit for PM history bins in REST get
                     responses.
                   required: true
-                  type: uint8
+                  type: int
               type: dict
           type: dict
-        root-scope:
+        root_scope:
           description: Control for root-level get and replace operations for management
             interfaces.
           suboptions:
@@ -464,166 +523,229 @@ waveserver-system:
               description: gNMI protocol source type.
               suboptions:
                 get:
+                  choices:
+                  - native
+                  - openconfig
+                  - all
                   description: Scope for gNMI root-level get operations.
                   required: true
-                  type: root-scope-enum
+                  type: str
                 replace:
+                  choices:
+                  - native
+                  - openconfig
+                  - all
                   description: Scope for gNMI root-level replace operations.
                   required: true
-                  type: root-scope-enum
+                  type: str
               type: dict
             netconf:
               description: NETCONF protocol source type.
               suboptions:
                 get:
+                  choices:
+                  - native
+                  - openconfig
+                  - all
                   description: Scope for NETCONF root-level get operations.
                   required: true
-                  type: root-scope-enum
+                  type: str
                 replace:
+                  choices:
+                  - native
+                  - openconfig
+                  - all
                   description: Scope for NETCONF root-level replace operations.
                   required: true
-                  type: root-scope-enum
+                  type: str
               type: dict
             rest:
               description: REST protocol source type.
               suboptions:
                 get:
+                  choices:
+                  - native
+                  - openconfig
+                  - all
                   description: Scope for REST root-level get operations.
                   required: true
-                  type: root-scope-enum
+                  type: str
                 replace:
+                  choices:
+                  - native
+                  - openconfig
+                  - all
                   description: Scope for REST root-level replace operations.
                   required: true
-                  type: root-scope-enum
+                  type: str
               type: dict
           type: dict
       type: dict
-    server-config:
+    server_config:
       description: Waveserver system server configuration attributes.
       suboptions:
-        global-inactivity-timeout:
+        global_inactivity_timeout:
           description: Global session inactivity timeout period, in minutes. Can be
             overridden by specific server type settings, if applicable.
           required: true
-          type: uint16
-        global-inactivity-timer:
+          type: int
+        global_inactivity_timer:
+          choices:
+          - disabled
+          - enabled
           description: Global session inactivity timer state.
           required: true
-          type: cienawstypes:enabled-disabled-enum
+          type: str
         grpc:
           description: gRPC server configuration.
           suboptions:
-            admin-state:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: gRPC server administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            certificate-verification:
+              type: str
+            certificate_verification:
               description: gRPC server configuration data for client certificate verification
                 through mutual authentication.
               suboptions:
-                certificate-name:
+                certificate_name:
                   description: The certificate name used by the gRPC server.
                   required: true
-                  type: string
-                mutual-authentication:
+                  type: str
+                mutual_authentication:
                   description: gRPC server mutual authentication configuration data.
                   suboptions:
-                    admin-state:
+                    admin_state:
+                      choices:
+                      - disabled
+                      - enabled
                       description: Whether gRPC server mutual authentication verification
                         is enabled or disabled.
                       required: true
-                      type: cienawstypes:enabled-disabled-enum
+                      type: str
                   type: dict
               type: dict
           type: dict
-        grpc-server-state:
+        grpc_server_state:
+          choices:
+          - disabled
+          - enabled
           description: Indicate whether gRPC server is enabled. This leaf is deprecated,
             replaced by admin-state in grpc container.
           required: true
-          type: cienawstypes:enabled-disabled-enum
+          type: str
         https:
           description: HTTPS server configuration.
           suboptions:
-            admin-state:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: HTTPS server administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            certificate-verification:
+              type: str
+            certificate_verification:
               description: The HTTPS server configuration data for client certificate
                 verification through mutual authentication and Online Certificate
                 Status Protocol(OCSP).
               suboptions:
-                certificate-name:
+                certificate_name:
                   description: The certificate name used by the HTTPS server.
                   required: true
-                  type: cienawstypes:string-maxl-32
-                mutual-authentication:
+                  type: str
+                mutual_authentication:
                   description: HTTPS server mutual authentication configuration data.
                   suboptions:
-                    admin-state:
+                    admin_state:
+                      choices:
+                      - disabled
+                      - enabled
                       description: Whether apache HTTPS server mutual authentication
                         verification is enabled or disabled.
                       required: true
-                      type: cienawstypes:enabled-disabled-enum
+                      type: str
                   type: dict
                 ocsp:
                   description: HTTPS server configuration data for OCSP verification.
                   suboptions:
-                    admin-state:
+                    admin_state:
+                      choices:
+                      - disabled
+                      - enabled
                       description: Whether OCSP verification is enabled or disabled.
                       required: true
-                      type: cienawstypes:enabled-disabled-enum
-                    default-responder:
+                      type: str
+                    default_responder:
                       description: Default OCSP responder. It should be in URL format.
                         e.g. https://192.168.20.2:2440. If the 'responder-preference'
                         is not set to 'default-responder', the URL given will be used
                         only if no responder URL (AIA extension) is specified in the
                         client certificate being verified.
                       required: true
-                      type: cienawstypes:string-maxl-128
+                      type: str
                     nonce:
+                      choices:
+                      - 'off'
+                      - 'on'
                       description: Determine whether queries to OCSP responders should
                         contain a nonce or not. By default nonce option is turned
                         on.
                       required: true
-                      type: cienawstypes:on-off-enum
-                    responder-preference:
+                      type: str
+                    responder_preference:
+                      choices:
+                      - aia
+                      - default-responder
                       description: If 'responder-preference' is set to aia, the OCSP
                         responder referred in client certificate AIA extension will
                         be used first during OCSP certificate validation. If it is
                         set to 'default-responder', the configured default OCSP responder
                         is used first.
                       required: true
-                      type: enumeration
+                      type: str
                   type: dict
-                trusted-dns:
+                trusted_dns:
                   description: Trusted DNS name used to check peer's certificate The
                     name should be fully qualified whenever possible, and can accept
                     a leading wildcard period.
                   required: true
-                  type: string
+                  type: str
               type: dict
-            inactivity-timeout:
+            inactivity_timeout:
               description: HTTPS inactivity timeout period, in minutes.
               required: true
-              type: uint16
-            web-ui-file-transfer-admin-state:
+              type: int
+            web_ui_file_transfer_admin_state:
+              choices:
+              - disabled
+              - enabled
               description: Web Ui File Transfer administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
           type: dict
-        netconf-server-state:
+        netconf_server_state:
+          choices:
+          - disabled
+          - enabled
           description: Indicate whether NETCONF server is enabled.
           required: true
-          type: cienawstypes:enabled-disabled-enum
-        scp-server-state:
+          type: str
+        scp_server_state:
+          choices:
+          - disabled
+          - enabled
           description: Indicate whether SCP server is enabled.
           required: true
-          type: cienawstypes:enabled-disabled-enum
-        sftp-server-state:
+          type: str
+        sftp_server_state:
+          choices:
+          - disabled
+          - enabled
           description: Indicate whether SFTP server is enabled.
           required: true
-          type: cienawstypes:enabled-disabled-enum
+          type: str
         ssh:
           description: SSH server configuration.
           suboptions:
@@ -634,227 +756,260 @@ waveserver-system:
                   description: List of SSH encryption algorithms. The algorithm names
                     are system assigned.
                   suboptions:
-                    admin-state:
+                    admin_state:
+                      choices:
+                      - disabled
+                      - enabled
                       description: SSH encryption algorithm administrative state.
                       required: true
-                      type: cienawstypes:enabled-disabled-enum
-                    algorithm-name:
+                      type: str
+                    algorithm_name:
                       description: The SSH encryption algorithm name.
                       required: true
-                      type: cienawstypes:string-maxl-64
+                      type: str
                   type: list
-                key-exchange:
+                key_exchange:
                   description: List of SSH key exchange algorithms. The algorithm
                     names are system assigned.
                   suboptions:
-                    admin-state:
+                    admin_state:
+                      choices:
+                      - disabled
+                      - enabled
                       description: SSH key exchange algorithm administrative state.
                       required: true
-                      type: cienawstypes:enabled-disabled-enum
-                    algorithm-name:
+                      type: str
+                    algorithm_name:
                       description: The SSH key exchange algorithm name.
                       required: true
-                      type: cienawstypes:string-maxl-64
+                      type: str
                   type: list
-                message-authentication-code:
+                message_authentication_code:
                   description: List of SSH message authentication code algorithms.
                     The algorithm names are system assigned.
                   suboptions:
-                    admin-state:
+                    admin_state:
+                      choices:
+                      - disabled
+                      - enabled
                       description: SSH message authentication code algorithm administrative
                         state.
                       required: true
-                      type: cienawstypes:enabled-disabled-enum
-                    algorithm-name:
+                      type: str
+                    algorithm_name:
                       description: The SSH message authentication code algorithm name.
                       required: true
-                      type: cienawstypes:string-maxl-64
+                      type: str
                   type: list
-                public-key-authentication:
+                public_key_authentication:
                   description: List of SSH public key authentication algorithms. The
                     algorithm names are system assigned.
                   suboptions:
-                    admin-state:
+                    admin_state:
+                      choices:
+                      - disabled
+                      - enabled
                       description: SSH public key authentication algorithm administrative
                         state.
                       required: true
-                      type: cienawstypes:enabled-disabled-enum
-                    algorithm-name:
+                      type: str
+                    algorithm_name:
                       description: The SSH public key authentication algorithm name.
                       required: true
-                      type: cienawstypes:string-maxl-64
+                      type: str
                   type: list
               type: dict
-            allowed-clients:
+            allowed_clients:
               description: List of allowed client IP addresses.
               suboptions:
-                ip-address:
+                ip_address:
                   description: IP address for allowed SSH clients. When the list is
                     not empty, only the clients in the list can login to the SSH server.
                   required: true
-                  type: cienawstypes:string-maxl-64
+                  type: str
               type: list
-            authentication-retries:
+            authentication_retries:
               description: Number of authentication retries allowed before the SSH
                 connection is dropped.
               required: true
-              type: uint8
-            listener-port:
+              type: int
+            listener_port:
               description: Configured SSH listener port. Default is port 22.
               required: true
-              type: uint16
+              type: int
           type: dict
-        web-server-state:
+        web_server_state:
+          choices:
+          - disabled
+          - enabled
           description: Indicate whether web server is enabled, HTTPS only. This leaf
             is deprecated, replaced by admin-state in https container.
           required: true
-          type: cienawstypes:enabled-disabled-enum
+          type: str
       type: dict
     shell:
       description: Waveserver system CLI shell/session attributes.
       suboptions:
-        inactivity-timeout:
+        inactivity_timeout:
           description: Leafref to global session inactivity timeout period, in minutes.
             This attribute is deprecated. Has been moved to server-config container.
           required: true
-          type: leafref
-        inactivity-timer:
+          type: str
+        inactivity_timer:
           description: Leafref to global session inactivity timer state. This attribute
             is deprecated. Has been moved to server-config container.
           required: true
-          type: leafref
-        login-authentication-message:
+          type: str
+        login_authentication_message:
+          choices:
+          - disabled
+          - enabled
           description: Toggles the authentication message for CLI/shell session logins.
           required: true
-          type: cienawstypes:enabled-disabled-enum
-        login-banner-file:
+          type: str
+        login_banner_file:
           description: Local file name containing the banner text to be displayed
             prior to CLI/shell session logins.
           required: true
-          type: cienawstypes:string-maxl-254
+          type: str
         more:
+          choices:
+          - disabled
+          - enabled
           description: Global CLI/shell session pagination (more) behavior.
           required: true
-          type: cienawstypes:enabled-disabled-enum
-        more-lines:
+          type: str
+        more_lines:
           description: Global CLI/shell session pagination (more) number of lines
             per page.
           required: true
-          type: uint16
-        welcome-banner-file:
+          type: int
+        welcome_banner_file:
           description: Local file name containing the welcome banner text to be displayed
             upon successful CLI/shell session logins.
           required: true
-          type: cienawstypes:string-maxl-254
+          type: str
       type: dict
     ssl:
       description: Waveserver SSL security configuration and operational data.
       suboptions:
-        tls-cipher-suite-algorithms:
+        tls_cipher_suite_algorithms:
           description: List of transport layer security(TLS) cipher suite algorithms.
             The algorithm names are system assigned.
           suboptions:
-            admin-state:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: TLS cipher suite algorithm administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            algorithm-name:
+              type: str
+            algorithm_name:
               description: The TLS cipher suite algorithm name.
               required: true
-              type: cienawstypes:string-maxl-64
+              type: str
           type: list
       type: dict
-    time-config:
+    time_config:
       description: Waveserver system time configuration attributes.
       suboptions:
-        time-offset:
+        time_offset:
           description: System time-offset from UTC in seconds.
           required: true
-          type: int32
-        time-stamp:
+          type: int
+        time_stamp:
+          choices:
+          - utc
+          - local
           description: 'System time stamp format: local time or UTC time.'
           required: true
-          type: enumeration
+          type: str
       type: dict
-    xftp-config:
+    xftp_config:
       description: Waveserver system XFTP configuration attributes.
       suboptions:
         ftp:
           description: Waveserver system FTP configuration.
           suboptions:
-            host-name:
+            host_name:
               description: FTP host name. Format is an IP address (with optional port)
                 or host name.
               required: true
-              type: cienawstypes:string-maxl-64
+              type: str
             password:
               description: FTP password string.
               required: true
-              type: cienawstypes:string-maxl-128
+              type: str
             secret:
               description: FTP secret string.
               required: true
-              type: cienawstypes:string-maxl-256
-            user-name:
+              type: str
+            user_name:
               description: FTP user name.
               required: true
-              type: cienawstypes:string-maxl-32
+              type: str
           type: dict
         mode:
+          choices:
+          - none
+          - tftp
+          - ftp
+          - sftp
+          - scp
           description: Identifies which file transfer protocol to user when default-server
             is specified in a command - FTP, SFTP, TFTP or SCP.
           required: true
-          type: enumeration
+          type: str
         scp:
           description: Waveserver system SCP configuration.
           suboptions:
-            host-name:
+            host_name:
               description: SCP host name. Format is an IP address (with optional port)
                 or host name.
               required: true
-              type: cienawstypes:string-maxl-64
+              type: str
             password:
               description: SCP password string.
               required: true
-              type: cienawstypes:string-maxl-128
+              type: str
             secret:
               description: SCP secret string.
               required: true
-              type: cienawstypes:string-maxl-256
-            user-name:
+              type: str
+            user_name:
               description: SCP user name.
               required: true
-              type: cienawstypes:string-maxl-32
+              type: str
           type: dict
         sftp:
           description: Waveserver system SFTP configuration.
           suboptions:
-            host-name:
+            host_name:
               description: SFTP host name. Format is an IP address (with optional
                 port) or host name.
               required: true
-              type: cienawstypes:string-maxl-64
+              type: str
             password:
               description: SFTP password string.
               required: true
-              type: cienawstypes:string-maxl-128
+              type: str
             secret:
               description: SFTP secret string.
               required: true
-              type: cienawstypes:string-maxl-256
-            user-name:
+              type: str
+            user_name:
               description: SFTP user name.
               required: true
-              type: cienawstypes:string-maxl-32
+              type: str
           type: dict
         tftp:
           description: Waveserver system TFTP configuration.
           suboptions:
-            config-host-name:
+            config_host_name:
               description: TFTP host name configured by user. Format is an IP address
                 (with optional port) or host name.
               required: true
-              type: cienawstypes:string-maxl-64
+              type: str
           type: dict
       type: dict
   type: dict

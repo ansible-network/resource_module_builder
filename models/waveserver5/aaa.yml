@@ -1,11 +1,11 @@
-waveserver-aaa:
+waveserver_aaa:
   description: Waveserver AAA configuration and operational data. Defines authentication,
     authorization and accounting services.
   suboptions:
     authentication:
       description: Global authentication configuration.
       suboptions:
-        authentication-method:
+        authentication_method:
           description: Ordered list of authentication methods for user login attempts,
             indexed by priority. If an authentication attempt fails using the first
             method, the next defined method will be attempted, until all specified
@@ -17,28 +17,40 @@ waveserver-aaa:
               description: Authentication priority, indicating the order in which
                 each of the authentication providers will be consulted.
               required: true
-              type: uint8
+              type: int
             scope:
+              choices:
+              - all
+              - serial
+              - remote
               description: Scope of the authentication method.
               required: true
-              type: authentication-scope-type
+              type: str
             type:
+              choices:
+              - local
+              - radius
+              - tacacs
+              - radsec
               description: The authentication method / provider type. Must be unique
                 within the list.
               required: true
-              type: authentication-method-type
+              type: str
           type: list
       type: dict
     radius:
       description: Top-level RADIUS container.
       suboptions:
-        global-config:
+        global_config:
           description: Global RADIUS configuration attributes.
           suboptions:
-            admin-state:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: RADIUS administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             key:
               description: The non-encrypted key that can be configured to generate
                 a shared secret between the authentication server and the device.
@@ -46,26 +58,29 @@ waveserver-aaa:
                 on the device. Specifying a zero-length string will clear the key
                 value.
               required: true
-              type: string
+              type: str
             retries:
               description: The number of retries. Default is 3.
               required: false
-              type: uint16
-            search-method:
+              type: int
+            search_method:
+              choices:
+              - priority
+              - cached
               description: 'RADIUS Search Method (Default: priority)'
               required: false
-              type: server-search-method
+              type: str
             secret:
               description: The encrypted shared secret key used between the authentication
                 server and the device. Specifying a zero-length string will clear
                 the shared secret value.
               required: true
-              type: string
+              type: str
             timeout:
               description: Global timeout period in seconds on responses from a RADIUS
                 server.
               required: true
-              type: uint16
+              type: int
           type: dict
         server:
           description: Global list of RADIUS servers to use for AAA functions.
@@ -73,80 +88,104 @@ waveserver-aaa:
             address:
               description: Configured IP address or Domain Name of the remote server.
               required: true
-              type: cienawstypes:ipaddr-or-hostname
-            admin-state:
+              type: str
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: Server administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             priority:
               description: Server priority.
               required: true
-              type: uint8
-            udp-port:
+              type: int
+            udp_port:
               description: RADIUS server UDP Port. Default value is 1812.
               required: true
-              type: uint16
+              type: int
           type: list
       type: dict
     radsec:
       description: Top-level RADSec container.
       suboptions:
-        global-config:
+        global_config:
           description: Global RADSec configuration attributes.
           suboptions:
-            admin-state:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: RADSec administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            certificate-name:
+              type: str
+            certificate_name:
               description: RADSec device certificate name.
               required: true
-              type: string
-            check-fingerprint:
+              type: str
+            check_fingerprint:
+              choices:
+              - disabled
+              - enabled
               description: Check the fingerprint of the peer's certificate.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            check-ip-host:
+              type: str
+            check_ip_host:
+              choices:
+              - disabled
+              - enabled
               description: Check peer's specified ip or hostname against it's certificate.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            search-method:
+              type: str
+            search_method:
+              choices:
+              - priority
+              - cached
               description: 'RADSec Search Method (Default: priority)'
               required: false
-              type: server-search-method
+              type: str
             timeout:
               description: Global timeout period in seconds on responses from a RADSec
                 server.
               required: true
-              type: uint16
+              type: int
           type: dict
-        ocsp-config:
+        ocsp_config:
           description: RADSec Online Certificate Status Protocol (OCSP) configuration
             attributes.
           suboptions:
-            admin-state:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: Whether OCSP verification is enabled or disabled.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            default-responder:
+              type: str
+            default_responder:
               description: Default OCSP responder. It should be in URL format. e.g.
                 https://192.168.20.2:2440. If the 'responder-preference' is not set
                 to 'default-responder', the URL given will be used only if no responder
                 URL (AIA extension) is specified in the client certificate being verified.
               required: true
-              type: cienawstypes:string-maxl-128
+              type: str
             nonce:
+              choices:
+              - 'off'
+              - 'on'
               description: Determine whether queries to OCSP responders should contain
                 a nonce or not. By default nonce option is turned on.
               required: true
-              type: cienawstypes:on-off-enum
-            responder-preference:
+              type: str
+            responder_preference:
+              choices:
+              - aia
+              - default-responder
               description: If 'responder-preference' is set to aia, the OCSP responder
                 referred in client certificate AIA extension will be used first during
                 OCSP certificate validation. If it is set to 'default-responder',
                 the configured default OCSP responder is used first.
               required: true
-              type: enumeration
+              type: str
           type: dict
         server:
           description: Global list of RADSec servers to use for AAA functions.
@@ -154,46 +193,52 @@ waveserver-aaa:
             address:
               description: Configured IP address or Domain Name of the remote server.
               required: true
-              type: cienawstypes:ipaddr-or-hostname
-            admin-state:
+              type: str
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: Server administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             port:
               description: RADSec server TCP Port. Default value is 2083.
               required: false
-              type: uint16
+              type: int
             priority:
               description: Server priority.
               required: true
-              type: uint8
-            trusted-dns:
+              type: int
+            trusted_dns:
               description: Trusted dns name used to check peer's certificate. The
                 name should be fully qualified whenever possible, and can accept a
                 leading wildcard period.
               required: true
-              type: string
-            trusted-fingerprint:
+              type: str
+            trusted_fingerprint:
               description: Trusted fingerprint for peer's certificate. The string
                 should have length of 95, except when it is empty or 'Not Set'.
               required: true
-              type: string
+              type: str
           type: list
       type: dict
     tacacs:
       description: Top-level TACACS+ container.
       suboptions:
-        accounting-server:
+        accounting_server:
           description: List of TACACS+ accounting servers to use for AAA functions.
           suboptions:
             address:
               description: Configured IP address or Domain Name of the remote server.
               required: true
-              type: cienawstypes:ipaddr-or-hostname
-            admin-state:
+              type: str
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: Server administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             key:
               description: The non-encrypted key that can be configured to generate
                 a shared secret between the authentication server and the device.
@@ -201,38 +246,41 @@ waveserver-aaa:
                 on the device. Specifying a zero-length string will clear the key
                 value.
               required: true
-              type: string
+              type: str
             priority:
               description: Server priority.
               required: true
-              type: uint8
+              type: int
             secret:
               description: The encrypted shared secret key used between the authentication
                 server and the device. Specifying a zero-length string will clear
                 the shared secret value.
               required: true
-              type: string
-            tcp-port:
+              type: str
+            tcp_port:
               description: TACACS+ server TCP Port. Default value is 49.
               required: false
-              type: uint16
+              type: int
             timeout:
               description: Global timeout period in seconds on responses from a TACACS+
                 server.
               required: true
-              type: uint16
+              type: int
           type: list
-        authentication-server:
+        authentication_server:
           description: List of TACACS+ authentication servers to use for AAA functions.
           suboptions:
             address:
               description: Configured IP address or Domain Name of the remote server.
               required: true
-              type: cienawstypes:ipaddr-or-hostname
-            admin-state:
+              type: str
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: Server administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             key:
               description: The non-encrypted key that can be configured to generate
                 a shared secret between the authentication server and the device.
@@ -240,38 +288,41 @@ waveserver-aaa:
                 on the device. Specifying a zero-length string will clear the key
                 value.
               required: true
-              type: string
+              type: str
             priority:
               description: Server priority.
               required: true
-              type: uint8
+              type: int
             secret:
               description: The encrypted shared secret key used between the authentication
                 server and the device. Specifying a zero-length string will clear
                 the shared secret value.
               required: true
-              type: string
-            tcp-port:
+              type: str
+            tcp_port:
               description: TACACS+ server TCP Port. Default value is 49.
               required: false
-              type: uint16
+              type: int
             timeout:
               description: Global timeout period in seconds on responses from a TACACS+
                 server.
               required: true
-              type: uint16
+              type: int
           type: list
-        authorization-server:
+        authorization_server:
           description: List of TACACS+ authorization servers to use for AAA functions.
           suboptions:
             address:
               description: Configured IP address or Domain Name of the remote server.
               required: true
-              type: cienawstypes:ipaddr-or-hostname
-            admin-state:
+              type: str
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: Server administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             key:
               description: The non-encrypted key that can be configured to generate
                 a shared secret between the authentication server and the device.
@@ -279,59 +330,74 @@ waveserver-aaa:
                 on the device. Specifying a zero-length string will clear the key
                 value.
               required: true
-              type: string
+              type: str
             priority:
               description: Server priority.
               required: true
-              type: uint8
+              type: int
             secret:
               description: The encrypted shared secret key used between the authentication
                 server and the device. Specifying a zero-length string will clear
                 the shared secret value.
               required: true
-              type: string
-            tcp-port:
+              type: str
+            tcp_port:
               description: TACACS+ server TCP Port. Default value is 49.
               required: false
-              type: uint16
+              type: int
             timeout:
               description: Global timeout period in seconds on responses from a TACACS+
                 server.
               required: true
-              type: uint16
+              type: int
           type: list
-        global-config:
+        global_config:
           description: Global TACACS+ configuration attributes.
           suboptions:
-            accounting-admin-state:
+            accounting_admin_state:
+              choices:
+              - disabled
+              - enabled
               description: TACACS+ accounting administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            accounting-command-enabled:
+              type: str
+            accounting_command_enabled:
               description: Specifies whether TACACS+ command accounting is enabled.
               required: true
-              type: boolean
-            accounting-session-enabled:
+              type: bool
+            accounting_session_enabled:
               description: Specifies whether TACACS+ session accounting is enabled.
               required: true
-              type: boolean
-            admin-state:
+              type: bool
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: TACACS+ administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            authentication-admin-state:
+              type: str
+            authentication_admin_state:
+              choices:
+              - disabled
+              - enabled
               description: TACACS+ authentication administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            authorization-admin-state:
+              type: str
+            authorization_admin_state:
+              choices:
+              - disabled
+              - enabled
               description: TACACS+ authorization administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
-            global-servers:
+              type: str
+            global_servers:
+              choices:
+              - 'off'
+              - 'on'
               description: Specifies whether the TACACS+ global servers list is enabled
                 for all AAA functions.
               required: true
-              type: cienawstypes:on-off-enum
+              type: str
             key:
               description: The non-encrypted key that can be configured to generate
                 a shared secret between the authentication server and the device.
@@ -339,43 +405,49 @@ waveserver-aaa:
                 on the device. Specifying a zero-length string will clear the key
                 value.
               required: true
-              type: string
-            key-min-length:
+              type: str
+            key_min_length:
               description: The minimum secret key length in bytes.
               required: true
-              type: uint16
-            privilege-level-admin:
+              type: int
+            privilege_level_admin:
               description: 'value for read-write privilege level (Default: 2).'
               required: false
-              type: uint16
-            privilege-level-diag:
+              type: int
+            privilege_level_diag:
               description: 'value for diagnostic privilege level (Default: 15).'
               required: false
-              type: uint16
-            privilege-level-super:
+              type: int
+            privilege_level_super:
               description: 'value for read-write-create privilege level (Default:
                 10)'
               required: false
-              type: uint16
-            search-method:
+              type: int
+            search_method:
+              choices:
+              - priority
+              - cached
               description: 'set the search method for TACACS+ servers (Default: priority)'
               required: false
-              type: server-search-method
+              type: str
             secret:
               description: The encrypted shared secret key used between the authentication
                 server and the device. Specifying a zero-length string will clear
                 the shared secret value.
               required: true
-              type: string
-            syslog-admin-state:
+              type: str
+            syslog_admin_state:
+              choices:
+              - disabled
+              - enabled
               description: TACACS+ syslog administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             timeout:
               description: Global timeout period in seconds on responses from a TACACS+
                 server.
               required: true
-              type: uint16
+              type: int
           type: dict
         server:
           description: Global list of TACACS+ servers to use for AAA functions.
@@ -383,11 +455,14 @@ waveserver-aaa:
             address:
               description: Configured IP address or Domain Name of the remote server.
               required: true
-              type: cienawstypes:ipaddr-or-hostname
-            admin-state:
+              type: str
+            admin_state:
+              choices:
+              - disabled
+              - enabled
               description: Server administrative state.
               required: true
-              type: cienawstypes:enabled-disabled-enum
+              type: str
             key:
               description: The non-encrypted key that can be configured to generate
                 a shared secret between the authentication server and the device.
@@ -395,35 +470,40 @@ waveserver-aaa:
                 on the device. Specifying a zero-length string will clear the key
                 value.
               required: true
-              type: string
+              type: str
             priority:
               description: Server priority.
               required: true
-              type: uint8
+              type: int
             secret:
               description: The encrypted shared secret key used between the authentication
                 server and the device. Specifying a zero-length string will clear
                 the shared secret value.
               required: true
-              type: string
-            tcp-port:
+              type: str
+            tcp_port:
               description: TACACS+ server TCP Port. Default value is 49.
               required: false
-              type: uint16
+              type: int
             timeout:
               description: Global timeout period in seconds on responses from a TACACS+
                 server.
               required: true
-              type: uint16
+              type: int
           type: list
       type: dict
     user:
       description: List of local user accounts used for local authentication.
       suboptions:
-        access-level:
+        access_level:
+          choices:
+          - limited
+          - admin
+          - super
+          - diag
           description: The access-level or role assigned to the local user.
           required: true
-          type: user-access-level
+          type: str
         password:
           description: The user password, supplied as cleartext. This is a write-only
             attribute that should not be stored nor returned on user retrieval. The
@@ -431,51 +511,51 @@ waveserver-aaa:
             its encrypted format. The hashed password string can be retrieved via
             the 'secret' attribute.
           required: true
-          type: cienawstypes:string-maxl-128
+          type: str
         secret:
           description: The encrypted user password string, supplied as a hashed value.
             This should only be configured at user creation time, and will be ignored
             if the user account already exists.
           required: true
-          type: cienawstypes:string-maxl-256
-        user-name:
+          type: str
+        user_name:
           description: The configured username for this local user. Must be unique
             across the list of configured local users.
           required: true
-          type: cienawstypes:string-maxl-64
+          type: str
       type: list
-    user-management:
+    user_management:
       description: User management.
       suboptions:
-        lockout-interval:
+        lockout_interval:
           description: User lockout time interval, in minutes. Applies only to local
             user accounts. System default is 10 min.
           required: true
-          type: uint16
-        max-admin-users:
+          type: int
+        max_admin_users:
           description: Maximum number of network logins of admin-level users. Deprecated.
             Use server-specific session limits instead.
           required: true
-          type: uint8
-        max-limited-users:
+          type: int
+        max_limited_users:
           description: Maximum number of network logins of limited-level users. Deprecated.
             Use server-specific session limits instead.
           required: true
-          type: uint8
-        max-login-attempt:
+          type: int
+        max_login_attempt:
           description: Maximum number of consecutive unsuccessful login attempts allowed
             before a user account is locked out. Applies only to local user accounts.
             System default is 5.
           required: true
-          type: uint16
-        max-super-users:
+          type: int
+        max_super_users:
           description: Maximum number of network logins of super users. Deprecated.
             Use server-specific session limits instead.
           required: true
-          type: uint8
-        min-password-length:
+          type: int
+        min_password_length:
           description: Minimum length of the user password.
           required: true
-          type: uint16
+          type: int
       type: dict
   type: dict

@@ -40,6 +40,209 @@ DOCUMENTATION: |
               required: true
               type: str
           type: dict
+        server_config:
+          description: Waveserver system server configuration attributes.
+          suboptions:
+            global_inactivity_timeout:
+              description: Global session inactivity timeout period, in minutes. Can be
+                overridden by specific server type settings, if applicable.
+              required: true
+              type: int
+            global_inactivity_timer:
+              description: Global session inactivity timer state.
+              required: true
+              type: cienawstypes:enabled_disabled_enum
+            grpc:
+              description: gRPC server configuration.
+              suboptions:
+                admin_state:
+                  description: gRPC server administrative state.
+                  required: true
+                  type: cienawstypes:enabled_disabled_enum
+                certificate_verification:
+                  description: gRPC server configuration data for client certificate verification
+                    through mutual authentication.
+                  suboptions:
+                    certificate_name:
+                      description: The certificate name used by the gRPC server.
+                      required: true
+                      type: string
+                    mutual_authentication:
+                      description: gRPC server mutual authentication configuration data.
+                      suboptions:
+                        admin_state:
+                          description: Whether gRPC server mutual authentication verification
+                            is enabled or disabled.
+                          required: true
+                          type: cienawstypes:enabled_disabled_enum
+                      type: dict
+                  type: dict
+              type: dict
+            https:
+              description: HTTPS server configuration.
+              suboptions:
+                admin_state:
+                  description: HTTPS server administrative state.
+                  required: true
+                  type: cienawstypes:enabled_disabled_enum
+                certificate_verification:
+                  description: The HTTPS server configuration data for client certificate
+                    verification through mutual authentication and Online Certificate
+                    Status Protocol(OCSP).
+                  suboptions:
+                    certificate_name:
+                      description: The certificate name used by the HTTPS server.
+                      required: true
+                      type: cienawstypes:string_maxl_32
+                    mutual_authentication:
+                      description: HTTPS server mutual authentication configuration data.
+                      suboptions:
+                        admin_state:
+                          description: Whether apache HTTPS server mutual authentication
+                            verification is enabled or disabled.
+                          required: true
+                          type: cienawstypes:enabled-disabled-enum
+                      type: dict
+                    ocsp:
+                      description: HTTPS server configuration data for OCSP verification.
+                      suboptions:
+                        admin_state:
+                          description: Whether OCSP verification is enabled or disabled.
+                          required: true
+                          type: cienawstypes:enabled-disabled-enum
+                        default_responder:
+                          description: Default OCSP responder. It should be in URL format.
+                            e.g. https://192.168.20.2:2440. If the 'responder-preference'
+                            is not set to 'default-responder', the URL given will be used
+                            only if no responder URL (AIA extension) is specified in the
+                            client certificate being verified.
+                          required: true
+                          type: cienawstypes:string-maxl-128
+                        nonce:
+                          description: Determine whether queries to OCSP responders should
+                            contain a nonce or not. By default nonce option is turned
+                            on.
+                          required: true
+                          type: cienawstypes:on-off-enum
+                        responder_preference:
+                          description: If 'responder-preference' is set to aia, the OCSP
+                            responder referred in client certificate AIA extension will
+                            be used first during OCSP certificate validation. If it is
+                            set to 'default-responder', the configured default OCSP responder
+                            is used first.
+                          required: true
+                          type: enumeration
+                      type: dict
+                    trusted_dns:
+                      description: Trusted DNS name used to check peer's certificate The
+                        name should be fully qualified whenever possible, and can accept
+                        a leading wildcard period.
+                      required: true
+                      type: string
+                  type: dict
+                inactivity_timeout:
+                  description: HTTPS inactivity timeout period, in minutes.
+                  required: true
+                  type: int
+                web_ui_file_transfer_admin_state:
+                  description: Web Ui File Transfer administrative state.
+                  required: true
+                  type: cienawstypes:enabled-disabled-enum
+              type: dict
+            netconf_server_state:
+              description: Indicate whether NETCONF server is enabled.
+              required: true
+              type: cienawstypes:enabled-disabled-enum
+            scp_server_state:
+              description: Indicate whether SCP server is enabled.
+              required: true
+              type: cienawstypes:enabled-disabled-enum
+            sftp_server_state:
+              description: Indicate whether SFTP server is enabled.
+              required: true
+              type: cienawstypes:enabled-disabled-enum
+            ssh:
+              description: SSH server configuration.
+              suboptions:
+                algorithms:
+                  description: Waveserver SSH algorithm lists.
+                  suboptions:
+                    encryption:
+                      description: List of SSH encryption algorithms. The algorithm names
+                        are system assigned.
+                      suboptions:
+                        admin_state:
+                          description: SSH encryption algorithm administrative state.
+                          required: true
+                          type: cienawstypes:enabled-disabled-enum
+                        algorithm_name:
+                          description: The SSH encryption algorithm name.
+                          required: true
+                          type: cienawstypes:string-maxl-64
+                      type: list
+                    key_exchange:
+                      description: List of SSH key exchange algorithms. The algorithm
+                        names are system assigned.
+                      suboptions:
+                        admin_state:
+                          description: SSH key exchange algorithm administrative state.
+                          required: true
+                          type: cienawstypes:enabled-disabled-enum
+                        algorithm_name:
+                          description: The SSH key exchange algorithm name.
+                          required: true
+                          type: cienawstypes:string-maxl-64
+                      type: list
+                    message-authentication_code:
+                      description: List of SSH message authentication code algorithms.
+                        The algorithm names are system assigned.
+                      suboptions:
+                        admin_state:
+                          description: SSH message authentication code algorithm administrative
+                            state.
+                          required: true
+                          type: cienawstypes:enabled-disabled-enum
+                        algorithm_name:
+                          description: The SSH message authentication code algorithm name.
+                          required: true
+                          type: cienawstypes:string-maxl-64
+                      type: list
+                    public_key_authentication:
+                      description: List of SSH public key authentication algorithms. The
+                        algorithm names are system assigned.
+                      suboptions:
+                        admin_state:
+                          description: SSH public key authentication algorithm administrative
+                            state.
+                          required: true
+                          type: cienawstypes:enabled-disabled-enum
+                        algorithm_name:
+                          description: The SSH public key authentication algorithm name.
+                          required: true
+                          type: cienawstypes:string-maxl-64
+                      type: list
+                  type: dict
+                allowed_clients:
+                  description: List of allowed client IP addresses.
+                  suboptions:
+                    ip_address:
+                      description: IP address for allowed SSH clients. When the list is
+                        not empty, only the clients in the list can login to the SSH server.
+                      required: true
+                      type: cienawstypes:string-maxl-64
+                  type: list
+                authentication_retries:
+                  description: Number of authentication retries allowed before the SSH
+                    connection is dropped.
+                  required: true
+                  type: uint8
+                listener_port:
+                  description: Configured SSH listener port. Default is port 22.
+                  required: true
+                  type: int
+              type: dict
+          type: dict
+
     state:
       choices:
       - merged

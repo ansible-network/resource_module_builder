@@ -1,0 +1,459 @@
+waveserver_interfaces:
+  description: Top level container for configuration and operational data for physical
+    and logical network interfaces.
+  suboptions:
+    acl:
+      description: Top-level container for Network Access Control List configuration.
+      suboptions:
+        egress:
+          description: Configuration data for interface egress ACLs.
+          suboptions:
+            acl_ipv4:
+              description: IP-layer ACLs with IPv4 addresses
+              suboptions:
+                action:
+                  choices:
+                  - allow
+                  - drop
+                  description: The forwarding action defined for packets matching
+                    the filtering rules for this ACL entry.
+                  required: true
+                  type: str
+                destination_address:
+                  description: The destination IPv4 address and optional prefix length
+                    for this ACL entry.
+                  required: true
+                  type: str
+                interface_name:
+                  description: The name of the logical management interface that the
+                    ACL entry is applied to, e.g. 'local'.
+                  required: true
+                  type: str
+                protocol:
+                  description: The transport protocol of the IPv4 packet to match.
+                    A value of 0 matches ALL protocols, 1=ICMP, 58=ICMPv6, 6=TCP,
+                    and 17=UDP.
+                  required: true
+                  type: int
+                sequence_id:
+                  description: The sequence id determines the priority in which ACL
+                    entries are applied. The sequece id must be unique in the ACL.
+                  required: true
+                  type: int
+                source_address:
+                  description: The source IPv4 address and optional prefix length
+                    for this ACL entry.
+                  required: true
+                  type: str
+              type: list
+            acl_ipv6:
+              description: IP-layer ACLs with IPv6 addresses
+              suboptions:
+                action:
+                  choices:
+                  - allow
+                  - drop
+                  description: The forwarding action defined for packets matching
+                    the filtering rules for this ACL entry.
+                  required: true
+                  type: str
+                destination_address:
+                  description: The destination IPv6 address and optional prefix length
+                    for this ACL entry.
+                  required: true
+                  type: str
+                interface_name:
+                  description: The name of the logical management interface that the
+                    ACL entry is applied to, e.g. 'local'.
+                  required: true
+                  type: str
+                protocol:
+                  description: The transport protocol of the IPv6 packet to match.
+                    A value of 0 matches ALL protocols, 1=ICMP, 6=TCP, and 17=UDP.
+                  required: true
+                  type: int
+                sequence_id:
+                  description: The sequence id determines the priority in which ACL
+                    entries are applied. The sequece id must be unique in the ACL.
+                  required: true
+                  type: int
+                source_address:
+                  description: The source IPv6 address and optional prefix length
+                    for this ACL entry.
+                  required: true
+                  type: str
+              type: list
+          type: dict
+        ingress:
+          description: Configuration data for interface ingress ACLs.
+          suboptions:
+            acl_ipv4:
+              description: IP-layer ACLs with IPv4 addresses
+              suboptions:
+                action:
+                  choices:
+                  - allow
+                  - drop
+                  description: The forwarding action defined for packets matching
+                    the filtering rules for this ACL entry.
+                  required: true
+                  type: str
+                destination_address:
+                  description: The destination IPv4 address and optional prefix length
+                    for this ACL entry.
+                  required: true
+                  type: str
+                interface_name:
+                  description: The name of the logical management interface that the
+                    ACL entry is applied to, e.g. 'local'.
+                  required: true
+                  type: str
+                protocol:
+                  description: The transport protocol of the IPv4 packet to match.
+                    A value of 0 matches ALL protocols, 1=ICMP, 58=ICMPv6, 6=TCP,
+                    and 17=UDP.
+                  required: true
+                  type: int
+                sequence_id:
+                  description: The sequence id determines the priority in which ACL
+                    entries are applied. The sequece id must be unique in the ACL.
+                  required: true
+                  type: int
+                source_address:
+                  description: The source IPv4 address and optional prefix length
+                    for this ACL entry.
+                  required: true
+                  type: str
+              type: list
+            acl_ipv6:
+              description: IP-layer ACLs with IPv6 addresses
+              suboptions:
+                action:
+                  choices:
+                  - allow
+                  - drop
+                  description: The forwarding action defined for packets matching
+                    the filtering rules for this ACL entry.
+                  required: true
+                  type: str
+                destination_address:
+                  description: The destination IPv6 address and optional prefix length
+                    for this ACL entry.
+                  required: true
+                  type: str
+                interface_name:
+                  description: The name of the logical management interface that the
+                    ACL entry is applied to, e.g. 'local'.
+                  required: true
+                  type: str
+                protocol:
+                  description: The transport protocol of the IPv6 packet to match.
+                    A value of 0 matches ALL protocols, 1=ICMP, 6=TCP, and 17=UDP.
+                  required: true
+                  type: int
+                sequence_id:
+                  description: The sequence id determines the priority in which ACL
+                    entries are applied. The sequece id must be unique in the ACL.
+                  required: true
+                  type: int
+                source_address:
+                  description: The source IPv6 address and optional prefix length
+                    for this ACL entry.
+                  required: true
+                  type: str
+              type: list
+          type: dict
+      type: dict
+    bgp:
+      description: Waveserver Border Gateway Protocol (BGP) configuration data and
+        peer information.
+      suboptions:
+        peer:
+          description: A list of BGP peers. BGP peers are created by the system when
+            BGP is enabled. Users are not allowed to create or delete peers
+          suboptions:
+            autonomous_system:
+              description: Autonomous system number of the peer.
+              required: true
+              type: int
+            interface:
+              description: The name of the peer interface, e.g. 'dcn', 'ilan-1'.
+              required: true
+              type: str
+            ip:
+              description: IP address of peer.
+              required: true
+              type: str
+            name:
+              choices:
+              - peer-1
+              - peer-2
+              description: Peer name. Read-only attribute.
+              required: true
+              type: str
+          type: list
+        properties:
+          description: BGP properties.
+          suboptions:
+            autonomous_system:
+              description: This is the autonomous system number which is an identification
+                number for the node. An autonomous system is a group of networks under
+                a common administration. Each node within that group gets an AS number.
+              required: true
+              type: int
+            holdoff_time:
+              description: The time in seconds that the node waits to receive a keep-alive
+                message. If the node does not receive a keep-alive within the hold-off
+                time, it will mark the BGP connection as down. The hold-off timer
+                should be set to at least 3 times the keep-alive timer.
+              required: true
+              type: int
+            keep_alive_time:
+              description: The time in seconds between sending a keep-alive heartbeat
+                between BGP nodes.
+              required: true
+              type: int
+          type: dict
+        state:
+          description: BGP state information.
+          suboptions:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
+              description: Whether Admin State is enabled or disabled for BGP protocol.
+              required: true
+              type: str
+          type: dict
+      type: dict
+    logical_interface:
+      description: List of logical IP management interfaces (e.g. 'local').
+      suboptions:
+        id:
+          description: Identification information of this logical management interface.
+          suboptions:
+            name:
+              description: The name of the logical management interface, e.g. 'local'.
+              required: true
+              type: str
+          type: dict
+        name:
+          description: References the system-assigned name of the logical interface.
+          required: true
+          type: str
+        properties:
+          description: All the configuration data of the logical management interface.
+          suboptions:
+            ipv4:
+              description: IPv4 configuration and operational data. It only applies
+                to external interfaces
+              suboptions:
+                admin_state:
+                  choices:
+                  - disabled
+                  - enabled
+                  description: Whether IPv4 stack is enabled or disabled on this interface.
+                    Always enabled for the local management interface.
+                  required: true
+                  type: str
+                backup_gateway:
+                  description: The user-configured backup IPv4 gateway on the interface.
+                  required: true
+                  type: str
+                oper_gateway_source:
+                  choices:
+                  - manual
+                  - dhcp
+                  - apipa
+                  - dhcpv6
+                  - slaac
+                  - local
+                  description: The IPv4 gateway address type.
+                  required: true
+                  type: str
+                oper_ip_source:
+                  choices:
+                  - manual
+                  - dhcp
+                  - apipa
+                  - dhcpv6
+                  - slaac
+                  - local
+                  description: The IPv4 ip address type.
+                  required: true
+                  type: str
+                user_gateway:
+                  description: The user-configured primary IPv4 gateway on the interface.
+                  required: true
+                  type: str
+                user_ip_address:
+                  description: The user-configured IPv4 address and prefix on the
+                    interface.
+                  required: true
+                  type: str
+              type: dict
+            ipv6:
+              description: IPv6 configuration and operational data. It only applies
+                to external interfaces
+              suboptions:
+                gateway_configuration:
+                  description: All the configuration data of IPv6 gateway.
+                  suboptions:
+                    ip_address:
+                      description: The user-configured IPv6 gateway on the interface.
+                      required: true
+                      type: str
+                    source:
+                      choices:
+                      - manual
+                      - dhcp
+                      - apipa
+                      - dhcpv6
+                      - slaac
+                      - local
+                      description: The IPv6 gateway address type.
+                      required: true
+                      type: str
+                  type: dict
+                user_ip_address:
+                  description: List of provisioned IPv6 addresses.
+                  suboptions:
+                    ip_address:
+                      description: The user-configured IPv6 address and prefix on
+                        the interface.
+                      required: true
+                      type: str
+                  type: list
+              type: dict
+          type: dict
+        state:
+          description: Logical interface state information.
+          suboptions:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
+              description: Whether Admin State is enabled or disabled for this management
+                interface.
+              required: true
+              type: str
+          type: dict
+      type: list
+    physical_interface:
+      description: List of physical Ethernet management interfaces (or interface ports).
+      suboptions:
+        id:
+          description: Identification information of this management interface.
+          suboptions:
+            name:
+              description: The system-assigned name of the physical interface (e.g.
+                ifp0-dcn-1, ifp0-ilan-1, ifp0-1-1, etc.). The names are predefined.
+              required: true
+              type: str
+          type: dict
+        name:
+          description: References the system-assigned name of the interface.
+          required: true
+          type: str
+        properties:
+          description: All the configuration data of the physical management interface.
+          suboptions: {}
+          type: dict
+        state:
+          description: Physical management interface state information.
+          suboptions:
+            admin_state:
+              choices:
+              - disabled
+              - enabled
+              description: Whether Admin State is enabled or disabled for this management
+                interface.
+              required: true
+              type: str
+          type: dict
+      type: list
+    routes:
+      description: Top-level container for IP route configuration and operational
+        data.
+      suboptions:
+        ipv4_static_route:
+          description: List of IPv4 static routing entries.
+          suboptions:
+            destination:
+              description: IPv4 route destination prefix for the static route. Only
+                one static routing entry per unique destination ip/prefix can be configured.
+              required: true
+              type: str
+            next_hop:
+              description: A list of next-hop entries associated with the static route.
+              suboptions:
+                index:
+                  description: The index key of the entry in the next-hop list. Currently
+                    only one static entry is supported per destination prefix, so
+                    the index should always be 1.
+                  required: true
+                  type: int
+                ip_address:
+                  description: IPv4 route next-hop or gateway address associated with
+                    the route. If not specified, the default gateway value for the
+                    local management interface will be used.
+                  required: true
+                  type: str
+                metric:
+                  description: Routing metric cost.
+                  required: false
+                  type: int
+              type: list
+          type: list
+        ipv6_static_route:
+          description: List of IPv6 static routing entries.
+          suboptions:
+            destination:
+              description: IPv6 route destination prefix for the static route. Only
+                one static routing entry per unique destination ip/prefix can be configured.
+              required: true
+              type: str
+            gateway:
+              description: IPv6 route gateway address associated with the route. If
+                not specified, the default gateway value for the local management
+                interface will be used.
+              required: true
+              type: str
+            metric:
+              description: Routing metric cost.
+              required: true
+              type: int
+          type: list
+      type: dict
+    stacks:
+      description: Top-level container for IP stacks configuration and operational
+        data.
+      suboptions:
+        ipv6_stack_state:
+          description: IPv6 stack state configuration and operational data.
+          suboptions:
+            accept_router_advertisement:
+              description: Whether accept the router advertisement.
+              required: true
+              type: bool
+            max_slaac_addresses:
+              description: Max number of the SLAAC addresses.
+              required: true
+              type: int
+            preference:
+              choices:
+              - ipv4
+              - ipv6
+              description: Interface stack preference. IPv4 or IPv6.
+              required: true
+              type: str
+            state:
+              choices:
+              - disabled
+              - enabled
+              description: IPv6 stack state.
+              required: true
+              type: str
+          type: dict
+      type: dict
+  type: dict
