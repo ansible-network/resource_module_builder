@@ -1,14 +1,16 @@
 ---
 GENERATOR_VERSION: "1.0"
 
-ANSIBLE_METADATA:
-  metadata_version: "1.1"
-  status: ["preview"]
-  supported_by: "network"
+ANSIBLE_METADATA: |
+  {
+    'metadata_version': '1.1',
+    'status': ['preview'],
+    'supported_by': 'network'
+  }
 
 NETWORK_OS: waveserver5
 RESOURCE: ptps
-RESOURCE_SINGULAR: xcvr
+RESOURCE_SINGULAR: ptp
 RESOURCE_KEY: ptp_id
 COPYRIGHT: Copyright 2023 Ciena
 XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-ptp"
@@ -128,12 +130,12 @@ DOCUMENTATION: |
       type: list
     state:
       choices:
-      - gathered
-      - merged
-      - overridden
+        - gathered
+        - merged
+        - overridden
       default: merged
       description:
-      - The state the configuration should be left in
+        - The state the configuration should be left in
       type: str
 requirements:
   - ncclient (>=v0.6.4)
