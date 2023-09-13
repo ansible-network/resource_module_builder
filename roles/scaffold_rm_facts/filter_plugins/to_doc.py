@@ -7,6 +7,7 @@ __metaclass__ = type
 import os
 import shutil
 from subprocess import Popen, PIPE
+import json
 
 from copy import deepcopy
 
@@ -66,18 +67,15 @@ def add(line, spaces=0, newline=True):
 
 
 def get_ansible_metadata(spec, _path):
-    # write ansible metadata
     if 'ANSIBLE_METADATA' not in spec:
-        raise AnsibleFilterError("missing required element 'ANSIBLE_METADATA'"
-                                 " in model")
+        raise AnsibleFilterError("missing required element 'ANSIBLE_METADATA' in model")
 
     metadata = spec['ANSIBLE_METADATA']
-    if not isinstance(metadata, string_types):
-        raise AnsibleFilterError("value of element 'ANSIBLE_METADATA'"
-                                 " should be of type string")
+    if not isinstance(metadata, dict):  # Changed from string_types to dict
+        raise AnsibleFilterError("value of element 'ANSIBLE_METADATA' should be of type dict")
 
-    add('ANSIBLE_METADATA = %s' % metadata, newline=True)
-    # add(metadata)
+    serialized_metadata = json.dumps(metadata, indent=4)  # Serializing object to string
+    add(f'ANSIBLE_METADATA = {serialized_metadata}', newline=True) 
 
 
 def get_documentation(spec, _path):
