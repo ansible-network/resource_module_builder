@@ -30,6 +30,7 @@ pyang -f ansible ciena-waveserver-module.yang > ../../models/waveserver5/module.
 pyang -f ansible ciena-waveserver-port.yang > ../../models/waveserver5/port.yml
 pyang -f ansible ciena-waveserver-snmp.yang > ../../models/waveserver5/snmp.yml
 pyang -f ansible ciena-waveserver-chassis.yang > ../../models/waveserver5/chassis.yml
+pyang -f ansible ciena-waveserver-ptp.yang > ../../models/waveserver5/ptp.yml
 # Paste the output of that into the model's yml file
 # Generate the module code
 ansible-playbook generate_saos10.yml

@@ -6,6 +6,7 @@
       modules:
         - system
         - xcvrs
+        - ptps
     overwrite: true
   tasks:
     - name: run execution

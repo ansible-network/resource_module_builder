@@ -1,0 +1,10 @@
+
+# Using overridden
+
+- name: Configure ptp
+  ciena.waveserver5.waveserver5_ptps:
+    config:
+      - ptp_id: 7-1
+        state:
+          admin_state: enabled
+    state: overridden

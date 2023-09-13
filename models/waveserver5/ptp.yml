@@ -1,0 +1,106 @@
+waveserver_ptps:
+  description:
+    Waveserver Physical Termination Point (PTP) configuration and operational
+    data.
+  suboptions:
+    ptps:
+      description: List of PTP objects.
+      suboptions:
+        properties:
+          description: All the configurable and operational data of this PTP instance.
+          suboptions:
+            forward_error_correction:
+              description: Forward error correction.
+              required: true
+              type: str
+            is_coherent:
+              description: Indicate whether or not this ptp can support coherent attributes
+              required: true
+              type: bool
+            thresholds:
+              description: Common container for PTP threshold configuration data.
+              suboptions:
+                hccs_db:
+                  description:
+                    High Correction Count Second (HCCS) Threshold, expressed
+                    in dB notation.
+                  required: true
+                  type: float
+                pre_fec_sd_db:
+                  description:
+                    Pre-FEC Signal Degrade threshold value, expressed in
+                    dB notation.
+                  required: true
+                  type: float
+                pre_fec_sf_db:
+                  description:
+                    Pre-FEC Signal Fail threshold value, expressed in dB
+                    notation.
+                  required: true
+                  type: float
+              type: dict
+            transmitter:
+              description: PTP transmitter related config and operational data fields.
+              suboptions:
+                state:
+                  description:
+                    Transmitter state (enabled or disabled) of the PTP.
+                    PTP Admin State cannot be changed to enabled unless the transmitter
+                    state is enabled.
+                  required: true
+                  type: str
+              type: dict
+            type:
+              choices:
+                - unknown
+                - WLAi
+                - WLAi-iOPS
+                - 4x25G
+                - 10G
+                - OCH
+                - OSC
+                - OSC-Add-Drop
+                - OTM
+                - WL5e
+                - WL5n
+                - 100G
+                - 4x100G
+                - 8x50G
+                - 2x50G
+                - 400ZR
+              description: Physical Termination Point type.
+              required: true
+              type: str
+            xcvr_type:
+              description:
+                Transceiver type of the XCVR that's associated with this
+                PTP. Type depends on what is physically plugged in. Read only attribute.
+              required: true
+              type: str
+          type: dict
+        ptp_id:
+          description:
+            Unique, access identifier string of the PTP (e.g., '1-1').
+            Key value for the PTP list. Read-only attribute.
+          required: true
+          type: str
+        state:
+          description: State information of this PTP instance.
+          suboptions:
+            admin_state:
+              description:
+                Administrative state (enabled or disabled) of the PTP.
+                If Admin State is set to enabled, majority of the PTP fields will
+                no longer be modifiable. When PTP Transmitter State is Disabled, PTP
+                Admin State cannot be changed from Disabled to Enabled.
+              required: true
+              type: str
+            spli_management:
+              description:
+                Whether or not Service Photonic Layer Interoperations management
+                protocol is enabled on this PTP.
+              required: true
+              type: str
+          type: dict
+      type: list
+  type: dict
