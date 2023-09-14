@@ -43,14 +43,12 @@ DOCUMENTATION: |
               description: PM instance properties.
               suboptions:
                 tca_profile_15_min:
-                  description:
-                    TCA profile name that is attached to the current 15 minute
+                  description: TCA profile name that is attached to the current 15 minute
                     bin
                   required: true
                   type: str
                 tca_profile_24_hr:
-                  description:
-                    TCA profile name that is attached to the current 24 hour
+                  description: TCA profile name that is attached to the current 24 hour
                     bin
                   required: true
                   type: str
@@ -89,14 +87,12 @@ DOCUMENTATION: |
               description: PM instance properties.
               suboptions:
                 tca_profile_15_min:
-                  description:
-                    TCA profile name that is attached to the current 15 minute
+                  description: TCA profile name that is attached to the current 15 minute
                     bin
                   required: true
                   type: str
                 tca_profile_24_hr:
-                  description:
-                    TCA profile name that is attached to the current 24 hour
+                  description: TCA profile name that is attached to the current 24 hour
                     bin
                   required: true
                   type: str
@@ -154,9 +150,8 @@ DOCUMENTATION: |
               choices:
                 - disabled
                 - enabled
-              description:
-                Global configuration for clearing untimed bin stats on a get
-                request.
+              description: Global configuration for clearing untimed bin stats on a
+                get request.
               required: true
               type: str
           type: dict
@@ -171,14 +166,12 @@ DOCUMENTATION: |
               description: PM instance properties.
               suboptions:
                 tca_profile_15_min:
-                  description:
-                    TCA profile name that is attached to the current 15 minute
+                  description: TCA profile name that is attached to the current 15 minute
                     bin
                   required: true
                   type: str
                 tca_profile_24_hr:
-                  description:
-                    TCA profile name that is attached to the current 24 hour
+                  description: TCA profile name that is attached to the current 24 hour
                     bin
                   required: true
                   type: str
@@ -217,14 +210,12 @@ DOCUMENTATION: |
               description: PM instance properties.
               suboptions:
                 tca_profile_15_min:
-                  description:
-                    TCA profile name that is attached to the current 15 minute
+                  description: TCA profile name that is attached to the current 15 minute
                     bin
                   required: true
                   type: str
                 tca_profile_24_hr:
-                  description:
-                    TCA profile name that is attached to the current 24 hour
+                  description: TCA profile name that is attached to the current 24 hour
                     bin
                   required: true
                   type: str
@@ -263,14 +254,12 @@ DOCUMENTATION: |
               description: PM instance properties.
               suboptions:
                 tca_profile_15_min:
-                  description:
-                    TCA profile name that is attached to the current 15 minute
+                  description: TCA profile name that is attached to the current 15 minute
                     bin
                   required: true
                   type: str
                 tca_profile_24_hr:
-                  description:
-                    TCA profile name that is attached to the current 24 hour
+                  description: TCA profile name that is attached to the current 24 hour
                     bin
                   required: true
                   type: str
@@ -309,14 +298,12 @@ DOCUMENTATION: |
               description: PM instance properties.
               suboptions:
                 tca_profile_15_min:
-                  description:
-                    TCA profile name that is attached to the current 15 minute
+                  description: TCA profile name that is attached to the current 15 minute
                     bin
                   required: true
                   type: str
                 tca_profile_24_hr:
-                  description:
-                    TCA profile name that is attached to the current 24 hour
+                  description: TCA profile name that is attached to the current 24 hour
                     bin
                   required: true
                   type: str
@@ -355,14 +342,12 @@ DOCUMENTATION: |
               description: PM instance properties.
               suboptions:
                 tca_profile_15_min:
-                  description:
-                    TCA profile name that is attached to the current 15 minute
+                  description: TCA profile name that is attached to the current 15 minute
                     bin
                   required: true
                   type: str
                 tca_profile_24_hr:
-                  description:
-                    TCA profile name that is attached to the current 24 hour
+                  description: TCA profile name that is attached to the current 24 hour
                     bin
                   required: true
                   type: str
@@ -402,8 +387,8 @@ DOCUMENTATION: |
 requirements:
   - ncclient (>=v0.6.4)
 notes:
-  - This module requires the netconf system service be enabled on
-    the remote device being managed.
+  - This module requires the netconf system service be enabled on the remote device
+    being managed.
   - Tested against SAOS 10.6.1
   - This module works with connection C(netconf)
 

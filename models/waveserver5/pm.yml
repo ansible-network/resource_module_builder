@@ -12,14 +12,12 @@ waveserver_pm:
           description: PM instance properties.
           suboptions:
             tca_profile_15_min:
-              description:
-                TCA profile name that is attached to the current 15 minute
+              description: TCA profile name that is attached to the current 15 minute
                 bin
               required: true
               type: str
             tca_profile_24_hr:
-              description:
-                TCA profile name that is attached to the current 24 hour
+              description: TCA profile name that is attached to the current 24 hour
                 bin
               required: true
               type: str
@@ -33,15 +31,15 @@ waveserver_pm:
           suboptions:
             admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured administrative state of the port.
               required: true
               type: str
             tca_admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured TCA administrative state for this PM instance.
               required: true
               type: str
@@ -58,14 +56,12 @@ waveserver_pm:
           description: PM instance properties.
           suboptions:
             tca_profile_15_min:
-              description:
-                TCA profile name that is attached to the current 15 minute
+              description: TCA profile name that is attached to the current 15 minute
                 bin
               required: true
               type: str
             tca_profile_24_hr:
-              description:
-                TCA profile name that is attached to the current 24 hour
+              description: TCA profile name that is attached to the current 24 hour
                 bin
               required: true
               type: str
@@ -79,15 +75,15 @@ waveserver_pm:
           suboptions:
             admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured administrative state of the port.
               required: true
               type: str
             tca_admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured TCA administrative state for this PM instance.
               required: true
               type: str
@@ -98,33 +94,32 @@ waveserver_pm:
       suboptions:
         admin_state:
           choices:
-            - disabled
-            - enabled
+          - disabled
+          - enabled
           description: Global admin state.
           required: true
           type: str
         tca_admin_state:
           choices:
-            - disabled
-            - enabled
+          - disabled
+          - enabled
           description: Global TCA administrative state.
           required: true
           type: str
         tca_notification_type:
           choices:
-            - summary-event
-            - summary-alarm
-            - event
-            - alarm
+          - summary-event
+          - summary-alarm
+          - event
+          - alarm
           description: Global TCA notification type.
           required: true
           type: str
         untimed_read_and_clear:
           choices:
-            - disabled
-            - enabled
-          description:
-            Global configuration for clearing untimed bin stats on a get
+          - disabled
+          - enabled
+          description: Global configuration for clearing untimed bin stats on a get
             request.
           required: true
           type: str
@@ -140,14 +135,12 @@ waveserver_pm:
           description: PM instance properties.
           suboptions:
             tca_profile_15_min:
-              description:
-                TCA profile name that is attached to the current 15 minute
+              description: TCA profile name that is attached to the current 15 minute
                 bin
               required: true
               type: str
             tca_profile_24_hr:
-              description:
-                TCA profile name that is attached to the current 24 hour
+              description: TCA profile name that is attached to the current 24 hour
                 bin
               required: true
               type: str
@@ -161,15 +154,15 @@ waveserver_pm:
           suboptions:
             admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured administrative state of the port.
               required: true
               type: str
             tca_admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured TCA administrative state for this PM instance.
               required: true
               type: str
@@ -186,14 +179,12 @@ waveserver_pm:
           description: PM instance properties.
           suboptions:
             tca_profile_15_min:
-              description:
-                TCA profile name that is attached to the current 15 minute
+              description: TCA profile name that is attached to the current 15 minute
                 bin
               required: true
               type: str
             tca_profile_24_hr:
-              description:
-                TCA profile name that is attached to the current 24 hour
+              description: TCA profile name that is attached to the current 24 hour
                 bin
               required: true
               type: str
@@ -207,15 +198,15 @@ waveserver_pm:
           suboptions:
             admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured administrative state of the port.
               required: true
               type: str
             tca_admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured TCA administrative state for this PM instance.
               required: true
               type: str
@@ -232,14 +223,12 @@ waveserver_pm:
           description: PM instance properties.
           suboptions:
             tca_profile_15_min:
-              description:
-                TCA profile name that is attached to the current 15 minute
+              description: TCA profile name that is attached to the current 15 minute
                 bin
               required: true
               type: str
             tca_profile_24_hr:
-              description:
-                TCA profile name that is attached to the current 24 hour
+              description: TCA profile name that is attached to the current 24 hour
                 bin
               required: true
               type: str
@@ -253,15 +242,15 @@ waveserver_pm:
           suboptions:
             admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured administrative state of the port.
               required: true
               type: str
             tca_admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured TCA administrative state for this PM instance.
               required: true
               type: str
@@ -278,14 +267,12 @@ waveserver_pm:
           description: PM instance properties.
           suboptions:
             tca_profile_15_min:
-              description:
-                TCA profile name that is attached to the current 15 minute
+              description: TCA profile name that is attached to the current 15 minute
                 bin
               required: true
               type: str
             tca_profile_24_hr:
-              description:
-                TCA profile name that is attached to the current 24 hour
+              description: TCA profile name that is attached to the current 24 hour
                 bin
               required: true
               type: str
@@ -299,15 +286,15 @@ waveserver_pm:
           suboptions:
             admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured administrative state of the port.
               required: true
               type: str
             tca_admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured TCA administrative state for this PM instance.
               required: true
               type: str
@@ -324,14 +311,12 @@ waveserver_pm:
           description: PM instance properties.
           suboptions:
             tca_profile_15_min:
-              description:
-                TCA profile name that is attached to the current 15 minute
+              description: TCA profile name that is attached to the current 15 minute
                 bin
               required: true
               type: str
             tca_profile_24_hr:
-              description:
-                TCA profile name that is attached to the current 24 hour
+              description: TCA profile name that is attached to the current 24 hour
                 bin
               required: true
               type: str
@@ -345,15 +330,15 @@ waveserver_pm:
           suboptions:
             admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured administrative state of the port.
               required: true
               type: str
             tca_admin_state:
               choices:
-                - disabled
-                - enabled
+              - disabled
+              - enabled
               description: The configured TCA administrative state for this PM instance.
               required: true
               type: str
