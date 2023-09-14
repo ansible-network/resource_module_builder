@@ -8,6 +8,7 @@
         - xcvrs
         - ptps
         - ports
+        - pm
     overwrite: true
   tasks:
     - name: run execution
