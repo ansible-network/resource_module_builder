@@ -1,5 +1,6 @@
 waveserver_interfaces:
-  description: Top level container for configuration and operational data for physical
+  description:
+    Top level container for configuration and operational data for physical
     and logical network interfaces.
   suboptions:
     acl:
@@ -13,35 +14,41 @@ waveserver_interfaces:
               suboptions:
                 action:
                   choices:
-                  - allow
-                  - drop
-                  description: The forwarding action defined for packets matching
+                    - allow
+                    - drop
+                  description:
+                    The forwarding action defined for packets matching
                     the filtering rules for this ACL entry.
                   required: true
                   type: str
                 destination_address:
-                  description: The destination IPv4 address and optional prefix length
+                  description:
+                    The destination IPv4 address and optional prefix length
                     for this ACL entry.
                   required: true
                   type: str
                 interface_name:
-                  description: The name of the logical management interface that the
+                  description:
+                    The name of the logical management interface that the
                     ACL entry is applied to, e.g. 'local'.
                   required: true
                   type: str
                 protocol:
-                  description: The transport protocol of the IPv4 packet to match.
+                  description:
+                    The transport protocol of the IPv4 packet to match.
                     A value of 0 matches ALL protocols, 1=ICMP, 58=ICMPv6, 6=TCP,
                     and 17=UDP.
                   required: true
                   type: int
                 sequence_id:
-                  description: The sequence id determines the priority in which ACL
+                  description:
+                    The sequence id determines the priority in which ACL
                     entries are applied. The sequece id must be unique in the ACL.
                   required: true
                   type: int
                 source_address:
-                  description: The source IPv4 address and optional prefix length
+                  description:
+                    The source IPv4 address and optional prefix length
                     for this ACL entry.
                   required: true
                   type: str
@@ -51,34 +58,40 @@ waveserver_interfaces:
               suboptions:
                 action:
                   choices:
-                  - allow
-                  - drop
-                  description: The forwarding action defined for packets matching
+                    - allow
+                    - drop
+                  description:
+                    The forwarding action defined for packets matching
                     the filtering rules for this ACL entry.
                   required: true
                   type: str
                 destination_address:
-                  description: The destination IPv6 address and optional prefix length
+                  description:
+                    The destination IPv6 address and optional prefix length
                     for this ACL entry.
                   required: true
                   type: str
                 interface_name:
-                  description: The name of the logical management interface that the
+                  description:
+                    The name of the logical management interface that the
                     ACL entry is applied to, e.g. 'local'.
                   required: true
                   type: str
                 protocol:
-                  description: The transport protocol of the IPv6 packet to match.
+                  description:
+                    The transport protocol of the IPv6 packet to match.
                     A value of 0 matches ALL protocols, 1=ICMP, 6=TCP, and 17=UDP.
                   required: true
                   type: int
                 sequence_id:
-                  description: The sequence id determines the priority in which ACL
+                  description:
+                    The sequence id determines the priority in which ACL
                     entries are applied. The sequece id must be unique in the ACL.
                   required: true
                   type: int
                 source_address:
-                  description: The source IPv6 address and optional prefix length
+                  description:
+                    The source IPv6 address and optional prefix length
                     for this ACL entry.
                   required: true
                   type: str
@@ -92,35 +105,41 @@ waveserver_interfaces:
               suboptions:
                 action:
                   choices:
-                  - allow
-                  - drop
-                  description: The forwarding action defined for packets matching
+                    - allow
+                    - drop
+                  description:
+                    The forwarding action defined for packets matching
                     the filtering rules for this ACL entry.
                   required: true
                   type: str
                 destination_address:
-                  description: The destination IPv4 address and optional prefix length
+                  description:
+                    The destination IPv4 address and optional prefix length
                     for this ACL entry.
                   required: true
                   type: str
                 interface_name:
-                  description: The name of the logical management interface that the
+                  description:
+                    The name of the logical management interface that the
                     ACL entry is applied to, e.g. 'local'.
                   required: true
                   type: str
                 protocol:
-                  description: The transport protocol of the IPv4 packet to match.
+                  description:
+                    The transport protocol of the IPv4 packet to match.
                     A value of 0 matches ALL protocols, 1=ICMP, 58=ICMPv6, 6=TCP,
                     and 17=UDP.
                   required: true
                   type: int
                 sequence_id:
-                  description: The sequence id determines the priority in which ACL
+                  description:
+                    The sequence id determines the priority in which ACL
                     entries are applied. The sequece id must be unique in the ACL.
                   required: true
                   type: int
                 source_address:
-                  description: The source IPv4 address and optional prefix length
+                  description:
+                    The source IPv4 address and optional prefix length
                     for this ACL entry.
                   required: true
                   type: str
@@ -130,34 +149,40 @@ waveserver_interfaces:
               suboptions:
                 action:
                   choices:
-                  - allow
-                  - drop
-                  description: The forwarding action defined for packets matching
+                    - allow
+                    - drop
+                  description:
+                    The forwarding action defined for packets matching
                     the filtering rules for this ACL entry.
                   required: true
                   type: str
                 destination_address:
-                  description: The destination IPv6 address and optional prefix length
+                  description:
+                    The destination IPv6 address and optional prefix length
                     for this ACL entry.
                   required: true
                   type: str
                 interface_name:
-                  description: The name of the logical management interface that the
+                  description:
+                    The name of the logical management interface that the
                     ACL entry is applied to, e.g. 'local'.
                   required: true
                   type: str
                 protocol:
-                  description: The transport protocol of the IPv6 packet to match.
+                  description:
+                    The transport protocol of the IPv6 packet to match.
                     A value of 0 matches ALL protocols, 1=ICMP, 6=TCP, and 17=UDP.
                   required: true
                   type: int
                 sequence_id:
-                  description: The sequence id determines the priority in which ACL
+                  description:
+                    The sequence id determines the priority in which ACL
                     entries are applied. The sequece id must be unique in the ACL.
                   required: true
                   type: int
                 source_address:
-                  description: The source IPv6 address and optional prefix length
+                  description:
+                    The source IPv6 address and optional prefix length
                     for this ACL entry.
                   required: true
                   type: str
@@ -165,11 +190,13 @@ waveserver_interfaces:
           type: dict
       type: dict
     bgp:
-      description: Waveserver Border Gateway Protocol (BGP) configuration data and
+      description:
+        Waveserver Border Gateway Protocol (BGP) configuration data and
         peer information.
       suboptions:
         peer:
-          description: A list of BGP peers. BGP peers are created by the system when
+          description:
+            A list of BGP peers. BGP peers are created by the system when
             BGP is enabled. Users are not allowed to create or delete peers
           suboptions:
             autonomous_system:
@@ -186,8 +213,8 @@ waveserver_interfaces:
               type: str
             name:
               choices:
-              - peer-1
-              - peer-2
+                - peer-1
+                - peer-2
               description: Peer name. Read-only attribute.
               required: true
               type: str
@@ -196,20 +223,23 @@ waveserver_interfaces:
           description: BGP properties.
           suboptions:
             autonomous_system:
-              description: This is the autonomous system number which is an identification
+              description:
+                This is the autonomous system number which is an identification
                 number for the node. An autonomous system is a group of networks under
                 a common administration. Each node within that group gets an AS number.
               required: true
               type: int
             holdoff_time:
-              description: The time in seconds that the node waits to receive a keep-alive
+              description:
+                The time in seconds that the node waits to receive a keep-alive
                 message. If the node does not receive a keep-alive within the hold-off
                 time, it will mark the BGP connection as down. The hold-off timer
                 should be set to at least 3 times the keep-alive timer.
               required: true
               type: int
             keep_alive_time:
-              description: The time in seconds between sending a keep-alive heartbeat
+              description:
+                The time in seconds between sending a keep-alive heartbeat
                 between BGP nodes.
               required: true
               type: int
@@ -219,8 +249,8 @@ waveserver_interfaces:
           suboptions:
             admin_state:
               choices:
-              - disabled
-              - enabled
+                - disabled
+                - enabled
               description: Whether Admin State is enabled or disabled for BGP protocol.
               required: true
               type: str
@@ -245,14 +275,16 @@ waveserver_interfaces:
           description: All the configuration data of the logical management interface.
           suboptions:
             ipv4:
-              description: IPv4 configuration and operational data. It only applies
+              description:
+                IPv4 configuration and operational data. It only applies
                 to external interfaces
               suboptions:
                 admin_state:
                   choices:
-                  - disabled
-                  - enabled
-                  description: Whether IPv4 stack is enabled or disabled on this interface.
+                    - disabled
+                    - enabled
+                  description:
+                    Whether IPv4 stack is enabled or disabled on this interface.
                     Always enabled for the local management interface.
                   required: true
                   type: str
@@ -262,23 +294,23 @@ waveserver_interfaces:
                   type: str
                 oper_gateway_source:
                   choices:
-                  - manual
-                  - dhcp
-                  - apipa
-                  - dhcpv6
-                  - slaac
-                  - local
+                    - manual
+                    - dhcp
+                    - apipa
+                    - dhcpv6
+                    - slaac
+                    - local
                   description: The IPv4 gateway address type.
                   required: true
                   type: str
                 oper_ip_source:
                   choices:
-                  - manual
-                  - dhcp
-                  - apipa
-                  - dhcpv6
-                  - slaac
-                  - local
+                    - manual
+                    - dhcp
+                    - apipa
+                    - dhcpv6
+                    - slaac
+                    - local
                   description: The IPv4 ip address type.
                   required: true
                   type: str
@@ -287,13 +319,15 @@ waveserver_interfaces:
                   required: true
                   type: str
                 user_ip_address:
-                  description: The user-configured IPv4 address and prefix on the
+                  description:
+                    The user-configured IPv4 address and prefix on the
                     interface.
                   required: true
                   type: str
               type: dict
             ipv6:
-              description: IPv6 configuration and operational data. It only applies
+              description:
+                IPv6 configuration and operational data. It only applies
                 to external interfaces
               suboptions:
                 gateway_configuration:
@@ -305,12 +339,12 @@ waveserver_interfaces:
                       type: str
                     source:
                       choices:
-                      - manual
-                      - dhcp
-                      - apipa
-                      - dhcpv6
-                      - slaac
-                      - local
+                        - manual
+                        - dhcp
+                        - apipa
+                        - dhcpv6
+                        - slaac
+                        - local
                       description: The IPv6 gateway address type.
                       required: true
                       type: str
@@ -319,7 +353,8 @@ waveserver_interfaces:
                   description: List of provisioned IPv6 addresses.
                   suboptions:
                     ip_address:
-                      description: The user-configured IPv6 address and prefix on
+                      description:
+                        The user-configured IPv6 address and prefix on
                         the interface.
                       required: true
                       type: str
@@ -331,9 +366,10 @@ waveserver_interfaces:
           suboptions:
             admin_state:
               choices:
-              - disabled
-              - enabled
-              description: Whether Admin State is enabled or disabled for this management
+                - disabled
+                - enabled
+              description:
+                Whether Admin State is enabled or disabled for this management
                 interface.
               required: true
               type: str
@@ -346,7 +382,8 @@ waveserver_interfaces:
           description: Identification information of this management interface.
           suboptions:
             name:
-              description: The system-assigned name of the physical interface (e.g.
+              description:
+                The system-assigned name of the physical interface (e.g.
                 ifp0-dcn-1, ifp0-ilan-1, ifp0-1-1, etc.). The names are predefined.
               required: true
               type: str
@@ -364,23 +401,26 @@ waveserver_interfaces:
           suboptions:
             admin_state:
               choices:
-              - disabled
-              - enabled
-              description: Whether Admin State is enabled or disabled for this management
+                - disabled
+                - enabled
+              description:
+                Whether Admin State is enabled or disabled for this management
                 interface.
               required: true
               type: str
           type: dict
       type: list
     routes:
-      description: Top-level container for IP route configuration and operational
+      description:
+        Top-level container for IP route configuration and operational
         data.
       suboptions:
         ipv4_static_route:
           description: List of IPv4 static routing entries.
           suboptions:
             destination:
-              description: IPv4 route destination prefix for the static route. Only
+              description:
+                IPv4 route destination prefix for the static route. Only
                 one static routing entry per unique destination ip/prefix can be configured.
               required: true
               type: str
@@ -388,13 +428,15 @@ waveserver_interfaces:
               description: A list of next-hop entries associated with the static route.
               suboptions:
                 index:
-                  description: The index key of the entry in the next-hop list. Currently
+                  description:
+                    The index key of the entry in the next-hop list. Currently
                     only one static entry is supported per destination prefix, so
                     the index should always be 1.
                   required: true
                   type: int
                 ip_address:
-                  description: IPv4 route next-hop or gateway address associated with
+                  description:
+                    IPv4 route next-hop or gateway address associated with
                     the route. If not specified, the default gateway value for the
                     local management interface will be used.
                   required: true
@@ -409,12 +451,14 @@ waveserver_interfaces:
           description: List of IPv6 static routing entries.
           suboptions:
             destination:
-              description: IPv6 route destination prefix for the static route. Only
+              description:
+                IPv6 route destination prefix for the static route. Only
                 one static routing entry per unique destination ip/prefix can be configured.
               required: true
               type: str
             gateway:
-              description: IPv6 route gateway address associated with the route. If
+              description:
+                IPv6 route gateway address associated with the route. If
                 not specified, the default gateway value for the local management
                 interface will be used.
               required: true
@@ -426,7 +470,8 @@ waveserver_interfaces:
           type: list
       type: dict
     stacks:
-      description: Top-level container for IP stacks configuration and operational
+      description:
+        Top-level container for IP stacks configuration and operational
         data.
       suboptions:
         ipv6_stack_state:
@@ -442,15 +487,15 @@ waveserver_interfaces:
               type: int
             preference:
               choices:
-              - ipv4
-              - ipv6
+                - ipv4
+                - ipv6
               description: Interface stack preference. IPv4 or IPv6.
               required: true
               type: str
             state:
               choices:
-              - disabled
-              - enabled
+                - disabled
+                - enabled
               description: IPv6 stack state.
               required: true
               type: str

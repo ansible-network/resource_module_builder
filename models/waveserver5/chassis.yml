@@ -9,15 +9,16 @@ waveserver_chassis:
           suboptions:
             admin_state:
               choices:
-              - disabled
-              - enabled
+                - disabled
+                - enabled
               description: Whether admin state of the Access Panel is enabled or disabled.
               required: true
               type: str
           type: dict
       type: dict
     control_module:
-      description: Waveserver Control Subsystem. This is the control module for the
+      description:
+        Waveserver Control Subsystem. This is the control module for the
         Waveserver Ai or Waveserver 5 chassis.
       suboptions:
         state:
@@ -25,9 +26,10 @@ waveserver_chassis:
           suboptions:
             admin_state:
               choices:
-              - disabled
-              - enabled
-              description: Whether admin state of the control module is enabled or
+                - disabled
+                - enabled
+              description:
+                Whether admin state of the control module is enabled or
                 disabled.
               required: true
               type: str
@@ -45,9 +47,10 @@ waveserver_chassis:
           suboptions:
             admin_state:
               choices:
-              - disabled
-              - enabled
-              description: Whether Admin State of the cooling fan unit is enabled
+                - disabled
+                - enabled
+              description:
+                Whether Admin State of the cooling fan unit is enabled
                 or disabled. Disabled state masks the alarms only.
               required: true
               type: str
@@ -58,15 +61,15 @@ waveserver_chassis:
       suboptions:
         port_id:
           choices:
-          - ilan-1
-          - ilan-2
-          - dcn-1
-          - dcn-2
-          - dcn-3
-          - dcn-4
-          - dcn-5
-          - console-1
-          - console-2
+            - ilan-1
+            - ilan-2
+            - dcn-1
+            - dcn-2
+            - dcn-3
+            - dcn-4
+            - dcn-5
+            - console-1
+            - console-2
           description: Management port identifier.
           required: true
           type: str
@@ -75,10 +78,11 @@ waveserver_chassis:
           suboptions:
             mode:
               choices:
-              - management
-              - wayside-channel
-              - redundant-bgp
-              description: Management port mode. Specifies whether the port is configured
+                - management
+                - wayside-channel
+                - redundant-bgp
+              description:
+                Management port mode. Specifies whether the port is configured
                 as a local management interface or wayside communications channel
                 (carry through).
               required: true
@@ -89,9 +93,10 @@ waveserver_chassis:
           suboptions:
             admin_state:
               choices:
-              - disabled
-              - enabled
-              description: Whether Admin State is enabled or disabled for this management
+                - disabled
+                - enabled
+              description:
+                Whether Admin State is enabled or disabled for this management
                 port.
               required: true
               type: str
@@ -109,9 +114,10 @@ waveserver_chassis:
           suboptions:
             admin_state:
               choices:
-              - disabled
-              - enabled
-              description: Whether admin state of the Power Supply Unit is enabled
+                - disabled
+                - enabled
+              description:
+                Whether admin state of the Power Supply Unit is enabled
                 or disabled. Disabled state masks the alarms only.
               required: true
               type: str
@@ -122,8 +128,8 @@ waveserver_chassis:
       suboptions:
         power_state:
           choices:
-          - automatic
-          - shutdown
+            - automatic
+            - shutdown
           description: Slot power state.
           required: true
           type: str

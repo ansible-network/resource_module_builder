@@ -1,8 +1,4 @@
 ---
-- name: remove directory
-  ansible.builtin.file:
-    path: build/{{ product }}
-    state: absent
 - name: Init Generation
   include_role:
     name: init
@@ -53,6 +49,29 @@
       ansible.builtin.copy:
         src: build/{{ product }}/plugins/module_utils/network/{{ product }}/facts/{{ item }}/{{ item }}.py
         dest: "{{ansible_collection_root}}/ciena/{{ product }}/plugins/module_utils/network/{{ product }}/facts/{{ item }}/{{ item }}.py"
+    - ansible.builtin.set_fact:
+        line_match: "from ansible_collections.ciena.{{ product }}.plugins.module_utils.network.{{ product }}.facts.{{ item }}.{{ item }} import \\("
+    - name: Read and check for line
+      slurp:
+        src: "{{ ansible_collection_root }}/ciena/{{ product }}/plugins/module_utils/network/{{ product }}/facts/facts.py"
+      register: slurped_content
+    - ansible.builtin.set_fact:
+        line_exists: "{{ ((slurped_content['content'] | b64decode).split('\n') | select('match', line_match) | list | length) > 0 }}"
+    - name: Ensure import line exists in facts file
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_collection_root }}/ciena/{{ product }}/plugins/module_utils/network/{{ product }}/facts/facts.py"
+        insertbefore: 'FACT_LEGACY_SUBSETS = dict'
+        regexp: "^from ansible_collections\\.ciena\\.{{ product }}\\.plugins\\.module_utils\\.network\\.{{ product }}\\.facts\\.{{ item }}\\.{{ item }} import \\(\\n.*{{ item | capitalize }}Facts,"
+        line: "from ansible_collections.ciena.{{ product }}.plugins.module_utils.network.{{ product }}.facts.{{ item }}.{{ item }} import ( {{ item | capitalize }}Facts, )"
+        state: present
+      when: not line_exists
+    - name: Ensure assignment line exists in facts file
+      ansible.builtin.lineinfile:
+        path: "{{ansible_collection_root}}/ciena/{{ product }}/plugins/module_utils/network/{{ product }}/facts/facts.py"
+        insertafter: 'FACT_RESOURCE_SUBSETS = dict\('
+        regexp: "^\\s*{{ item }}={{ item|capitalize }}Facts,$"
+        line: '    {{ item }}={{ item | capitalize }}Facts,'
+        state: present
     - name: Run black
       ansible.builtin.command: black . -l 120
       args:

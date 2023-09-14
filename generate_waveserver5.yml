@@ -11,7 +11,11 @@
         - pm
     overwrite: true
   tasks:
-    - name: run execution
+    - name: Remove directory
+      ansible.builtin.file:
+        path: build/waveserver5
+        state: absent
+    - name: Run execution
       include_tasks: playbook_tasks.yml
       vars:
         product: waveserver5
