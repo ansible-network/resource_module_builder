@@ -56,7 +56,7 @@ class AnsiblePlugin(plugin.PyangPlugin):
             if typedef_node:
                 type_node = typedef_node.search_one("type")
                 if type_node.arg == "enumeration":
-                    logging.critical("Methodology: Custom enumeration type found. Using handle_custom_enum.")
+                    logging.error("Methodology: Custom enumeration type found. Using handle_custom_enum.")
                     return self.handle_custom_enum(type_node)
         else:
             typedef_node = None
@@ -178,6 +178,7 @@ class AnsiblePlugin(plugin.PyangPlugin):
     def yang_to_dict(self, yang_module, path):
         data = {}
         for child in yang_module.i_children:
+            logging.warning(child)
             status_node = child.search_one("status")
             if status_node and status_node.arg == "deprecated":
                 logging.warning(f"Skipping deprecated leaf: {child.arg}")
