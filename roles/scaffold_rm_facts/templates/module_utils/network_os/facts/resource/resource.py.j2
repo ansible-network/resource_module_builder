@@ -174,7 +174,7 @@ class {{ resource|capitalize }}Facts(object):
         return result[0].text if result else None
 
     def recursive_config_fill(self, config, conf, spec, xml_base_path=""):
-        for key, _ in spec.items():
+        for key, unused in spec.items():
             modified_key = key.replace('_', '-')
             new_base_path = f"{xml_base_path}/{modified_key}" if xml_base_path else modified_key
 
