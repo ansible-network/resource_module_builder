@@ -10,11 +10,11 @@ ANSIBLE_METADATA: |
 
 NETWORK_OS: waveserver5
 RESOURCE: xcvrs
-RESOURCE_SINGULAR: xcvr
-RESOURCE_KEY: xcvr_id
 COPYRIGHT: Copyright 2023 Ciena
 XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-xcvr"
-XML_RESOURCE: waveserver-xcvrs
+XML_ROOT_KEY: waveserver-xcvrs
+# Promoted list
+XML_ITEMS: xcvrs
 
 DOCUMENTATION: |
   module: waveserver5_xcvr

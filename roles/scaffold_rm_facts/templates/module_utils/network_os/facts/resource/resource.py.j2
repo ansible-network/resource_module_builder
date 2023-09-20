@@ -1,56 +1,5 @@
 {% set doc = rm['DOCUMENTATION'] | from_yaml %}
 {% set config = doc.options.config %}
-
-{% macro build_config(config) %}
-{% if config.type == "list" %}
-{% for key, value in config.suboptions.items() %}
-{% if value.type == "str" and key != resource_key %}
-{{ build_str(resource_singular, key, "config") }}{% endif %}
-{% if value.type == "int" and key != resource_key %}
-{{ build_int(resource_singular, key, "config") }}{% endif %}
-{% if value.type == "list" %}
-{{ build_list(resource_singular, key, value, "config", config.suboptions) }}{% endif %}
-{# {% if value.type == "dict" %}
-    {{ build_dict(resource_singular + "_node", key, value) | indent }}{% endif %} #}
-{% endfor %}
-
-{%- endif %}
-{% endmacro %}
-
-{% macro build_list(parent, key, value, config_parent, schema) %}
-if {{ parent }}["{{ key }}"]:
-    {{ config_parent }}["{{ key }}"] = []
-    if not isinstance({{ parent }}["{{ key }}"], list):
-        {{ key | replace("-","_") }}s = [{{ parent }}["{{ key }}"]]
-    else:
-        {{ key | replace("-","_") }}s = {{ parent }}["{{ key }}"]
-
-    for {{ key | replace("-","_") }} in {{ key | replace("-","_") }}s:
-        {{ key | replace("-", "_") }}_result = {}
-{% for k, v in schema[key].suboptions.items() %}
-{% if v.type == "str" %}
-        {{ build_str(key | replace("-", "_"), k, key | replace("-", "_") + "_result") | indent | indent }}{% endif %}
-{% if v.type == "int" %}
-        {{ build_int(key | replace("-", "_"), k, key | replace("-", "_") + "_result") | indent | indent }}{% endif %}
-{% if v.type == "list" %}
-        {{ build_list(key | replace("-", "_"), k, v, key | replace("-", "_") + "_result", schema[key].suboptions) | indent | indent }}
-{% endif %}
-{% endfor %}
-        {{ config_parent }}["{{ key }}"].append({{ key | replace("-", "_") }}_result)
-
-{% endmacro %}
-
-{% macro build_str(parent, key, config_parent) %}
-if "{{ key }}" in {{ parent }}:
-    {{ config_parent }}["{{ key }}"] = re.sub('^[a-z]+\:', '',{{ parent }}["{{ key }}"]) # regex to remove namespace declaration in values
-{% endmacro %}
-
-{% macro build_int(parent, key, config_parent) %}
-if "{{ key }}" in {{ parent }}:
-    {{ config_parent }}["{{ key }}"] = {{ parent }}["{{ key }}"]
-{% endmacro %}
-
-
 #
 # -*- coding: utf-8 -*-
 # {{ rm["COPYRIGHT"] }}
@@ -132,8 +81,8 @@ class {{ resource|capitalize }}Facts(object):
 
         if not data:
             config_filter = """
-                <{{ xml_resource }} xmlns="{{ xml_namespace }}">
-                </{{ xml_resource }}>
+                <{{ xml_root_key }} xmlns="{{ xml_namespace }}">
+                </{{ xml_root_key }}>
                 """
             data = get(self._module, filter=("subtree", config_filter))
 
@@ -141,7 +90,7 @@ class {{ resource|capitalize }}Facts(object):
         data = fromstring(to_bytes(stripped, errors="surrogate_then_replace"))
 
 {% if config.type == "list" %}
-        resources = data.xpath("/rpc-reply/data/{{ xml_resource }}/{{ resource }}")
+        resources = data.xpath("/rpc-reply/data/{{ xml_root_key }}/{{ resource }}")
         objs = []
         for resource in resources:
             if resource:
@@ -157,7 +106,7 @@ class {{ resource|capitalize }}Facts(object):
                 facts["{{ resource }}"].append(utils.remove_empties(cfg))
 
 {% elif config.type == "dict" %}
-        resource = data.xpath("/rpc-reply/data/{{ xml_resource }}")[0]
+        resource = data.xpath("/rpc-reply/data/{{ xml_root_key }}")[0]
         obj = self.render_config(self.generated_spec, resource)
 
         facts = {}

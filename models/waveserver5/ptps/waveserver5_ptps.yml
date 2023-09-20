@@ -10,11 +10,11 @@ ANSIBLE_METADATA: |
 
 NETWORK_OS: waveserver5
 RESOURCE: ptps
-RESOURCE_SINGULAR: ptp
-RESOURCE_KEY: ptp_id
 COPYRIGHT: Copyright 2023 Ciena
 XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-ptp"
-XML_RESOURCE: waveserver-ptps
+XML_ROOT_KEY: waveserver-ptps
+# Promoted list
+XML_ITEMS: ptps
 
 DOCUMENTATION: |
   module: waveserver5_ptp

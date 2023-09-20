@@ -2,13 +2,12 @@
 - hosts: localhost
   vars:
     ansible_collection_root: /home/{{ansible_user_id}}/src/ansible_collections
-    waveserver5:
-      modules:
-        - system
-        - xcvrs
-        - ptps
-        - ports
-        - pm
+    modules:
+      - system
+      - xcvrs
+      - ptps
+      - ports
+      - pm
     overwrite: true
   tasks:
     - name: Remove directory
@@ -19,4 +18,4 @@
       include_tasks: playbook_tasks.yml
       vars:
         product: waveserver5
-      with_items: "{{ waveserver5.modules }}"
+      with_items: "{{ modules }}"

@@ -10,11 +10,11 @@ ANSIBLE_METADATA: |
 
 NETWORK_OS: waveserver5
 RESOURCE: system
-RESOURCE_SINGULAR: system
-RESOURCE_KEY: name
 COPYRIGHT: Copyright 2023 Ciena
 XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-system"
-XML_RESOURCE: waveserver-system
+XML_ROOT_KEY: waveserver-system
+# Promoted list
+XML_ITEMS: N/A
 
 DOCUMENTATION: |
   module: waveserver5_system

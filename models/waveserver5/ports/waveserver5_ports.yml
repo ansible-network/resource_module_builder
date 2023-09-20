@@ -10,11 +10,11 @@ ANSIBLE_METADATA: |
 
 NETWORK_OS: waveserver5
 RESOURCE: ports
-RESOURCE_SINGULAR: port
-RESOURCE_KEY: port_id
 COPYRIGHT: Copyright 2023 Ciena
 XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-port"
-XML_RESOURCE: waveserver-ports
+XML_ROOT_KEY: waveserver-ports
+# Promoted list
+XML_ITEMS: ports
 
 DOCUMENTATION: |
   module: waveserver5_port
