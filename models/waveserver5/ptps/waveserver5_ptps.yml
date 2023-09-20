@@ -17,7 +17,7 @@ XML_ROOT_KEY: waveserver-ptps
 XML_ITEMS: ptps
 
 DOCUMENTATION: |
-  module: waveserver5_ptp
+  module: waveserver5_ptps
   version_added: 1.1.0
   short_description: Waveserver PTP configuration data and operational data.
   description: Waveserver PTP configuration data and operational data.

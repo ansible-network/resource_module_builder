@@ -17,7 +17,7 @@ XML_ROOT_KEY: waveserver-xcvrs
 XML_ITEMS: xcvrs
 
 DOCUMENTATION: |
-  module: waveserver5_xcvr
+  module: waveserver5_xcvrs
   version_added: 1.1.0
   short_description: Waveserver Transceiver configuration data and operational data.
   description: Waveserver Transceiver configuration data and operational data.

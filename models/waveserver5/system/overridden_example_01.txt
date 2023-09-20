@@ -1,9 +1,0 @@
-
-# Using overridden
-
-- name: Configure system hostname
-  ciena.waveserver5.waveserver5_system:
-    config:
-      host_name:
-        config_host_name: foo
-    state: overridden

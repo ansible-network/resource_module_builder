@@ -1,9 +1,0 @@
-
-# Using overridden
-
-- name: Configure Transceiver enable
-  ciena.waveserver5.waveserver5_xcvr:
-    config:
-      host-name:
-        config-host-name: foo
-    state: overridden

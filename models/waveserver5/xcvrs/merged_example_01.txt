@@ -1,9 +1,17 @@
 
 # Using merged
 
-- name: Configure xcvr
-  ciena.waveserver5.waveserver5_xcvr:
+- name: Disable xcvr
+  ciena.waveserver5.waveserver5_xcvrs:
     config:
-      host-name:
-        config-host-name: foo
+      - xcvr_id: 5-1
+        state:
+          admin_state: disabled
+    state: merged
+- name: Enable xcvr
+  ciena.waveserver5.waveserver5_xcvrs:
+    config:
+      - xcvr_id: 5-1
+        state:
+          admin_state: enabled
     state: merged

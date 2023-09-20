@@ -1,9 +1,0 @@
-# Using overridden
-
-- name: Configure port
-  ciena.waveserver5.waveserver5_port:
-    config:
-      - port_id: 7/1
-        state:
-          admin_state: disabled
-    state: overridden

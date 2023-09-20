@@ -17,7 +17,7 @@ XML_ROOT_KEY: waveserver-ports
 XML_ITEMS: ports
 
 DOCUMENTATION: |
-  module: waveserver5_port
+  module: waveserver5_ports
   version_added: 1.1.0
   short_description: Waveserver Port configuration data and operational data.
   description: Waveserver Port configuration data and operational data.
