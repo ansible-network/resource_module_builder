@@ -3,6 +3,7 @@ waveserver_xcvrs:
   suboptions:
     xcvr_profiles:
       description: List of XCVR profiles.
+      elements: dict
       suboptions:
         description:
           description: The description of the profile to uniquely identify the XCVR
@@ -102,6 +103,7 @@ waveserver_xcvrs:
       type: list
     xcvrs:
       description: Waveserver transceiver (XCVR) list.
+      elements: dict
       suboptions:
         properties:
           description: All the Configurable and operational data of this XCVR instance.

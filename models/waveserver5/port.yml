@@ -3,13 +3,14 @@ waveserver_ports:
   suboptions:
     ports:
       description: Configuration and operational data for the port.
+      elements: dict
       suboptions:
         channels:
           description: List of ODU4 channels within the parent OTU port object.
+          elements: dict
           suboptions:
             channel_id:
-              description:
-                Channel number or ODU4 tributary number within the parent
+              description: Channel number or ODU4 tributary number within the parent
                 OTU port object. Key value for the channels list.
               required: true
               type: int
@@ -32,22 +33,19 @@ waveserver_ports:
                   description: ODU4 path trace attributes for this channel.
                   suboptions:
                     exp_dapi:
-                      description:
-                        The expected destination access point identifier
+                      description: The expected destination access point identifier
                         (DAPI) portion of the received trace string, up to 15 characters,
                         excluding the first byte in the TTI DAPI overhead, which is
                         implicitly always null.
                       required: true
                       type: str
                     exp_oper:
-                      description:
-                        The expected operator-specific portion of the received
+                      description: The expected operator-specific portion of the received
                         trace string, up to 32 characters.
                       required: true
                       type: str
                     exp_sapi:
-                      description:
-                        The expected source access point identifier (SAPI)
+                      description: The expected source access point identifier (SAPI)
                         portion of the received trace string, up to 15 characters,
                         excluding the first byte in the TTI SAPI overhead, which is
                         implicitly always null.
@@ -55,55 +53,49 @@ waveserver_ports:
                       type: str
                     mismatch_fail_mode:
                       choices:
-                        - none
-                        - alarm-only
-                        - squelch-traffic
-                      description:
-                        The trail trace identifier (TTI) mismatch failure
+                      - none
+                      - alarm-only
+                      - squelch-traffic
+                      description: The trail trace identifier (TTI) mismatch failure
                         mode. When TTI mismatch condition occurs, this indicates the
                         consequent action taken, e.g. whether or not to raise an alarm.
                       required: true
                       type: str
                     mismatch_mode:
                       choices:
-                        - operator-only
-                        - sapi
-                        - dapi
-                        - sapi-and-dapi
-                      description:
-                        The trail trace identifier (TTI) mismatch mode,
+                      - operator-only
+                      - sapi
+                      - dapi
+                      - sapi-and-dapi
+                      description: The trail trace identifier (TTI) mismatch mode,
                         indicating which fields of the TTI overhead are used for trace
                         mismatch detection.
                       required: true
                       type: str
                     tx_dapi:
-                      description:
-                        The destination access point identifier (DAPI)
+                      description: The destination access point identifier (DAPI)
                         portion of the transmitted trace string, up to 15 characters,
                         excluding the first byte in the TTI DAPI overhead, which is
                         implicitly always null.
                       required: true
                       type: str
                     tx_oper:
-                      description:
-                        The operator-specific portion of the transmitted
+                      description: The operator-specific portion of the transmitted
                         trace string, up to 32 characters. Ignored if tx-oper-mode
                         is 'automatic'.
                       required: true
                       type: str
                     tx_oper_mode:
                       choices:
-                        - manual
-                        - automatic
-                      description:
-                        Specifies whether to allow manual provisioning
+                      - manual
+                      - automatic
+                      description: Specifies whether to allow manual provisioning
                         of the transmitted TTI string, or let the system assign this
                         value automatically based on a pre-defined format.
                       required: true
                       type: str
                     tx_sapi:
-                      description:
-                        The source access point identifier (SAPI) portion
+                      description: The source access point identifier (SAPI) portion
                         of the transmitted trace string, up to 15 characters, excluding
                         the first byte in the TTI SAPI overhead, which is implicitly
                         always null.
@@ -116,8 +108,8 @@ waveserver_ports:
               suboptions:
                 admin_state:
                   choices:
-                    - disabled
-                    - enabled
+                  - disabled
+                  - enabled
                   description: The configured administrative state of the channel.
                   required: true
                   type: str
@@ -132,19 +124,18 @@ waveserver_ports:
               type: str
             type:
               choices:
-                - unknown
-                - ethernet
-                - otn
-                - OTUk
-                - OTUCn
-                - OTUCn-Flex
+              - unknown
+              - ethernet
+              - otn
+              - OTUk
+              - OTUCn
+              - OTUCn-Flex
               description: The port interface type.
               required: true
               type: str
           type: dict
         port_id:
-          description:
-            Unique, access identifier string of the port in '<slot>-<port>'
+          description: Unique, access identifier string of the port in '<slot>-<port>'
             format.
           required: true
           type: str
@@ -152,16 +143,14 @@ waveserver_ports:
           description: Port properties.
           suboptions:
             connection_peer:
-              description:
-                Port connection peer list. Indicates the client/line port/channel
+              description: Port connection peer list. Indicates the client/line port/channel
                 that may be connected to this line/client port. For certain client
                 ports, the connection state is user-configurable or can be system
                 assigned on port creation based on bandwidth availability. For other
                 ports, the connection state is fixed and cannot be manually configured.
               suboptions:
                 peer_id:
-                  description:
-                    Specifies the client/line connection information for
+                  description: Specifies the client/line connection information for
                     the port or channel. Client ports can be connected to a line-side
                     channel or port. Line ports can be connected to a client side
                     port. Line channels can be connected to one or more client ports.
@@ -172,10 +161,9 @@ waveserver_ports:
               type: list
             connection_state:
               choices:
-                - disabled
-                - enabled
-              description:
-                Specifies whether the line-side bandwidth is allocated
+              - disabled
+              - enabled
+              description: Specifies whether the line-side bandwidth is allocated
                 for the connection between this client port and its connection peer.
                 For most client port types, this is enabled by default and cannot
                 be disabled. For certain client ports that can share line-side bandwidth
@@ -189,20 +177,18 @@ waveserver_ports:
               description: Ethernet-specific properties.
               suboptions:
                 conditioning_holdoff:
-                  description:
-                    Number of milliseconds to delay Egress UNI port consequent
+                  description: Number of milliseconds to delay Egress UNI port consequent
                     action for an EPL service.
                   required: true
                   type: int
                 conditioning_type:
                   choices:
-                    - none
-                    - laser-off
-                    - ethernet
-                    - otn
-                    - protocol-specific
-                  description:
-                    Egress UNI port consequent action for an EPL service
+                  - none
+                  - laser-off
+                  - ethernet
+                  - otn
+                  - protocol-specific
+                  description: Egress UNI port consequent action for an EPL service
                     to be applied on a far-end ingress UNI failure or network failure.
                     Supported values are 'none', 'laser-off', and 'ethernet'.
                   required: true
@@ -210,11 +196,10 @@ waveserver_ports:
               type: dict
             loopback:
               choices:
-                - disabled
-                - rx
-                - tx
-              description:
-                Port PHY layer loopback. RX loopback is a loopback forwarding
+              - disabled
+              - rx
+              - tx
+              description: Port PHY layer loopback. RX loopback is a loopback forwarding
                 ingress traffic from RX port directly to TX port. TX loopback is a
                 loopback forwarding egress traffic from TX port directly to RX port,
                 TX loopback is not supported in I-NNI ports. The RX/TX loopback can
@@ -231,32 +216,29 @@ waveserver_ports:
               suboptions:
                 conditioning_type:
                   choices:
-                    - none
-                    - laser-off
-                    - ethernet
-                    - otn
-                    - protocol-specific
-                  description:
-                    Conditioning type for OTN ports. Supported values are
+                  - none
+                  - laser-off
+                  - ethernet
+                  - otn
+                  - protocol-specific
+                  description: Conditioning type for OTN ports. Supported values are
                     'laser-off' and 'otn'.
                   required: true
                   type: str
                 odu_sd_threshold:
-                  description:
-                    ODUk Signal Degrade threshold value, e.g. '1E-05' to
+                  description: ODUk Signal Degrade threshold value, e.g. '1E-05' to
                     '1E-09'.
                   required: true
                   type: str
                 odu_termination:
                   choices:
-                    - terminated
-                    - passthrough
+                  - terminated
+                  - passthrough
                   description: ODUk termination mode.
                   required: true
                   type: str
                 otu_sd_threshold:
-                  description:
-                    OTU Signal Degrade threshold value, e.g. '1E-06' to
+                  description: OTU Signal Degrade threshold value, e.g. '1E-06' to
                     '1E-09'.
                   required: true
                   type: str
@@ -267,22 +249,19 @@ waveserver_ports:
                       description: ODUk path trace attributes for this port.
                       suboptions:
                         exp_dapi:
-                          description:
-                            The expected destination access point identifier
+                          description: The expected destination access point identifier
                             (DAPI) portion of the received trace string, up to 15
                             characters, excluding the first byte in the TTI DAPI overhead,
                             which is implicitly always null.
                           required: true
                           type: str
                         exp_oper:
-                          description:
-                            The expected operator-specific portion of the
+                          description: The expected operator-specific portion of the
                             received trace string, up to 32 characters.
                           required: true
                           type: str
                         exp_sapi:
-                          description:
-                            The expected source access point identifier
+                          description: The expected source access point identifier
                             (SAPI) portion of the received trace string, up to 15
                             characters, excluding the first byte in the TTI SAPI overhead,
                             which is implicitly always null.
@@ -290,11 +269,10 @@ waveserver_ports:
                           type: str
                         mismatch_fail_mode:
                           choices:
-                            - none
-                            - alarm-only
-                            - squelch-traffic
-                          description:
-                            The trail trace identifier (TTI) mismatch failure
+                          - none
+                          - alarm-only
+                          - squelch-traffic
+                          description: The trail trace identifier (TTI) mismatch failure
                             mode. When TTI mismatch condition occurs, this indicates
                             the consequent action taken, e.g. whether or not to raise
                             an alarm.
@@ -302,44 +280,39 @@ waveserver_ports:
                           type: str
                         mismatch_mode:
                           choices:
-                            - operator-only
-                            - sapi
-                            - dapi
-                            - sapi-and-dapi
-                          description:
-                            The trail trace identifier (TTI) mismatch mode,
+                          - operator-only
+                          - sapi
+                          - dapi
+                          - sapi-and-dapi
+                          description: The trail trace identifier (TTI) mismatch mode,
                             indicating which fields of the TTI overhead are used for
                             trace mismatch detection.
                           required: true
                           type: str
                         tx_dapi:
-                          description:
-                            The destination access point identifier (DAPI)
+                          description: The destination access point identifier (DAPI)
                             portion of the transmitted trace string, up to 15 characters,
                             excluding the first byte in the TTI DAPI overhead, which
                             is implicitly always null.
                           required: true
                           type: str
                         tx_oper:
-                          description:
-                            The operator-specific portion of the transmitted
+                          description: The operator-specific portion of the transmitted
                             trace string, up to 32 characters. Ignored if tx-oper-mode
                             is 'automatic'.
                           required: true
                           type: str
                         tx_oper_mode:
                           choices:
-                            - manual
-                            - automatic
-                          description:
-                            Specifies whether to allow manual provisioning
+                          - manual
+                          - automatic
+                          description: Specifies whether to allow manual provisioning
                             of the transmitted TTI string, or let the system assign
                             this value automatically based on a pre-defined format.
                           required: true
                           type: str
                         tx_sapi:
-                          description:
-                            The source access point identifier (SAPI) portion
+                          description: The source access point identifier (SAPI) portion
                             of the transmitted trace string, up to 15 characters,
                             excluding the first byte in the TTI SAPI overhead, which
                             is implicitly always null.
@@ -350,22 +323,19 @@ waveserver_ports:
                       description: OTUk section trace attributes for this port.
                       suboptions:
                         exp_dapi:
-                          description:
-                            The expected destination access point identifier
+                          description: The expected destination access point identifier
                             (DAPI) portion of the received trace string, up to 15
                             characters, excluding the first byte in the TTI DAPI overhead,
                             which is implicitly always null.
                           required: true
                           type: str
                         exp_oper:
-                          description:
-                            The expected operator-specific portion of the
+                          description: The expected operator-specific portion of the
                             received trace string, up to 32 characters.
                           required: true
                           type: str
                         exp_sapi:
-                          description:
-                            The expected source access point identifier
+                          description: The expected source access point identifier
                             (SAPI) portion of the received trace string, up to 15
                             characters, excluding the first byte in the TTI SAPI overhead,
                             which is implicitly always null.
@@ -373,11 +343,10 @@ waveserver_ports:
                           type: str
                         mismatch_fail_mode:
                           choices:
-                            - none
-                            - alarm-only
-                            - squelch-traffic
-                          description:
-                            The trail trace identifier (TTI) mismatch failure
+                          - none
+                          - alarm-only
+                          - squelch-traffic
+                          description: The trail trace identifier (TTI) mismatch failure
                             mode. When TTI mismatch condition occurs, this indicates
                             the consequent action taken, e.g. whether or not to raise
                             an alarm.
@@ -385,44 +354,39 @@ waveserver_ports:
                           type: str
                         mismatch_mode:
                           choices:
-                            - operator-only
-                            - sapi
-                            - dapi
-                            - sapi-and-dapi
-                          description:
-                            The trail trace identifier (TTI) mismatch mode,
+                          - operator-only
+                          - sapi
+                          - dapi
+                          - sapi-and-dapi
+                          description: The trail trace identifier (TTI) mismatch mode,
                             indicating which fields of the TTI overhead are used for
                             trace mismatch detection.
                           required: true
                           type: str
                         tx_dapi:
-                          description:
-                            The destination access point identifier (DAPI)
+                          description: The destination access point identifier (DAPI)
                             portion of the transmitted trace string, up to 15 characters,
                             excluding the first byte in the TTI DAPI overhead, which
                             is implicitly always null.
                           required: true
                           type: str
                         tx_oper:
-                          description:
-                            The operator-specific portion of the transmitted
+                          description: The operator-specific portion of the transmitted
                             trace string, up to 32 characters. Ignored if tx-oper-mode
                             is 'automatic'.
                           required: true
                           type: str
                         tx_oper_mode:
                           choices:
-                            - manual
-                            - automatic
-                          description:
-                            Specifies whether to allow manual provisioning
+                          - manual
+                          - automatic
+                          description: Specifies whether to allow manual provisioning
                             of the transmitted TTI string, or let the system assign
                             this value automatically based on a pre-defined format.
                           required: true
                           type: str
                         tx_sapi:
-                          description:
-                            The source access point identifier (SAPI) portion
+                          description: The source access point identifier (SAPI) portion
                             of the transmitted trace string, up to 15 characters,
                             excluding the first byte in the TTI SAPI overhead, which
                             is implicitly always null.
@@ -437,8 +401,8 @@ waveserver_ports:
           suboptions:
             admin_state:
               choices:
-                - enabled
-                - disabled
+              - enabled
+              - disabled
               description: The configured administrative state of the port.
               required: true
               type: str
