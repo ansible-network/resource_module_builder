@@ -9,6 +9,7 @@
         - ptps
         - ports
         - pm
+        - chassis
     overwrite: true
   tasks:
     - name: Remove directory

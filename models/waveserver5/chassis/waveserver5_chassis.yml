@@ -1,0 +1,185 @@
+---
+GENERATOR_VERSION: "1.0"
+
+ANSIBLE_METADATA: |
+  {
+    'metadata_version': '1.1',
+    'status': ['preview'],
+    'supported_by': 'network'
+  }
+
+NETWORK_OS: waveserver5
+RESOURCE: chassis
+RESOURCE_SINGULAR: chassis
+RESOURCE_KEY: name
+COPYRIGHT: Copyright 2023 Ciena
+XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-chassis"
+XML_RESOURCE: waveserver-chassis
+
+DOCUMENTATION: |
+  module: waveserver5_chassis
+  version_added: 1.1.0
+  short_description: Waveserver chassis configuration data and operational data.
+  description: Waveserver chassis configuration data and operational data.
+  author:
+    - Jeff Groom (@jgroom33)
+    - Galo Ertola (@perrary)
+  requirements:
+    - ncclient (>=v0.6.4)
+    - xmltodict (>=0.12.0)
+  options:
+    config:
+      description: Configuration and operational data for the port.
+      type: list
+      suboptions:
+        access_panel:
+          description: Access Panel
+          suboptions:
+            state:
+              description: Access Panel state information.
+              suboptions:
+                admin_state:
+                  choices:
+                    - disabled
+                    - enabled
+                  description: Whether admin state of the Access Panel is enabled or
+                    disabled.
+                  required: true
+                  type: str
+              type: dict
+          type: dict
+        control_module:
+          description: Waveserver Control Subsystem. This is the control module for
+            the Waveserver Ai or Waveserver 5 chassis.
+          suboptions:
+            state:
+              description: Control module state information.
+              suboptions:
+                admin_state:
+                  choices:
+                    - disabled
+                    - enabled
+                  description: Whether admin state of the control module is enabled
+                    or disabled.
+                  required: true
+                  type: str
+              type: dict
+          type: dict
+        cooling_fan_units:
+          description: Cooling Fan Unit Status.
+          suboptions:
+            cfu_id:
+              description: Unique id for the Cooling Fan Unit list entry.
+              required: true
+              type: str
+            state:
+              description: Cooling Fan Unit state information.
+              suboptions:
+                admin_state:
+                  choices:
+                    - disabled
+                    - enabled
+                  description: Whether Admin State of the cooling fan unit is enabled
+                    or disabled. Disabled state masks the alarms only.
+                  required: true
+                  type: str
+              type: dict
+          type: list
+        management_port:
+          description: A list to manage chassis ports.
+          suboptions:
+            port_id:
+              choices:
+                - ilan-1
+                - ilan-2
+                - dcn-1
+                - dcn-2
+                - dcn-3
+                - dcn-4
+                - dcn-5
+                - console-1
+                - console-2
+              description: Management port identifier.
+              required: true
+              type: str
+            properties:
+              description: All the operational data of this management port.
+              suboptions:
+                mode:
+                  choices:
+                    - management
+                    - wayside-channel
+                    - redundant-bgp
+                  description: Management port mode. Specifies whether the port is configured
+                    as a local management interface or wayside communications channel
+                    (carry through).
+                  required: true
+                  type: str
+              type: dict
+            state:
+              description: Management port state information.
+              suboptions:
+                admin_state:
+                  choices:
+                    - disabled
+                    - enabled
+                  description: Whether Admin State is enabled or disabled for this management
+                    port.
+                  required: true
+                  type: str
+              type: dict
+          type: list
+        power_supply_units:
+          description: Power Supply Unit Status.
+          suboptions:
+            psu_id:
+              description: Unique id for the Power Supply Unit list entry.
+              required: true
+              type: str
+            state:
+              description: Power Supply Unit state information.
+              suboptions:
+                admin_state:
+                  choices:
+                    - disabled
+                    - enabled
+                  description: Whether admin state of the Power Supply Unit is enabled
+                    or disabled. Disabled state masks the alarms only.
+                  required: true
+                  type: str
+              type: dict
+          type: list
+        slot:
+          description: Chassis slot power management.
+          suboptions:
+            power_state:
+              choices:
+                - automatic
+                - shutdown
+              description: Slot power state.
+              required: true
+              type: str
+            slot_id:
+              description: Chassis slot number, Key value for the chassis slot list.
+              required: true
+              type: int
+          type: list
+    state:
+      choices:
+        - gathered
+        - merged
+        - overridden
+      default: merged
+      description:
+        - The state the configuration should be left in
+      type: str
+requirements:
+  - ncclient (>=v0.6.4)
+notes:
+  - This module requires the netconf system service be enabled on the remote device
+    being managed.
+  - This module works with connection C(netconf)
+
+EXAMPLES:
+  - merged_example_01.txt
+  - overridden_example_01.txt
