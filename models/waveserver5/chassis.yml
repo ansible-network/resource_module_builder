@@ -1,141 +1,140 @@
 waveserver_chassis:
-  description: Waveserver chassis configuration data and operational data.
-  suboptions:
-    access_panel:
-      description: Access Panel
-      suboptions:
-        state:
-          description: Access Panel state information.
-          suboptions:
-            admin_state:
-              choices:
-                - disabled
-                - enabled
-              description: Whether admin state of the Access Panel is enabled or disabled.
-              required: true
-              type: str
-          type: dict
-      type: dict
-    control_module:
-      description:
-        Waveserver Control Subsystem. This is the control module for the
-        Waveserver Ai or Waveserver 5 chassis.
-      suboptions:
-        state:
-          description: Control module state information.
-          suboptions:
-            admin_state:
-              choices:
-                - disabled
-                - enabled
-              description:
-                Whether admin state of the control module is enabled or
-                disabled.
-              required: true
-              type: str
-          type: dict
-      type: dict
-    cooling_fan_units:
-      description: Cooling Fan Unit Status.
-      suboptions:
-        cfu_id:
-          description: Unique id for the Cooling Fan Unit list entry.
-          required: true
-          type: str
-        state:
-          description: Cooling Fan Unit state information.
-          suboptions:
-            admin_state:
-              choices:
-                - disabled
-                - enabled
-              description:
-                Whether Admin State of the cooling fan unit is enabled
-                or disabled. Disabled state masks the alarms only.
-              required: true
-              type: str
-          type: dict
-      type: list
-    management_port:
-      description: A list to manage chassis ports.
-      suboptions:
-        port_id:
-          choices:
-            - ilan-1
-            - ilan-2
-            - dcn-1
-            - dcn-2
-            - dcn-3
-            - dcn-4
-            - dcn-5
-            - console-1
-            - console-2
-          description: Management port identifier.
-          required: true
-          type: str
-        properties:
-          description: All the operational data of this management port.
-          suboptions:
-            mode:
-              choices:
-                - management
-                - wayside-channel
-                - redundant-bgp
-              description:
-                Management port mode. Specifies whether the port is configured
-                as a local management interface or wayside communications channel
-                (carry through).
-              required: true
-              type: str
-          type: dict
-        state:
-          description: Management port state information.
-          suboptions:
-            admin_state:
-              choices:
-                - disabled
-                - enabled
-              description:
-                Whether Admin State is enabled or disabled for this management
-                port.
-              required: true
-              type: str
-          type: dict
-      type: list
-    power_supply_units:
-      description: Power Supply Unit Status.
-      suboptions:
-        psu_id:
-          description: Unique id for the Power Supply Unit list entry.
-          required: true
-          type: str
-        state:
-          description: Power Supply Unit state information.
-          suboptions:
-            admin_state:
-              choices:
-                - disabled
-                - enabled
-              description:
-                Whether admin state of the Power Supply Unit is enabled
-                or disabled. Disabled state masks the alarms only.
-              required: true
-              type: str
-          type: dict
-      type: list
-    slot:
-      description: Chassis slot power management.
-      suboptions:
-        power_state:
-          choices:
-            - automatic
-            - shutdown
-          description: Slot power state.
-          required: true
-          type: str
-        slot_id:
-          description: Chassis slot number, Key value for the chassis slot list.
-          required: true
-          type: int
-      type: list
-  type: dict
+   description: Waveserver chassis configuration data and operational data.
+   type: dict
+   suboptions:
+      power_supply_units:
+         description: Power Supply Unit Status.
+         type: list
+         elements: dict
+         suboptions:
+            psu_id:
+               description: Unique id for the Power Supply Unit list entry.
+               type: str
+               required: true
+            state:
+               description: Power Supply Unit state information.
+               type: dict
+               suboptions:
+                  admin_state:
+                     description: Whether admin state of the Power Supply Unit is
+                        enabled or disabled. Disabled state masks the alarms only.
+                     type: str
+                     choices:
+                     - disabled
+                     - enabled
+                     required: true
+      cooling_fan_units:
+         description: Cooling Fan Unit Status.
+         type: list
+         elements: dict
+         suboptions:
+            cfu_id:
+               description: Unique id for the Cooling Fan Unit list entry.
+               type: str
+               required: true
+            state:
+               description: Cooling Fan Unit state information.
+               type: dict
+               suboptions:
+                  admin_state:
+                     description: Whether Admin State of the cooling fan unit is enabled
+                        or disabled. Disabled state masks the alarms only.
+                     type: str
+                     choices:
+                     - disabled
+                     - enabled
+                     required: true
+      management_port:
+         description: A list to manage chassis ports.
+         type: list
+         elements: dict
+         suboptions:
+            port_id:
+               description: Management port identifier.
+               type: str
+               choices:
+               - ilan-1
+               - ilan-2
+               - dcn-1
+               - dcn-2
+               - dcn-3
+               - dcn-4
+               - dcn-5
+               - console-1
+               - console-2
+               required: true
+            state:
+               description: Management port state information.
+               type: dict
+               suboptions:
+                  admin_state:
+                     description: Whether Admin State is enabled or disabled for this
+                        management port.
+                     type: str
+                     choices:
+                     - disabled
+                     - enabled
+                     required: true
+            properties:
+               description: All the operational data of this management port.
+               type: dict
+               suboptions:
+                  mode:
+                     description: Management port mode. Specifies whether the port
+                        is configured as a local management interface or wayside communications
+                        channel (carry through).
+                     type: str
+                     choices:
+                     - management
+                     - wayside-channel
+                     - redundant-bgp
+                     required: true
+      access_panel:
+         description: Access Panel
+         type: dict
+         suboptions:
+            state:
+               description: Access Panel state information.
+               type: dict
+               suboptions:
+                  admin_state:
+                     description: Whether admin state of the Access Panel is enabled
+                        or disabled.
+                     type: str
+                     choices:
+                     - disabled
+                     - enabled
+                     required: true
+      control_module:
+         description: Waveserver Control Subsystem. This is the control module for
+            the Waveserver Ai or Waveserver 5 chassis.
+         type: dict
+         suboptions:
+            state:
+               description: Control module state information.
+               type: dict
+               suboptions:
+                  admin_state:
+                     description: Whether admin state of the control module is enabled
+                        or disabled.
+                     type: str
+                     choices:
+                     - disabled
+                     - enabled
+                     required: true
+      slot:
+         description: Chassis slot power management.
+         type: list
+         elements: dict
+         suboptions:
+            slot_id:
+               description: Chassis slot number, Key value for the chassis slot list.
+               type: int
+               required: true
+            power_state:
+               description: Slot power state.
+               type: str
+               choices:
+               - automatic
+               - shutdown
+               required: true

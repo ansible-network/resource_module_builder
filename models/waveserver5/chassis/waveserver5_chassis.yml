@@ -29,8 +29,7 @@ DOCUMENTATION: |
     - xmltodict (>=0.12.0)
   options:
     config:
-      description: Configuration and operational data for the port.
-      type: list
+      description: Waveserver chassis configuration data and operational data.
       suboptions:
         access_panel:
           description: Access Panel
@@ -67,6 +66,7 @@ DOCUMENTATION: |
           type: dict
         cooling_fan_units:
           description: Cooling Fan Unit Status.
+          elements: dict
           suboptions:
             cfu_id:
               description: Unique id for the Cooling Fan Unit list entry.
@@ -87,6 +87,7 @@ DOCUMENTATION: |
           type: list
         management_port:
           description: A list to manage chassis ports.
+          elements: dict
           suboptions:
             port_id:
               choices:
@@ -131,6 +132,7 @@ DOCUMENTATION: |
           type: list
         power_supply_units:
           description: Power Supply Unit Status.
+          elements: dict
           suboptions:
             psu_id:
               description: Unique id for the Power Supply Unit list entry.
@@ -164,6 +166,7 @@ DOCUMENTATION: |
               required: true
               type: int
           type: list
+      type: dict
     state:
       choices:
         - gathered
@@ -182,4 +185,3 @@ notes:
 
 EXAMPLES:
   - merged_example_01.txt
-  - overridden_example_01.txt

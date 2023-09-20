@@ -25,7 +25,7 @@ def extract_and_update(input_path, rmb_path, input_key):
     documentation_content = rmb_data.get("DOCUMENTATION", None)
     if documentation_content:
         documentation_dict = yaml.load(documentation_content)
-        documentation_dict['options']['config']['suboptions'] = target_property
+        documentation_dict['options']['config'] = target_property
         # Convert documentation_dict back to a YAML-formatted string
         documentation_str_stream = StringIO()
         yaml.dump(documentation_dict, documentation_str_stream)

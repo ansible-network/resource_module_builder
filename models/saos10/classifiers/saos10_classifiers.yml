@@ -10,8 +10,6 @@ ANSIBLE_METADATA: |
 
 NETWORK_OS: saos10
 RESOURCE: classifiers
-RESOURCE_SINGULAR: classifier
-RESOURCE_KEY: name
 COPYRIGHT: Copyright 2021 Ciena
 
 DOCUMENTATION: |
@@ -111,5 +109,3 @@ notes:
 
 EXAMPLES:
   - merged_example_01.txt
-  - overridden_example_01.txt
-  - deleted_example_01.txt

@@ -293,16 +293,14 @@ DOCUMENTATION: |
               choices:
                 - disabled
                 - enabled
-              description:
-                Whether Admin State is enabled or disabled for this XCVR's
+              description: Whether Admin State is enabled or disabled for this XCVR's
                 PTP.
               required: true
               type: str
           type: dict
         xcvr_id:
-          description:
-            Unique, access identifier string of the XCVR (e.g. '1-1').
-            Key value for the XCVR List.
+          description: Unique, access identifier string of the XCVR (e.g. '1-1'). Key
+            value for the XCVR List.
           required: true
           type: str
       type: list
@@ -318,10 +316,9 @@ DOCUMENTATION: |
 requirements:
   - ncclient (>=v0.6.4)
 notes:
-  - This module requires the netconf system service be enabled on
-    the remote device being managed.
+  - This module requires the netconf system service be enabled on the remote device
+    being managed.
   - This module works with connection C(netconf)
 
 EXAMPLES:
   - merged_example_01.txt
-  - overridden_example_01.txt

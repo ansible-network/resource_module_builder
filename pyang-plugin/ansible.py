@@ -3,13 +3,29 @@ Generates a YML that presents resource module skeleton
 of the YANG module.
 """
 
-import yaml
+import ez_yaml
 import logging
 from pyang import plugin, error
 
 
 def pyang_plugin_init():
     plugin.register_plugin(AnsiblePlugin())
+
+def order_dict(d, ordered_keys):
+    new_dict = {}
+    for key in ordered_keys:
+        if key in d:
+            value = d[key]
+            if isinstance(value, dict):
+                value = order_dict(value, ordered_keys)
+            new_dict[key] = value
+    for key in d:
+        if key not in ordered_keys:
+            value = d[key]
+            if isinstance(value, dict):
+                value = order_dict(value, ordered_keys)
+            new_dict[key] = value
+    return new_dict
 
 
 class AnsiblePlugin(plugin.PyangPlugin):
@@ -172,7 +188,8 @@ class AnsiblePlugin(plugin.PyangPlugin):
         global key_count  # Declare counter as global to read
         logging.critical(f"Starting processing for module {module.arg}. Total keys processed so far: {key_count}.")
         data = self.yang_to_dict(module, path)
-        yaml_data = yaml.dump(data, default_flow_style=False)
+        ordered_data = order_dict(data, ["description", "type", "elements", "choices", "suboptions"])
+        yaml_data = ez_yaml.to_string(ordered_data)
         fd.write(yaml_data)
 
     def yang_to_dict(self, yang_module, path):
@@ -189,10 +206,10 @@ class AnsiblePlugin(plugin.PyangPlugin):
                 if child.i_config:
                     ansible_type = self.yang_type_to_ansible_type(child)
                     data[key_name] = {
+                        "type": ansible_type if type(ansible_type) is str else ansible_type["type"],
                         "description": " ".join(child.search_one("description").arg.split("\n"))
                         if child.search_one("description")
                         else "",
-                        "type": ansible_type if type(ansible_type) is str else ansible_type["type"],
                         "required": not bool(child.search_one("default")),
                     }
                     if type(ansible_type) is dict:
@@ -202,21 +219,26 @@ class AnsiblePlugin(plugin.PyangPlugin):
 
             elif child.keyword in ["container", "list"]:
                 if child.i_config:
+                    suboptions = self.yang_to_dict(child, path)
+                    is_dict_elements = any(sub_child.keyword in ["container", "list"] for sub_child in child.i_children)
                     data[key_name] = {
+                        "type": "list" if child.keyword == "list" else "dict",
+                        "suboptions": suboptions,
                         "description": " ".join(child.search_one("description").arg.split("\n"))
                         if child.search_one("description")
                         else "",
-                        "type": "list" if child.keyword == "list" else "dict",
-                        "suboptions": self.yang_to_dict(child, path),
                     }
-
+                    if child.keyword == "list" and is_dict_elements:
+                        data[key_name]["elements"] = "dict"
+                    if child.keyword == "list" and not is_dict_elements:
+                        data[key_name]["elements"] = "dict"
             elif child.keyword == "choice":
                 if child.i_config:
                     data[key_name] = {
+                        "type": "str",
                         "description": " ".join(child.search_one("description").arg.split("\n"))
                         if child.search_one("description")
                         else "",
-                        "type": "str",
                         "choices": [case.arg for case in child.i_children],
                     }
 

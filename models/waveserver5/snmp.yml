@@ -1,324 +1,342 @@
 waveserver_snmp:
-  description: Waveserver SNMP configuration and operational data.
-  suboptions:
-    access:
-      description: List of access entry profiles, defining access privileges and MIB
-        read/write and notification view filters for a particular user class group
-        of users.
-      suboptions:
-        entry:
-          description: Entry name. Uniquely identifies the access entry/group in the
-            list.
-          required: true
-          type: str
-        notify_view:
-          description: Notify view type, optional.
-          required: true
-          type: str
-        read_view:
-          description: Read view type. Each access entry profile must have a read
-            view assigned to it.
-          required: true
-          type: str
-        sec_level:
-          choices:
-          - no-auth-no-priv
-          - auth-no-priv
-          - auth-priv
-          description: The security level associated with this access entry.
-          required: true
-          type: str
-        sec_model:
-          choices:
-          - v1
-          - v2c
-          - usm
-          description: The security model associated with this access entry.
-          required: true
-          type: str
-        write_view:
-          description: Write view type, optional.
-          required: true
-          type: str
-      type: list
-    community:
-      description: List of community entries for SNMP v1 and v2c security.
-      suboptions:
-        community_name:
-          description: SNMP community name, represented as a string.
-          required: true
-          type: str
-        context_name:
-          description: The context in which management information is accessed when
-            using the community string specified by this entry.
-          required: true
-          type: str
-        index:
-          description: Index into the community list.
-          required: true
-          type: str
-        security_name:
-          description: SNMP security name, represented as a string.
-          required: true
-          type: str
-        transport_tag:
-          description: Used to limit access for this community to the specified target(s).
-          required: true
-          type: str
-      type: list
-    global_config:
-      description: Global configuration attributes for the SNMP engine.
-      suboptions:
-        admin_state:
-          choices:
-          - disabled
-          - enabled
-          description: SNMP engine administrative state.
-          required: true
-          type: str
-        contact:
-          description: SNMP system contact string.
-          required: true
-          type: str
-        local_port:
-          description: UDP port number on which snmp agent listens. Default is 161.
-          required: true
-          type: int
-        location:
-          description: SNMP system location string.
-          required: true
-          type: str
-        standard_link_traps_admin_state:
-          choices:
-          - disabled
-          - enabled
-          description: Specifies whether standard link up/down trap notifications
-            are enabled or disabled.
-          required: true
-          type: str
-      type: dict
-    notify:
-      description: List of notification target entries. Used to select management
-        targets which should receive notifications, as well as the type of notification
-        which should be sent to each selected management target.
-      suboptions:
-        name:
-          description: Notify name. Uniquely identifies the notify entry in the list.
-          required: true
-          type: str
-        notify_tag:
-          description: Notify tag name. Contains a single tag value which is used
-            to select entries in the target list (target address table). Any entry
-            in the target list which contains this tag value will be selected for
-            this notify target. If the tag value is an empty string, then no entries
-            will be selected.
-          required: true
-          type: str
-        notify_type:
-          choices:
-          - trap
-          - inform
-          description: The type of notification to be generated for entries in the
-            target list selected by the notify-tag value. Default is trap.
-          required: true
-          type: str
-      type: list
-    security_to_group:
-      description: List of security-to-group entries. A double-keyed list of entries
-        identified by security criteria (name and model) which can be assigned to
-        an access group name. Security groups can be created to identify sets of users
-        with similar read/write access control permissions or notification view filtering.
-      suboptions:
-        group:
-          description: A user-assigned access entry group name identifying a group
-            of users with similar access control permissions, notification view, etc.
-            This group name is used as an index into the access list to select an
-            access control policy, however it does not imply or guarantee that an
-            instance with this name actually exists in the access table.
-          required: true
-          type: str
-        sec_model:
-          choices:
-          - v1
-          - v2c
-          - usm
-          description: The security model associated with this security-to-group entry.
-          required: true
-          type: str
-        user:
-          description: User name string (SNMPv3) or community string (SNMPv1, SNMPv2)
-            associated with the security group.
-          required: true
-          type: str
-      type: list
-    target:
-      description: List of target transport addresses (e.g. trap destinations) to
-        be used in the generation of SNMP messages.
-      suboptions:
-        address:
-          description: The SNMP target transport address, as an IPv4 address with
-            optional prefix length, or hostname format.
-          required: true
-          type: str
-        name:
-          description: SNMP trap target name. Uniquely identifies the target entry
-            in the list.
-          required: true
-          type: str
-        port:
-          description: UDP port number associated with the target entry. Default is
-            162.
-          required: true
-          type: int
-        retry_count:
-          description: The default number of retries to be attempted when a response
-            is not received for a generate message to this target transport address.
-          required: true
-          type: int
-        tag:
-          description: Tag value used to select one or more target address entries
-            for a particular operation.
-          required: true
-          type: str
-        target_params:
-          description: Identifies an entry in the target-params list. The identified
-            entry contains SNMP parameters to be used when generating messages to
-            be sent to this target transport address. If the selected entry in the
-            target-params list does not exist, the management target will not be used
-            to generate notifications.
-          required: true
-          type: str
-        timeout:
-          description: The expected maximum round trip time for communicating with
-            this target transport address, expressed in hundredths of a second.
-          required: true
-          type: int
-        transport_domain:
-          choices:
-          - snmp-udp
-          - v4-udp
-          - v6-udp
-          description: Indicates the transport type of the address contained in this
-            SNMP target entry. Default is 'snmp-udp'.
-          required: true
-          type: str
-      type: list
-    target_params:
-      description: List of objects containing one ore more SNMP parameters which can
-        be associated with an SNMP transport target.
-      suboptions:
-        name:
-          description: An arbitrary name which uniquely identifies this target-params
-            entry in the list.
-          required: true
-          type: str
-        security_level:
-          choices:
-          - no-auth-no-priv
-          - auth-no-priv
-          - auth-priv
-          description: The security level associated with this target-params entry.
-            Default is no-auth-no-priv.
-          required: true
-          type: str
-        security_model:
-          choices:
-          - v1
-          - v2c
-          - usm
-          description: The security model associated with this target-params entry.
-            Default is v1.
-          required: true
-          type: str
-        security_name:
-          description: SNMP security name, represented as a string.
-          required: true
-          type: str
-      type: list
-    user:
-      description: List of SNMPv3 user profiles. A double-keyed list that consists
-        of a user name and an Engine Id value. The combination of user name and Engine
-        Id make up SNMP MIB user profile.
-      suboptions:
-        auth_password:
-          description: The user authentication protocol password, supplied as cleartext.
-            This is a write-only attribute that should not be stored nor returned
-            on user retrieval. The password will be encrypted via one-way hash function
-            and stored only in its encrypted format.
-          required: true
-          type: str
-        auth_protocol:
-          choices:
-          - noAuth
-          - md5
-          - sha
-          description: The SNMP user authentication protocol.
-          required: true
-          type: str
-        auth_secret:
-          description: The encrypted user authentication protocol password string,
-            supplied as a hashed value. This should only be configured at user creation
-            time, and will be ignored if the user account already exists.
-          required: true
-          type: str
-        engine_id:
-          description: The SNMP user engine id, unique identifier, expressed as a
-            series of colon-separated hexadecimal octets.
-          required: true
-          type: str
-        name:
-          description: SNMP user name. Uniquely identifies the user entry in the list.
-          required: true
-          type: str
-        priv_password:
-          description: The user privacy protocol password, supplied as cleartext.
-            This is a write-only attribute that should not be stored nor returned
-            on user retrieval. The password will be encrypted via one-way hash function
-            and stored only in its encrypted format.
-          required: true
-          type: str
-        priv_protocol:
-          choices:
-          - noPriv
-          - des
-          - 3des
-          - aes-128
-          description: The SNMP user privacy protocol.
-          required: true
-          type: str
-        priv_secret:
-          description: The encrypted user privacy protocol password string, supplied
-            as a hashed value. This should only be configured at user creation time,
-            and will be ignored if the user account already exists.
-          required: true
-          type: str
-      type: list
-    viewtree:
-      description: List of view tree definitions. A double-keyed list that consists
-        of a view tree name and sub-tree OID string value. The combination of sub-tree
-        entries with the same viewtree name make up an SNMP MIB Viewtree or View Tree
-        Family.
-      suboptions:
-        mask:
-          description: Sub-tree mask or family mask, a colon-separated octet string.
-          required: true
-          type: str
-        name:
-          description: SNMP viewtree name. Identifies the viewtree entries in the
-            list that belong to the same viewtree family.
-          required: true
-          type: str
-        sub_tree:
-          description: SNMP Sub-tree definition, OID format, Ex:1.3.6.1.4.1.1271.35,
-            and predefined system defaults snmpResearch and iso.
-          required: true
-          type: str
-        type:
-          choices:
-          - include
-          - exclude
-          description: The SNMP Sub-tree type.
-          required: true
-          type: str
-      type: list
-  type: dict
+   description: Waveserver SNMP configuration and operational data.
+   type: dict
+   suboptions:
+      global_config:
+         description: Global configuration attributes for the SNMP engine.
+         type: dict
+         suboptions:
+            admin_state:
+               description: SNMP engine administrative state.
+               type: str
+               choices:
+               - disabled
+               - enabled
+               required: true
+            standard_link_traps_admin_state:
+               description: Specifies whether standard link up/down trap notifications
+                  are enabled or disabled.
+               type: str
+               choices:
+               - disabled
+               - enabled
+               required: true
+            contact:
+               description: SNMP system contact string.
+               type: str
+               required: true
+            location:
+               description: SNMP system location string.
+               type: str
+               required: true
+            local_port:
+               description: UDP port number on which snmp agent listens. Default is
+                  161.
+               type: int
+               required: true
+      target:
+         description: List of target transport addresses (e.g. trap destinations)
+            to be used in the generation of SNMP messages.
+         type: list
+         elements: dict
+         suboptions:
+            name:
+               description: SNMP trap target name. Uniquely identifies the target
+                  entry in the list.
+               type: str
+               required: true
+            address:
+               description: The SNMP target transport address, as an IPv4 address
+                  with optional prefix length, or hostname format.
+               type: str
+               required: true
+            target_params:
+               description: Identifies an entry in the target-params list. The identified
+                  entry contains SNMP parameters to be used when generating messages
+                  to be sent to this target transport address. If the selected entry
+                  in the target-params list does not exist, the management target
+                  will not be used to generate notifications.
+               type: str
+               required: true
+            tag:
+               description: Tag value used to select one or more target address entries
+                  for a particular operation.
+               type: str
+               required: true
+            port:
+               description: UDP port number associated with the target entry. Default
+                  is 162.
+               type: int
+               required: true
+            transport_domain:
+               description: Indicates the transport type of the address contained
+                  in this SNMP target entry. Default is 'snmp-udp'.
+               type: str
+               choices:
+               - snmp-udp
+               - v4-udp
+               - v6-udp
+               required: true
+            timeout:
+               description: The expected maximum round trip time for communicating
+                  with this target transport address, expressed in hundredths of a
+                  second.
+               type: int
+               required: true
+            retry_count:
+               description: The default number of retries to be attempted when a response
+                  is not received for a generate message to this target transport
+                  address.
+               type: int
+               required: true
+      target_params:
+         description: List of objects containing one ore more SNMP parameters which
+            can be associated with an SNMP transport target.
+         type: list
+         elements: dict
+         suboptions:
+            name:
+               description: An arbitrary name which uniquely identifies this target-params
+                  entry in the list.
+               type: str
+               required: true
+            security_name:
+               description: SNMP security name, represented as a string.
+               type: str
+               required: true
+            security_model:
+               description: The security model associated with this target-params
+                  entry. Default is v1.
+               type: str
+               choices:
+               - v1
+               - v2c
+               - usm
+               required: true
+            security_level:
+               description: The security level associated with this target-params
+                  entry. Default is no-auth-no-priv.
+               type: str
+               choices:
+               - no-auth-no-priv
+               - auth-no-priv
+               - auth-priv
+               required: true
+      community:
+         description: List of community entries for SNMP v1 and v2c security.
+         type: list
+         elements: dict
+         suboptions:
+            index:
+               description: Index into the community list.
+               type: str
+               required: true
+            community_name:
+               description: SNMP community name, represented as a string.
+               type: str
+               required: true
+            security_name:
+               description: SNMP security name, represented as a string.
+               type: str
+               required: true
+            transport_tag:
+               description: Used to limit access for this community to the specified
+                  target(s).
+               type: str
+               required: true
+            context_name:
+               description: The context in which management information is accessed
+                  when using the community string specified by this entry.
+               type: str
+               required: true
+      user:
+         description: List of SNMPv3 user profiles. A double-keyed list that consists
+            of a user name and an Engine Id value. The combination of user name and
+            Engine Id make up SNMP MIB user profile.
+         type: list
+         elements: dict
+         suboptions:
+            name:
+               description: SNMP user name. Uniquely identifies the user entry in
+                  the list.
+               type: str
+               required: true
+            engine_id:
+               description: The SNMP user engine id, unique identifier, expressed
+                  as a series of colon-separated hexadecimal octets.
+               type: str
+               required: true
+            auth_protocol:
+               description: The SNMP user authentication protocol.
+               type: str
+               choices:
+               - noAuth
+               - md5
+               - sha
+               required: true
+            auth_password:
+               description: The user authentication protocol password, supplied as
+                  cleartext. This is a write-only attribute that should not be stored
+                  nor returned on user retrieval. The password will be encrypted via
+                  one-way hash function and stored only in its encrypted format.
+               type: str
+               required: true
+            auth_secret:
+               description: The encrypted user authentication protocol password string,
+                  supplied as a hashed value. This should only be configured at user
+                  creation time, and will be ignored if the user account already exists.
+               type: str
+               required: true
+            priv_protocol:
+               description: The SNMP user privacy protocol.
+               type: str
+               choices:
+               - noPriv
+               - des
+               - 3des
+               - aes-128
+               required: true
+            priv_password:
+               description: The user privacy protocol password, supplied as cleartext.
+                  This is a write-only attribute that should not be stored nor returned
+                  on user retrieval. The password will be encrypted via one-way hash
+                  function and stored only in its encrypted format.
+               type: str
+               required: true
+            priv_secret:
+               description: The encrypted user privacy protocol password string, supplied
+                  as a hashed value. This should only be configured at user creation
+                  time, and will be ignored if the user account already exists.
+               type: str
+               required: true
+      viewtree:
+         description: List of view tree definitions. A double-keyed list that consists
+            of a view tree name and sub-tree OID string value. The combination of
+            sub-tree entries with the same viewtree name make up an SNMP MIB Viewtree
+            or View Tree Family.
+         type: list
+         elements: dict
+         suboptions:
+            type:
+               description: The SNMP Sub-tree type.
+               type: str
+               choices:
+               - include
+               - exclude
+               required: true
+            name:
+               description: SNMP viewtree name. Identifies the viewtree entries in
+                  the list that belong to the same viewtree family.
+               type: str
+               required: true
+            sub_tree:
+               description: SNMP Sub-tree definition, OID format, Ex:1.3.6.1.4.1.1271.35,
+                  and predefined system defaults snmpResearch and iso.
+               type: str
+               required: true
+            mask:
+               description: Sub-tree mask or family mask, a colon-separated octet
+                  string.
+               type: str
+               required: true
+      security_to_group:
+         description: List of security-to-group entries. A double-keyed list of entries
+            identified by security criteria (name and model) which can be assigned
+            to an access group name. Security groups can be created to identify sets
+            of users with similar read/write access control permissions or notification
+            view filtering.
+         type: list
+         elements: dict
+         suboptions:
+            user:
+               description: User name string (SNMPv3) or community string (SNMPv1,
+                  SNMPv2) associated with the security group.
+               type: str
+               required: true
+            sec_model:
+               description: The security model associated with this security-to-group
+                  entry.
+               type: str
+               choices:
+               - v1
+               - v2c
+               - usm
+               required: true
+            group:
+               description: A user-assigned access entry group name identifying a
+                  group of users with similar access control permissions, notification
+                  view, etc. This group name is used as an index into the access list
+                  to select an access control policy, however it does not imply or
+                  guarantee that an instance with this name actually exists in the
+                  access table.
+               type: str
+               required: true
+      access:
+         description: List of access entry profiles, defining access privileges and
+            MIB read/write and notification view filters for a particular user class
+            group of users.
+         type: list
+         elements: dict
+         suboptions:
+            entry:
+               description: Entry name. Uniquely identifies the access entry/group
+                  in the list.
+               type: str
+               required: true
+            sec_model:
+               description: The security model associated with this access entry.
+               type: str
+               choices:
+               - v1
+               - v2c
+               - usm
+               required: true
+            sec_level:
+               description: The security level associated with this access entry.
+               type: str
+               choices:
+               - no-auth-no-priv
+               - auth-no-priv
+               - auth-priv
+               required: true
+            read_view:
+               description: Read view type. Each access entry profile must have a
+                  read view assigned to it.
+               type: str
+               required: true
+            write_view:
+               description: Write view type, optional.
+               type: str
+               required: true
+            notify_view:
+               description: Notify view type, optional.
+               type: str
+               required: true
+      notify:
+         description: List of notification target entries. Used to select management
+            targets which should receive notifications, as well as the type of notification
+            which should be sent to each selected management target.
+         type: list
+         elements: dict
+         suboptions:
+            name:
+               description: Notify name. Uniquely identifies the notify entry in the
+                  list.
+               type: str
+               required: true
+            notify_tag:
+               description: Notify tag name. Contains a single tag value which is
+                  used to select entries in the target list (target address table).
+                  Any entry in the target list which contains this tag value will
+                  be selected for this notify target. If the tag value is an empty
+                  string, then no entries will be selected.
+               type: str
+               required: true
+            notify_type:
+               description: The type of notification to be generated for entries in
+                  the target list selected by the notify-tag value. Default is trap.
+               type: str
+               choices:
+               - trap
+               - inform
+               required: true
