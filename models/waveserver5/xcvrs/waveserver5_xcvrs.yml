@@ -30,12 +30,33 @@ DOCUMENTATION: |
   options:
     config:
       description: Waveserver transceiver (XCVR) list.
+      type: list
       elements: dict
       suboptions:
+        xcvr_id:
+          description: Unique, access identifier string of the XCVR (e.g. '1-1'). Key
+            value for the XCVR List.
+          type: str
+          required: true
+        state:
+          description: State information of this XCVR instance.
+          type: dict
+          suboptions:
+            admin_state:
+              description: Whether Admin State is enabled or disabled for this XCVR's
+                PTP.
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: true
         properties:
           description: All the Configurable and operational data of this XCVR instance.
+          type: dict
           suboptions:
             mode:
+              description: Mode of the XCVR.
+              type: str
               choices:
                 - blank
                 - OCH
@@ -282,28 +303,7 @@ DOCUMENTATION: |
                 - 82-700-E
                 - 82-750-E
                 - 82-800-E
-              description: Mode of the XCVR.
               required: true
-              type: str
-          type: dict
-        state:
-          description: State information of this XCVR instance.
-          suboptions:
-            admin_state:
-              choices:
-                - disabled
-                - enabled
-              description: Whether Admin State is enabled or disabled for this XCVR's
-                PTP.
-              required: true
-              type: str
-          type: dict
-        xcvr_id:
-          description: Unique, access identifier string of the XCVR (e.g. '1-1'). Key
-            value for the XCVR List.
-          required: true
-          type: str
-      type: list
     state:
       choices:
         - gathered
