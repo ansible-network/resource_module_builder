@@ -4,6 +4,20 @@ from io import StringIO
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString
 
 
+def stringify_on_off(obj):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if v == 'on' or v == 'off':
+                obj[k] = DoubleQuotedScalarString(v)
+            elif isinstance(v, dict) or isinstance(v, list):
+                stringify_on_off(v)
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            if v == 'on' or v == 'off':
+                obj[i] = DoubleQuotedScalarString(v)
+            elif isinstance(v, dict) or isinstance(v, list):
+                stringify_on_off(v)
+
 def extract_and_update(input_path, rmb_path, input_key):
     yaml = YAML()
     yaml.indent(mapping=2, sequence=4, offset=2)
@@ -16,10 +30,12 @@ def extract_and_update(input_path, rmb_path, input_key):
     target_property = input_data
     for key in input_key.split("."):
         target_property = target_property[key]
+    stringify_on_off(target_property)
 
     # Read the rmb YAML file
     with open(rmb_path, "r") as rmb_file:
         rmb_data = yaml.load(rmb_file)
+    stringify_on_off(rmb_data)
 
     # Extract the DOCUMENTATION content and convert to a dictionary
     documentation_content = rmb_data.get("DOCUMENTATION", None)
@@ -36,7 +52,6 @@ def extract_and_update(input_path, rmb_path, input_key):
         rmb_data['GENERATOR_VERSION'] = DoubleQuotedScalarString(rmb_data['GENERATOR_VERSION'])
 
 
-    # Write updated data back to the RMB file
     yaml.explicit_start = True
     with open(rmb_path, "w") as rmb_file:
         yaml.dump(rmb_data, rmb_file)
