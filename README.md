@@ -22,14 +22,9 @@ ansible-playbook yang_get.yml
 # Convert the yangs to RMB json
 ./generate_ymls.sh
 # Move the output of the into the model's yml file
-RESOURCE=system && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions
-RESOURCE=pm && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions
-RESOURCE=interfaces && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions.$RESOURCE
-RESOURCE=aaa && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions
-RESOURCE=modules && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions.$RESOURCE
-RESOURCE=snmp && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions
-RESOURCE=chassis && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE
-RESOURCE=snmp && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions
+RESOURCE=system && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE
+RESOURCE=pm && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE
+
 RESOURCE=xcvrs && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions.$RESOURCE
 RESOURCE=ports && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions.$RESOURCE
 RESOURCE=ptps && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions.$RESOURCE
