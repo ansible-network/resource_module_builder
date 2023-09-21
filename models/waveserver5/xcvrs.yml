@@ -23,7 +23,7 @@ waveserver_xcvrs:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: All the Configurable and operational data of this XCVR
                   instance.
@@ -288,7 +288,7 @@ waveserver_xcvrs:
                description: The description of the profile to uniquely identify the
                   XCVR and its profile.
                type: str
-               required: true
+               required: false
             xcvr_profile_index:
                description: XCVR tranceiver profile index, unique, key value for the
                   XCVR Profile List.
@@ -301,19 +301,19 @@ waveserver_xcvrs:
                   vendor_name:
                      description: Name of the XCVR vendor.
                      type: str
-                     required: true
+                     required: false
                   vendor_oui:
                      description: OUI of the XCVR vendor.
                      type: str
-                     required: true
+                     required: false
                   vendor_pn:
                      description: XCVR vendor part number.
                      type: str
-                     required: true
+                     required: false
                   vendor_rev:
                      description: XCVR vendor revision.
                      type: str
-                     required: true
+                     required: false
             properties:
                description: Configurable attributes of the XCVR profile.
                type: dict
@@ -325,7 +325,7 @@ waveserver_xcvrs:
                         to allow monitoring irrespective of the EEPROM setting. And,
                         False means no override.
                      type: bool
-                     required: true
+                     required: false
                   tx_thresholds:
                      description: Transmit power thresholds of the XCVR profile. These
                         threshold attributes will not affect the traffic. Modifying
@@ -339,22 +339,22 @@ waveserver_xcvrs:
                               on provisioned tx power. High threshold = target power
                               + 3.
                            type: float
-                           required: true
+                           required: false
                         low_alarm_threshold:
                            description: Optical power low alarm threshold, in dBm.
                               If it is modem Tx-power, the threshold can change based
                               on provisioned tx power. Low threshold = target power
                               - 10.
                            type: float
-                           required: true
+                           required: false
                         high_warning_threshold:
                            description: Optical power high warning threshold, in dBm.
                            type: float
-                           required: true
+                           required: false
                         low_warning_threshold:
                            description: Optical power low warning threshold, in dBm.
                            type: float
-                           required: true
+                           required: false
                   rx_thresholds:
                      description: Receiver power thresholds of the XCVR profile. These
                         threshold attributes will not affect the traffic. Modifying
@@ -368,19 +368,19 @@ waveserver_xcvrs:
                               on provisioned tx power. High threshold = target power
                               + 3.
                            type: float
-                           required: true
+                           required: false
                         low_alarm_threshold:
                            description: Optical power low alarm threshold, in dBm.
                               If it is modem Tx-power, the threshold can change based
                               on provisioned tx power. Low threshold = target power
                               - 10.
                            type: float
-                           required: true
+                           required: false
                         high_warning_threshold:
                            description: Optical power high warning threshold, in dBm.
                            type: float
-                           required: true
+                           required: false
                         low_warning_threshold:
                            description: Optical power low warning threshold, in dBm.
                            type: float
-                           required: true
+                           required: false

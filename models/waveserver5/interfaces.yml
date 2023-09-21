@@ -12,7 +12,7 @@ waveserver_interfaces:
             name:
                description: References the system-assigned name of the interface.
                type: str
-               required: true
+               required: false
             id:
                description: Identification information of this management interface.
                type: dict
@@ -22,7 +22,7 @@ waveserver_interfaces:
                         (e.g. ifp0-dcn-1, ifp0-ilan-1, ifp0-1-1, etc.). The names
                         are predefined.
                      type: str
-                     required: true
+                     required: false
             state:
                description: Physical management interface state information.
                type: dict
@@ -34,7 +34,7 @@ waveserver_interfaces:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: All the configuration data of the physical management
                   interface.
@@ -48,7 +48,7 @@ waveserver_interfaces:
             name:
                description: References the system-assigned name of the logical interface.
                type: str
-               required: true
+               required: false
             id:
                description: Identification information of this logical management
                   interface.
@@ -58,7 +58,7 @@ waveserver_interfaces:
                      description: The name of the logical management interface, e.g.
                         'local'.
                      type: str
-                     required: true
+                     required: false
             state:
                description: Logical interface state information.
                type: dict
@@ -70,7 +70,7 @@ waveserver_interfaces:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: All the configuration data of the logical management interface.
                type: dict
@@ -88,22 +88,22 @@ waveserver_interfaces:
                            choices:
                            - disabled
                            - enabled
-                           required: true
+                           required: false
                         user_ip_address:
                            description: The user-configured IPv4 address and prefix
                               on the interface.
                            type: str
-                           required: true
+                           required: false
                         user_gateway:
                            description: The user-configured primary IPv4 gateway on
                               the interface.
                            type: str
-                           required: true
+                           required: false
                         backup_gateway:
                            description: The user-configured backup IPv4 gateway on
                               the interface.
                            type: str
-                           required: true
+                           required: false
                         oper_ip_source:
                            description: The IPv4 ip address type.
                            type: str
@@ -114,7 +114,7 @@ waveserver_interfaces:
                            - dhcpv6
                            - slaac
                            - local
-                           required: true
+                           required: false
                         oper_gateway_source:
                            description: The IPv4 gateway address type.
                            type: str
@@ -125,7 +125,7 @@ waveserver_interfaces:
                            - dhcpv6
                            - slaac
                            - local
-                           required: true
+                           required: false
                   ipv6:
                      description: IPv6 configuration and operational data. It only
                         applies to external interfaces
@@ -140,7 +140,7 @@ waveserver_interfaces:
                                  description: The user-configured IPv6 address and
                                     prefix on the interface.
                                  type: str
-                                 required: true
+                                 required: false
                         gateway_configuration:
                            description: All the configuration data of IPv6 gateway.
                            type: dict
@@ -149,7 +149,7 @@ waveserver_interfaces:
                                  description: The user-configured IPv6 gateway on
                                     the interface.
                                  type: str
-                                 required: true
+                                 required: false
                               source:
                                  description: The IPv6 gateway address type.
                                  type: str
@@ -160,7 +160,7 @@ waveserver_interfaces:
                                  - dhcpv6
                                  - slaac
                                  - local
-                                 required: true
+                                 required: false
       routes:
          description: Top-level container for IP route configuration and operational
             data.
@@ -176,7 +176,7 @@ waveserver_interfaces:
                         Only one static routing entry per unique destination ip/prefix
                         can be configured.
                      type: str
-                     required: true
+                     required: false
                   next_hop:
                      description: A list of next-hop entries associated with the static
                         route.
@@ -188,13 +188,13 @@ waveserver_interfaces:
                               list. Currently only one static entry is supported per
                               destination prefix, so the index should always be 1.
                            type: int
-                           required: true
+                           required: false
                         ip_address:
                            description: IPv4 route next-hop or gateway address associated
                               with the route. If not specified, the default gateway
                               value for the local management interface will be used.
                            type: str
-                           required: true
+                           required: false
                         metric:
                            description: Routing metric cost.
                            type: int
@@ -209,17 +209,17 @@ waveserver_interfaces:
                         Only one static routing entry per unique destination ip/prefix
                         can be configured.
                      type: str
-                     required: true
+                     required: false
                   gateway:
                      description: IPv6 route gateway address associated with the route.
                         If not specified, the default gateway value for the local
                         management interface will be used.
                      type: str
-                     required: true
+                     required: false
                   metric:
                      description: Routing metric cost.
                      type: int
-                     required: true
+                     required: false
       stacks:
          description: Top-level container for IP stacks configuration and operational
             data.
@@ -235,22 +235,22 @@ waveserver_interfaces:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
                   preference:
                      description: Interface stack preference. IPv4 or IPv6.
                      type: str
                      choices:
                      - ipv4
                      - ipv6
-                     required: true
+                     required: false
                   accept_router_advertisement:
                      description: Whether accept the router advertisement.
                      type: bool
-                     required: true
+                     required: false
                   max_slaac_addresses:
                      description: Max number of the SLAAC addresses.
                      type: int
-                     required: true
+                     required: false
       acl:
          description: Top-level container for Network Access Control List configuration.
          type: dict
@@ -269,28 +269,28 @@ waveserver_interfaces:
                               which ACL entries are applied. The sequece id must be
                               unique in the ACL.
                            type: int
-                           required: true
+                           required: false
                         interface_name:
                            description: The name of the logical management interface
                               that the ACL entry is applied to, e.g. 'local'.
                            type: str
-                           required: true
+                           required: false
                         source_address:
                            description: The source IPv4 address and optional prefix
                               length for this ACL entry.
                            type: str
-                           required: true
+                           required: false
                         destination_address:
                            description: The destination IPv4 address and optional
                               prefix length for this ACL entry.
                            type: str
-                           required: true
+                           required: false
                         protocol:
                            description: The transport protocol of the IPv4 packet
                               to match. A value of 0 matches ALL protocols, 1=ICMP,
                               58=ICMPv6, 6=TCP, and 17=UDP.
                            type: int
-                           required: true
+                           required: false
                         action:
                            description: The forwarding action defined for packets
                               matching the filtering rules for this ACL entry.
@@ -298,7 +298,7 @@ waveserver_interfaces:
                            choices:
                            - allow
                            - drop
-                           required: true
+                           required: false
                   acl_ipv6:
                      description: IP-layer ACLs with IPv6 addresses
                      type: list
@@ -309,28 +309,28 @@ waveserver_interfaces:
                               which ACL entries are applied. The sequece id must be
                               unique in the ACL.
                            type: int
-                           required: true
+                           required: false
                         interface_name:
                            description: The name of the logical management interface
                               that the ACL entry is applied to, e.g. 'local'.
                            type: str
-                           required: true
+                           required: false
                         source_address:
                            description: The source IPv6 address and optional prefix
                               length for this ACL entry.
                            type: str
-                           required: true
+                           required: false
                         destination_address:
                            description: The destination IPv6 address and optional
                               prefix length for this ACL entry.
                            type: str
-                           required: true
+                           required: false
                         protocol:
                            description: The transport protocol of the IPv6 packet
                               to match. A value of 0 matches ALL protocols, 1=ICMP,
                               6=TCP, and 17=UDP.
                            type: int
-                           required: true
+                           required: false
                         action:
                            description: The forwarding action defined for packets
                               matching the filtering rules for this ACL entry.
@@ -338,7 +338,7 @@ waveserver_interfaces:
                            choices:
                            - allow
                            - drop
-                           required: true
+                           required: false
             egress:
                description: Configuration data for interface egress ACLs.
                type: dict
@@ -353,28 +353,28 @@ waveserver_interfaces:
                               which ACL entries are applied. The sequece id must be
                               unique in the ACL.
                            type: int
-                           required: true
+                           required: false
                         interface_name:
                            description: The name of the logical management interface
                               that the ACL entry is applied to, e.g. 'local'.
                            type: str
-                           required: true
+                           required: false
                         source_address:
                            description: The source IPv4 address and optional prefix
                               length for this ACL entry.
                            type: str
-                           required: true
+                           required: false
                         destination_address:
                            description: The destination IPv4 address and optional
                               prefix length for this ACL entry.
                            type: str
-                           required: true
+                           required: false
                         protocol:
                            description: The transport protocol of the IPv4 packet
                               to match. A value of 0 matches ALL protocols, 1=ICMP,
                               58=ICMPv6, 6=TCP, and 17=UDP.
                            type: int
-                           required: true
+                           required: false
                         action:
                            description: The forwarding action defined for packets
                               matching the filtering rules for this ACL entry.
@@ -382,7 +382,7 @@ waveserver_interfaces:
                            choices:
                            - allow
                            - drop
-                           required: true
+                           required: false
                   acl_ipv6:
                      description: IP-layer ACLs with IPv6 addresses
                      type: list
@@ -393,28 +393,28 @@ waveserver_interfaces:
                               which ACL entries are applied. The sequece id must be
                               unique in the ACL.
                            type: int
-                           required: true
+                           required: false
                         interface_name:
                            description: The name of the logical management interface
                               that the ACL entry is applied to, e.g. 'local'.
                            type: str
-                           required: true
+                           required: false
                         source_address:
                            description: The source IPv6 address and optional prefix
                               length for this ACL entry.
                            type: str
-                           required: true
+                           required: false
                         destination_address:
                            description: The destination IPv6 address and optional
                               prefix length for this ACL entry.
                            type: str
-                           required: true
+                           required: false
                         protocol:
                            description: The transport protocol of the IPv6 packet
                               to match. A value of 0 matches ALL protocols, 1=ICMP,
                               6=TCP, and 17=UDP.
                            type: int
-                           required: true
+                           required: false
                         action:
                            description: The forwarding action defined for packets
                               matching the filtering rules for this ACL entry.
@@ -422,7 +422,7 @@ waveserver_interfaces:
                            choices:
                            - allow
                            - drop
-                           required: true
+                           required: false
       bgp:
          description: Waveserver Border Gateway Protocol (BGP) configuration data
             and peer information.
@@ -439,7 +439,7 @@ waveserver_interfaces:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: BGP properties.
                type: dict
@@ -450,12 +450,12 @@ waveserver_interfaces:
                         a group of networks under a common administration. Each node
                         within that group gets an AS number.
                      type: int
-                     required: true
+                     required: false
                   keep_alive_time:
                      description: The time in seconds between sending a keep-alive
                         heartbeat between BGP nodes.
                      type: int
-                     required: true
+                     required: false
                   holdoff_time:
                      description: The time in seconds that the node waits to receive
                         a keep-alive message. If the node does not receive a keep-alive
@@ -463,7 +463,7 @@ waveserver_interfaces:
                         as down. The hold-off timer should be set to at least 3 times
                         the keep-alive timer.
                      type: int
-                     required: true
+                     required: false
             peer:
                description: A list of BGP peers. BGP peers are created by the system
                   when BGP is enabled. Users are not allowed to create or delete peers
@@ -476,16 +476,16 @@ waveserver_interfaces:
                      choices:
                      - peer-1
                      - peer-2
-                     required: true
+                     required: false
                   interface:
                      description: The name of the peer interface, e.g. 'dcn', 'ilan-1'.
                      type: str
-                     required: true
+                     required: false
                   ip:
                      description: IP address of peer.
                      type: str
-                     required: true
+                     required: false
                   autonomous_system:
                      description: Autonomous system number of the peer.
                      type: int
-                     required: true
+                     required: false

@@ -7,6 +7,7 @@ __metaclass__ = type  # pylint: disable=C0103
 
 import pprint
 import yaml
+import json
 
 from ansible.module_utils.six import iteritems
 from ansible.module_utils.six import string_types
@@ -53,7 +54,9 @@ def to_argspec(spec):
 
     dive(doc['options'], result)
 
-    result = pprint.pformat(result, indent=1)
+    result = json.dumps(result, indent=1)
+    result = result.replace('"required": true', '"required": True')
+    # result = pprint.pformat(result, indent=1)
     display.debug("Arguments: %s" % result)
     return result
 

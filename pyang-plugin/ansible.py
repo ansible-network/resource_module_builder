@@ -205,12 +205,15 @@ class AnsiblePlugin(plugin.PyangPlugin):
             if child.keyword in ["leaf", "leaf-list"]:
                 if child.i_config:
                     ansible_type = self.yang_type_to_ansible_type(child)
+                    mandatory_field = child.search_one("mandatory")
+                    is_mandatory = mandatory_field.arg == "true" if mandatory_field else False
+
                     data[key_name] = {
                         "type": ansible_type if type(ansible_type) is str else ansible_type["type"],
                         "description": " ".join(child.search_one("description").arg.split("\n"))
                         if child.search_one("description")
                         else "",
-                        "required": not bool(child.search_one("default")),
+                        "required": is_mandatory,
                     }
                     if type(ansible_type) is dict:
                         for key, value in ansible_type.items():

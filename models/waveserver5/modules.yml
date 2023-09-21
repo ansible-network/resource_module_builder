@@ -40,7 +40,7 @@ waveserver_modules:
                   label:
                      description: The user-specified label string for this module.
                      type: str
-                     required: true
+                     required: false
             state:
                description: State information of this Module instance.
                type: dict
@@ -52,7 +52,7 @@ waveserver_modules:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: Configuration properties of this Module instance.
                type: dict
@@ -65,4 +65,4 @@ waveserver_modules:
                      - oducn-regen
                      - mated
                      - mated-oducn-regen
-                     required: true
+                     required: false

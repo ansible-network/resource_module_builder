@@ -10,7 +10,7 @@ waveserver_chassis:
             psu_id:
                description: Unique id for the Power Supply Unit list entry.
                type: str
-               required: true
+               required: false
             state:
                description: Power Supply Unit state information.
                type: dict
@@ -22,7 +22,7 @@ waveserver_chassis:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
       cooling_fan_units:
          description: Cooling Fan Unit Status.
          type: list
@@ -31,7 +31,7 @@ waveserver_chassis:
             cfu_id:
                description: Unique id for the Cooling Fan Unit list entry.
                type: str
-               required: true
+               required: false
             state:
                description: Cooling Fan Unit state information.
                type: dict
@@ -43,7 +43,7 @@ waveserver_chassis:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
       management_port:
          description: A list to manage chassis ports.
          type: list
@@ -62,7 +62,7 @@ waveserver_chassis:
                - dcn-5
                - console-1
                - console-2
-               required: true
+               required: false
             state:
                description: Management port state information.
                type: dict
@@ -74,7 +74,7 @@ waveserver_chassis:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: All the operational data of this management port.
                type: dict
@@ -88,7 +88,7 @@ waveserver_chassis:
                      - management
                      - wayside-channel
                      - redundant-bgp
-                     required: true
+                     required: false
       access_panel:
          description: Access Panel
          type: dict
@@ -104,7 +104,7 @@ waveserver_chassis:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
       control_module:
          description: Waveserver Control Subsystem. This is the control module for
             the Waveserver Ai or Waveserver 5 chassis.
@@ -121,7 +121,7 @@ waveserver_chassis:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
       slot:
          description: Chassis slot power management.
          type: list
@@ -130,11 +130,11 @@ waveserver_chassis:
             slot_id:
                description: Chassis slot number, Key value for the chassis slot list.
                type: int
-               required: true
+               required: false
             power_state:
                description: Slot power state.
                type: str
                choices:
                - automatic
                - shutdown
-               required: true
+               required: false

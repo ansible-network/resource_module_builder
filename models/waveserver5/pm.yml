@@ -12,7 +12,7 @@ waveserver_pm:
                choices:
                - disabled
                - enabled
-               required: true
+               required: false
             untimed_read_and_clear:
                description: Global configuration for clearing untimed bin stats on
                   a get request.
@@ -20,14 +20,14 @@ waveserver_pm:
                choices:
                - disabled
                - enabled
-               required: true
+               required: false
             tca_admin_state:
                description: Global TCA administrative state.
                type: str
                choices:
                - disabled
                - enabled
-               required: true
+               required: false
             tca_notification_type:
                description: Global TCA notification type.
                type: str
@@ -36,7 +36,7 @@ waveserver_pm:
                - summary-alarm
                - event
                - alarm
-               required: true
+               required: false
       ethernet_performance_instances:
          description: Ethernet port PM instances.
          type: list
@@ -45,7 +45,7 @@ waveserver_pm:
             instance_name:
                description: Unique name for PM instance.
                type: str
-               required: true
+               required: false
             state:
                description: PM instance state.
                type: dict
@@ -56,7 +56,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
                   tca_admin_state:
                      description: The configured TCA administrative state for this
                         PM instance.
@@ -64,7 +64,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: PM instance properties.
                type: dict
@@ -73,17 +73,17 @@ waveserver_pm:
                      description: TCA profile name that is attached to the current
                         15 minute bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_24_hr:
                      description: TCA profile name that is attached to the current
                         24 hour bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_untimed:
                      description: TCA profile name that is attached to the untimed
                         bin
                      type: str
-                     required: true
+                     required: false
       optical_power_instances:
          description: PTP Optical Power PM instances.
          type: list
@@ -92,7 +92,7 @@ waveserver_pm:
             instance_name:
                description: Unique name for PM instance.
                type: str
-               required: true
+               required: false
             state:
                description: PM instance state.
                type: dict
@@ -103,7 +103,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
                   tca_admin_state:
                      description: The configured TCA administrative state for this
                         PM instance.
@@ -111,7 +111,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: PM instance properties.
                type: dict
@@ -120,17 +120,17 @@ waveserver_pm:
                      description: TCA profile name that is attached to the current
                         15 minute bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_24_hr:
                      description: TCA profile name that is attached to the current
                         24 hour bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_untimed:
                      description: TCA profile name that is attached to the untimed
                         bin
                      type: str
-                     required: true
+                     required: false
       photonics_instances:
          description: PTP Photonics PM instances.
          type: list
@@ -139,7 +139,7 @@ waveserver_pm:
             instance_name:
                description: Unique name for PM instance.
                type: str
-               required: true
+               required: false
             state:
                description: PM instance state.
                type: dict
@@ -150,7 +150,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
                   tca_admin_state:
                      description: The configured TCA administrative state for this
                         PM instance.
@@ -158,7 +158,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: PM instance properties.
                type: dict
@@ -167,17 +167,17 @@ waveserver_pm:
                      description: TCA profile name that is attached to the current
                         15 minute bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_24_hr:
                      description: TCA profile name that is attached to the current
                         24 hour bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_untimed:
                      description: TCA profile name that is attached to the untimed
                         bin
                      type: str
-                     required: true
+                     required: false
       modem_performance_instances:
          description: PTP Modem PM instances.
          type: list
@@ -186,7 +186,7 @@ waveserver_pm:
             instance_name:
                description: Unique name for PM instance.
                type: str
-               required: true
+               required: false
             state:
                description: PM instance state.
                type: dict
@@ -197,7 +197,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
                   tca_admin_state:
                      description: The configured TCA administrative state for this
                         PM instance.
@@ -205,7 +205,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: PM instance properties.
                type: dict
@@ -214,17 +214,17 @@ waveserver_pm:
                      description: TCA profile name that is attached to the current
                         15 minute bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_24_hr:
                      description: TCA profile name that is attached to the current
                         24 hour bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_untimed:
                      description: TCA profile name that is attached to the untimed
                         bin
                      type: str
-                     required: true
+                     required: false
       otu_performance_instances:
          description: Port OTU PM instances.
          type: list
@@ -233,7 +233,7 @@ waveserver_pm:
             instance_name:
                description: Unique name for PM instance.
                type: str
-               required: true
+               required: false
             state:
                description: PM instance state.
                type: dict
@@ -244,7 +244,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
                   tca_admin_state:
                      description: The configured TCA administrative state for this
                         PM instance.
@@ -252,7 +252,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: PM instance properties.
                type: dict
@@ -261,17 +261,17 @@ waveserver_pm:
                      description: TCA profile name that is attached to the current
                         15 minute bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_24_hr:
                      description: TCA profile name that is attached to the current
                         24 hour bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_untimed:
                      description: TCA profile name that is attached to the untimed
                         bin
                      type: str
-                     required: true
+                     required: false
       odu_performance_instances:
          description: Port/channel ODU PM instances.
          type: list
@@ -280,7 +280,7 @@ waveserver_pm:
             instance_name:
                description: Unique name for PM instance.
                type: str
-               required: true
+               required: false
             state:
                description: PM instance state.
                type: dict
@@ -291,7 +291,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
                   tca_admin_state:
                      description: The configured TCA administrative state for this
                         PM instance.
@@ -299,7 +299,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: PM instance properties.
                type: dict
@@ -308,17 +308,17 @@ waveserver_pm:
                      description: TCA profile name that is attached to the current
                         15 minute bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_24_hr:
                      description: TCA profile name that is attached to the current
                         24 hour bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_untimed:
                      description: TCA profile name that is attached to the untimed
                         bin
                      type: str
-                     required: true
+                     required: false
       encryption_gcm_performance_instances:
          description: Channel Encryption-GCM PM instances.
          type: list
@@ -327,7 +327,7 @@ waveserver_pm:
             instance_name:
                description: Unique name for PM instance.
                type: str
-               required: true
+               required: false
             state:
                description: PM instance state.
                type: dict
@@ -338,7 +338,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
                   tca_admin_state:
                      description: The configured TCA administrative state for this
                         PM instance.
@@ -346,7 +346,7 @@ waveserver_pm:
                      choices:
                      - disabled
                      - enabled
-                     required: true
+                     required: false
             properties:
                description: PM instance properties.
                type: dict
@@ -355,14 +355,14 @@ waveserver_pm:
                      description: TCA profile name that is attached to the current
                         15 minute bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_24_hr:
                      description: TCA profile name that is attached to the current
                         24 hour bin
                      type: str
-                     required: true
+                     required: false
                   tca_profile_untimed:
                      description: TCA profile name that is attached to the untimed
                         bin
                      type: str
-                     required: true
+                     required: false

@@ -1,1021 +1,1040 @@
 waveserver_system:
-   description: Waveserver System configuration data and operational data.
-   type: dict
-   suboptions:
-      id:
-         description: Waveserver system identification attributes.
-         type: dict
-         suboptions:
-            network:
-               description: Waveserver system network attributes.
-               type: dict
-               suboptions:
+  description: Waveserver System configuration data and operational data.
+  type: dict
+  suboptions:
+    id:
+      description: Waveserver system identification attributes.
+      type: dict
+      suboptions:
+        network:
+          description: Waveserver system network attributes.
+          type: dict
+          suboptions:
+            description:
+              description: A description for the sub-network domain.
+              type: str
+              required: false
+            id:
+              description: An integer to uniquely identify the sub-network
+                domain in which this Waveserver chassis is managed.
+              type: int
+              required: false
+            name:
+              description: A name for the sub-network domain.
+              type: str
+              required: false
+        site:
+          description: Waveserver system site attributes.
+          type: dict
+          suboptions:
+            description:
+              description: The site description
+              type: str
+              required: false
+            id:
+              description: "An integer to uniquely identify the site where
+                this Waveserver is located. This is used to help group Waveservers
+                together with line system equipment. All equipment in a common
+                site should share the same site identifier. "
+              type: int
+              required: false
+            name:
+              description: The name for the site where the Waveserver is located.
+              type: str
+              required: false
+            latitude:
+              description: Geographic coordinate for the site location in degrees.
+              type: float
+              required: false
+            longitude:
+              description: Geographic coordinate for the site location in degrees.
+              type: float
+              required: false
+            address:
+              description: The street address of the site.
+              type: str
+              required: false
+        group:
+          description: Waveserver system group attributes.
+          type: dict
+          suboptions:
+            description:
+              description: "A description for the group of Waveservers. "
+              type: str
+              required: false
+            id:
+              description:
+                An integer to uniquely identify a group of Waveservers
+                within a site.
+              type: int
+              required: false
+            name:
+              description: A name for the group of Waveservers.
+              type: str
+              required: false
+        member:
+          description: Waveserver system member attributes.
+          type: dict
+          suboptions:
+            description:
+              description: A description for the Waveserver chassis.
+              type: str
+              required: false
+            id:
+              description: An integer to uniquely identify a Waveserver chassis
+                within a group of Waveservers.
+              type: int
+              required: false
+            name:
+              description: A name for the Waveserver chassis. Set to the host
+                name by default.
+              type: str
+              required: false
+            frame_identification:
+              description:
+                A description to identify the location of the Waveserver
+                chassis within the data center. For example, the building,
+                floor, aisle, frame number, etc.
+              type: str
+              required: false
+            rack_unit_number:
+              description:
+                A logical identifier for the location of the Waveserver
+                within the frame or rack. For example, the device at the top
+                could be labeled unit 1.
+              type: int
+              required: false
+            cluster_enrollment:
+              description: Attribute indicating if the waveserver member is
+                enrolled into culster.
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: false
+    host_name:
+      description: Waveserver system host name attributes.
+      type: dict
+      suboptions:
+        config_host_name:
+          description: User configured host name.
+          type: str
+          required: false
+    domain_name:
+      description: Waveserver system domain name attributes.
+      type: dict
+      suboptions:
+        config_domain_name:
+          description: User configured domain name.
+          type: str
+          required: false
+    time_config:
+      description: Waveserver system time configuration attributes.
+      type: dict
+      suboptions:
+        time_offset:
+          description: System time-offset from UTC in seconds.
+          type: int
+          required: false
+        time_stamp:
+          description: "System time stamp format: local time or UTC time."
+          type: str
+          choices:
+            - utc
+            - local
+          required: false
+    server_config:
+      description: Waveserver system server configuration attributes.
+      type: dict
+      suboptions:
+        sftp_server_state:
+          description: Indicate whether SFTP server is enabled.
+          type: str
+          choices:
+            - disabled
+            - enabled
+          required: false
+        scp_server_state:
+          description: Indicate whether SCP server is enabled.
+          type: str
+          choices:
+            - disabled
+            - enabled
+          required: false
+        netconf_server_state:
+          description: Indicate whether NETCONF server is enabled.
+          type: str
+          choices:
+            - disabled
+            - enabled
+          required: false
+        global_inactivity_timer:
+          description: Global session inactivity timer state.
+          type: str
+          choices:
+            - disabled
+            - enabled
+          required: false
+        global_inactivity_timeout:
+          description: Global session inactivity timeout period, in minutes.
+            Can be overridden by specific server type settings, if applicable.
+          type: int
+          required: false
+        https:
+          description: HTTPS server configuration.
+          type: dict
+          suboptions:
+            admin_state:
+              description: HTTPS server administrative state.
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: false
+            web_ui_file_transfer_admin_state:
+              description: Web Ui File Transfer administrative state.
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: false
+            inactivity_timeout:
+              description: HTTPS inactivity timeout period, in minutes.
+              type: int
+              required: false
+            certificate_verification:
+              description:
+                The HTTPS server configuration data for client certificate
+                verification through mutual authentication and Online Certificate
+                Status Protocol(OCSP).
+              type: dict
+              suboptions:
+                certificate_name:
+                  description: The certificate name used by the HTTPS server.
+                  type: str
+                  required: false
+                trusted_dns:
+                  description: Trusted DNS name used to check peer's certificate
+                    The name should be fully qualified whenever possible,
+                    and can accept a leading wildcard period.
+                  type: str
+                  required: false
+                mutual_authentication:
+                  description: HTTPS server mutual authentication configuration
+                    data.
+                  type: dict
+                  suboptions:
+                    admin_state:
+                      description:
+                        Whether apache HTTPS server mutual authentication
+                        verification is enabled or disabled.
+                      type: str
+                      choices:
+                        - disabled
+                        - enabled
+                      required: false
+                ocsp:
+                  description: HTTPS server configuration data for OCSP verification.
+                  type: dict
+                  suboptions:
+                    admin_state:
+                      description: Whether OCSP verification is enabled
+                        or disabled.
+                      type: str
+                      choices:
+                        - disabled
+                        - enabled
+                      required: false
+                    responder_preference:
+                      description: If 'responder-preference' is set to
+                        aia, the OCSP responder referred in client certificate
+                        AIA extension will be used first during OCSP certificate
+                        validation. If it is set to 'default-responder',
+                        the configured default OCSP responder is used
+                        first.
+                      type: str
+                      choices:
+                        - aia
+                        - default-responder
+                      required: false
+                    default_responder:
+                      description: Default OCSP responder. It should be
+                        in URL format. e.g. https://192.168.20.2:2440.
+                        If the 'responder-preference' is not set to 'default-responder',
+                        the URL given will be used only if no responder
+                        URL (AIA extension) is specified in the client
+                        certificate being verified.
+                      type: str
+                      required: false
+                    nonce:
+                      description: Determine whether queries to OCSP responders
+                        should contain a nonce or not. By default nonce
+                        option is turned on.
+                      type: str
+                      choices:
+                        - off
+                        - on
+                      required: false
+        grpc:
+          description: gRPC server configuration.
+          type: dict
+          suboptions:
+            admin_state:
+              description: gRPC server administrative state.
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: false
+            certificate_verification:
+              description: gRPC server configuration data for client certificate
+                verification through mutual authentication.
+              type: dict
+              suboptions:
+                certificate_name:
+                  description: The certificate name used by the gRPC server.
+                  type: str
+                  required: false
+                mutual_authentication:
+                  description: gRPC server mutual authentication configuration
+                    data.
+                  type: dict
+                  suboptions:
+                    admin_state:
+                      description: Whether gRPC server mutual authentication
+                        verification is enabled or disabled.
+                      type: str
+                      choices:
+                        - disabled
+                        - enabled
+                      required: false
+        ssh:
+          description: SSH server configuration.
+          type: dict
+          suboptions:
+            authentication_retries:
+              description: Number of authentication retries allowed before
+                the SSH connection is dropped.
+              type: int
+              required: false
+            listener_port:
+              description: Configured SSH listener port. Default is port 22.
+              type: int
+              required: false
+            allowed_clients:
+              description: List of allowed client IP addresses.
+              type: list
+              elements: dict
+              suboptions:
+                ip_address:
+                  description: IP address for allowed SSH clients. When the
+                    list is not empty, only the clients in the list can
+                    login to the SSH server.
+                  type: str
+                  required: false
+            algorithms:
+              description: Waveserver SSH algorithm lists.
+              type: dict
+              suboptions:
+                key_exchange:
                   description:
-                     description: A description for the sub-network domain.
-                     type: str
-                     required: true
-                  id:
-                     description: An integer to uniquely identify the sub-network
-                        domain in which this Waveserver chassis is managed.
-                     type: int
-                     required: true
-                  name:
-                     description: A name for the sub-network domain.
-                     type: str
-                     required: true
-            site:
-               description: Waveserver system site attributes.
-               type: dict
-               suboptions:
+                    List of SSH key exchange algorithms. The algorithm
+                    names are system assigned.
+                  type: list
+                  elements: dict
+                  suboptions:
+                    algorithm_name:
+                      description: The SSH key exchange algorithm name.
+                      type: str
+                      required: false
+                    admin_state:
+                      description: SSH key exchange algorithm administrative
+                        state.
+                      type: str
+                      choices:
+                        - disabled
+                        - enabled
+                      required: false
+                encryption:
+                  description: List of SSH encryption algorithms. The algorithm
+                    names are system assigned.
+                  type: list
+                  elements: dict
+                  suboptions:
+                    algorithm_name:
+                      description: The SSH encryption algorithm name.
+                      type: str
+                      required: false
+                    admin_state:
+                      description: SSH encryption algorithm administrative
+                        state.
+                      type: str
+                      choices:
+                        - disabled
+                        - enabled
+                      required: false
+                message_authentication_code:
                   description:
-                     description: The site description
-                     type: str
-                     required: true
-                  id:
-                     description: 'An integer to uniquely identify the site where
-                        this Waveserver is located. This is used to help group Waveservers
-                        together with line system equipment. All equipment in a common
-                        site should share the same site identifier. '
-                     type: int
-                     required: true
-                  name:
-                     description: The name for the site where the Waveserver is located.
-                     type: str
-                     required: true
-                  latitude:
-                     description: Geographic coordinate for the site location in degrees.
-                     type: float
-                     required: true
-                  longitude:
-                     description: Geographic coordinate for the site location in degrees.
-                     type: float
-                     required: true
-                  address:
-                     description: The street address of the site.
-                     type: str
-                     required: true
-            group:
-               description: Waveserver system group attributes.
-               type: dict
-               suboptions:
-                  description:
-                     description: 'A description for the group of Waveservers. '
-                     type: str
-                     required: true
-                  id:
-                     description: An integer to uniquely identify a group of Waveservers
-                        within a site.
-                     type: int
-                     required: true
-                  name:
-                     description: A name for the group of Waveservers.
-                     type: str
-                     required: true
-            member:
-               description: Waveserver system member attributes.
-               type: dict
-               suboptions:
-                  description:
-                     description: A description for the Waveserver chassis.
-                     type: str
-                     required: true
-                  id:
-                     description: An integer to uniquely identify a Waveserver chassis
-                        within a group of Waveservers.
-                     type: int
-                     required: true
-                  name:
-                     description: A name for the Waveserver chassis. Set to the host
-                        name by default.
-                     type: str
-                     required: true
-                  frame_identification:
-                     description: A description to identify the location of the Waveserver
-                        chassis within the data center. For example, the building,
-                        floor, aisle, frame number, etc.
-                     type: str
-                     required: true
-                  rack_unit_number:
-                     description: A logical identifier for the location of the Waveserver
-                        within the frame or rack. For example, the device at the top
-                        could be labeled unit 1.
-                     type: int
-                     required: true
-                  cluster_enrollment:
-                     description: Attribute indicating if the waveserver member is
-                        enrolled into culster.
-                     type: str
-                     choices:
-                     - disabled
-                     - enabled
-                     required: true
-      host_name:
-         description: Waveserver system host name attributes.
-         type: dict
-         suboptions:
-            config_host_name:
-               description: User configured host name.
-               type: str
-               required: true
-      domain_name:
-         description: Waveserver system domain name attributes.
-         type: dict
-         suboptions:
-            config_domain_name:
-               description: User configured domain name.
-               type: str
-               required: true
-      time_config:
-         description: Waveserver system time configuration attributes.
-         type: dict
-         suboptions:
-            time_offset:
-               description: System time-offset from UTC in seconds.
-               type: int
-               required: true
-            time_stamp:
-               description: 'System time stamp format: local time or UTC time.'
-               type: str
-               choices:
-               - utc
-               - local
-               required: true
-      server_config:
-         description: Waveserver system server configuration attributes.
-         type: dict
-         suboptions:
-            sftp_server_state:
-               description: Indicate whether SFTP server is enabled.
-               type: str
-               choices:
-               - disabled
-               - enabled
-               required: true
-            scp_server_state:
-               description: Indicate whether SCP server is enabled.
-               type: str
-               choices:
-               - disabled
-               - enabled
-               required: true
-            netconf_server_state:
-               description: Indicate whether NETCONF server is enabled.
-               type: str
-               choices:
-               - disabled
-               - enabled
-               required: true
-            global_inactivity_timer:
-               description: Global session inactivity timer state.
-               type: str
-               choices:
-               - disabled
-               - enabled
-               required: true
-            global_inactivity_timeout:
-               description: Global session inactivity timeout period, in minutes.
-                  Can be overridden by specific server type settings, if applicable.
-               type: int
-               required: true
-            https:
-               description: HTTPS server configuration.
-               type: dict
-               suboptions:
-                  admin_state:
-                     description: HTTPS server administrative state.
-                     type: str
-                     choices:
-                     - disabled
-                     - enabled
-                     required: true
-                  web_ui_file_transfer_admin_state:
-                     description: Web Ui File Transfer administrative state.
-                     type: str
-                     choices:
-                     - disabled
-                     - enabled
-                     required: true
-                  inactivity_timeout:
-                     description: HTTPS inactivity timeout period, in minutes.
-                     type: int
-                     required: true
-                  certificate_verification:
-                     description: The HTTPS server configuration data for client certificate
-                        verification through mutual authentication and Online Certificate
-                        Status Protocol(OCSP).
-                     type: dict
-                     suboptions:
-                        certificate_name:
-                           description: The certificate name used by the HTTPS server.
-                           type: str
-                           required: true
-                        trusted_dns:
-                           description: Trusted DNS name used to check peer's certificate
-                              The name should be fully qualified whenever possible,
-                              and can accept a leading wildcard period.
-                           type: str
-                           required: true
-                        mutual_authentication:
-                           description: HTTPS server mutual authentication configuration
-                              data.
-                           type: dict
-                           suboptions:
-                              admin_state:
-                                 description: Whether apache HTTPS server mutual authentication
-                                    verification is enabled or disabled.
-                                 type: str
-                                 choices:
-                                 - disabled
-                                 - enabled
-                                 required: true
-                        ocsp:
-                           description: HTTPS server configuration data for OCSP verification.
-                           type: dict
-                           suboptions:
-                              admin_state:
-                                 description: Whether OCSP verification is enabled
-                                    or disabled.
-                                 type: str
-                                 choices:
-                                 - disabled
-                                 - enabled
-                                 required: true
-                              responder_preference:
-                                 description: If 'responder-preference' is set to
-                                    aia, the OCSP responder referred in client certificate
-                                    AIA extension will be used first during OCSP certificate
-                                    validation. If it is set to 'default-responder',
-                                    the configured default OCSP responder is used
-                                    first.
-                                 type: str
-                                 choices:
-                                 - aia
-                                 - default-responder
-                                 required: true
-                              default_responder:
-                                 description: Default OCSP responder. It should be
-                                    in URL format. e.g. https://192.168.20.2:2440.
-                                    If the 'responder-preference' is not set to 'default-responder',
-                                    the URL given will be used only if no responder
-                                    URL (AIA extension) is specified in the client
-                                    certificate being verified.
-                                 type: str
-                                 required: true
-                              nonce:
-                                 description: Determine whether queries to OCSP responders
-                                    should contain a nonce or not. By default nonce
-                                    option is turned on.
-                                 type: str
-                                 choices:
-                                 - off
-                                 - on
-                                 required: true
-            grpc:
-               description: gRPC server configuration.
-               type: dict
-               suboptions:
-                  admin_state:
-                     description: gRPC server administrative state.
-                     type: str
-                     choices:
-                     - disabled
-                     - enabled
-                     required: true
-                  certificate_verification:
-                     description: gRPC server configuration data for client certificate
-                        verification through mutual authentication.
-                     type: dict
-                     suboptions:
-                        certificate_name:
-                           description: The certificate name used by the gRPC server.
-                           type: str
-                           required: true
-                        mutual_authentication:
-                           description: gRPC server mutual authentication configuration
-                              data.
-                           type: dict
-                           suboptions:
-                              admin_state:
-                                 description: Whether gRPC server mutual authentication
-                                    verification is enabled or disabled.
-                                 type: str
-                                 choices:
-                                 - disabled
-                                 - enabled
-                                 required: true
-            ssh:
-               description: SSH server configuration.
-               type: dict
-               suboptions:
-                  authentication_retries:
-                     description: Number of authentication retries allowed before
-                        the SSH connection is dropped.
-                     type: int
-                     required: true
-                  listener_port:
-                     description: Configured SSH listener port. Default is port 22.
-                     type: int
-                     required: true
-                  allowed_clients:
-                     description: List of allowed client IP addresses.
-                     type: list
-                     elements: dict
-                     suboptions:
-                        ip_address:
-                           description: IP address for allowed SSH clients. When the
-                              list is not empty, only the clients in the list can
-                              login to the SSH server.
-                           type: str
-                           required: true
-                  algorithms:
-                     description: Waveserver SSH algorithm lists.
-                     type: dict
-                     suboptions:
-                        key_exchange:
-                           description: List of SSH key exchange algorithms. The algorithm
-                              names are system assigned.
-                           type: list
-                           elements: dict
-                           suboptions:
-                              algorithm_name:
-                                 description: The SSH key exchange algorithm name.
-                                 type: str
-                                 required: true
-                              admin_state:
-                                 description: SSH key exchange algorithm administrative
-                                    state.
-                                 type: str
-                                 choices:
-                                 - disabled
-                                 - enabled
-                                 required: true
-                        encryption:
-                           description: List of SSH encryption algorithms. The algorithm
-                              names are system assigned.
-                           type: list
-                           elements: dict
-                           suboptions:
-                              algorithm_name:
-                                 description: The SSH encryption algorithm name.
-                                 type: str
-                                 required: true
-                              admin_state:
-                                 description: SSH encryption algorithm administrative
-                                    state.
-                                 type: str
-                                 choices:
-                                 - disabled
-                                 - enabled
-                                 required: true
-                        message_authentication_code:
-                           description: List of SSH message authentication code algorithms.
-                              The algorithm names are system assigned.
-                           type: list
-                           elements: dict
-                           suboptions:
-                              algorithm_name:
-                                 description: The SSH message authentication code
-                                    algorithm name.
-                                 type: str
-                                 required: true
-                              admin_state:
-                                 description: SSH message authentication code algorithm
-                                    administrative state.
-                                 type: str
-                                 choices:
-                                 - disabled
-                                 - enabled
-                                 required: true
-                        public_key_authentication:
-                           description: List of SSH public key authentication algorithms.
-                              The algorithm names are system assigned.
-                           type: list
-                           elements: dict
-                           suboptions:
-                              algorithm_name:
-                                 description: The SSH public key authentication algorithm
-                                    name.
-                                 type: str
-                                 required: true
-                              admin_state:
-                                 description: SSH public key authentication algorithm
-                                    administrative state.
-                                 type: str
-                                 choices:
-                                 - disabled
-                                 - enabled
-                                 required: true
-      client_config:
-         description: Waveserver client configuration attributes.
-         type: dict
-         suboptions:
-            dhcp:
-               description: Waveserver DHCP client configuration attributes.
-               type: dict
-               suboptions:
-                  admin_state:
-                     description: DHCP client administrative atate
-                     type: str
-                     choices:
-                     - disabled
-                     - enabled
-                     required: true
-                  interface_type:
-                     description: DHCP client interface type.
-                     type: str
-                     choices:
-                     - remote
-                     - active
-                     required: true
-                  discovery_interval:
-                     description: DHCP client discovery interval in seconds.
-                     type: int
-                     required: true
-                  requested_lease_time:
-                     description: DHCP client requested lease time in seconds.
-                     type: int
-                     required: true
-                  options:
-                     description: DHCP Options. A list of the enabled/requested options
-                        configured on the DHCP client.
-                     type: dict
-                     suboptions:
-                        subnet_mask:
-                           description: DHCP Option 1 - Subnet Mask.
-                           type: bool
-                           required: true
-                        time_offset:
-                           description: DHCP Option 2 - Time Offset.
-                           type: bool
-                           required: true
-                        router:
-                           description: DHCP Option 3 - Router.
-                           type: bool
-                           required: true
-                        domain_server:
-                           description: DHCP Option 6 - Domain Name Server.
-                           type: bool
-                           required: true
-                        log_server:
-                           description: DHCP Option 7 - Log Server.
-                           type: bool
-                           required: true
-                        host_name:
-                           description: DHCP Option 12 - Host Name.
-                           type: bool
-                           required: true
-                        domain_name:
-                           description: DHCP Option 15 - Domain Name.
-                           type: bool
-                           required: true
-                        ntp_servers:
-                           description: DHCP Option 42 - Network Time Protocol Servers.
-                           type: bool
-                           required: true
-                        lease_time:
-                           description: DHCP Option 51 - Lease Time.
-                           type: bool
-                           required: true
-                        tftp_server_name:
-                           description: DHCP Option 66 - TFTP Server Name.
-                           type: bool
-                           required: true
-                        bootfile_name:
-                           description: DHCP Option 67 - Bootfile Name.
-                           type: bool
-                           required: true
-            ntp:
-               description: Waveserver NTP client configuration attributes.
-               type: dict
-               suboptions:
-                  admin_state:
-                     description: NTP client administrative state.
-                     type: str
-                     choices:
-                     - disabled
-                     - enabled
-                     required: true
-                  authentication_state:
-                     description: NTP client authentication state. When enabled, only
-                        MD5 authenticated packets will be used to synchronize the
-                        time.
-                     type: str
-                     choices:
-                     - disabled
-                     - enabled
-                     required: true
-                  autokey_authentication_state:
-                     description: NTP client autokey authentication state. A RSA host
-                        key and an X509 certificate (RSA-SHA1) will be created (if
-                        not exist) and saved. The host key and certificate will be
-                        loaded to NTP daemon only if the NTP autokey is enabled on
-                        Waveserver
-                     type: str
-                     choices:
-                     - disabled
-                     - enabled
-                     required: true
-                  mode:
-                     description: NTP client mode.
-                     type: str
-                     choices:
-                     - polling
-                     - broadcast
-                     - multicast
-                     required: true
-                  polling_interval:
-                     description: The NTP client polling interval, in seconds. Applicable
-                        only when NTP client mode is set to 'polling'. This is a global
-                        setting that applies to all configured NTP peer servers.
-                     type: int
-                     required: true
-                  ntp_key:
-                     description: List of NTP authentication keys.
-                     type: list
-                     elements: dict
-                     suboptions:
-                        key_id:
-                           description: Unique index value for the NTP authentication
-                              key.
-                           type: int
-                           required: true
-                        key_value:
-                           description: NTP authentication key value.
-                           type: str
-                           required: true
-                  server:
-                     description: List of NTP servers to use for time synchronization.
-                     type: list
-                     elements: dict
-                     suboptions:
-                        address:
-                           description: Configured IP address or Domain Name of the
-                              remote NTP server.
-                           type: str
-                           required: true
-                        autokey_authentication:
-                           description: Whether autokey authentication method is enabled
-                              for the server. The 'enabled' state will only be effective
-                              when the 'ntp/authentication-state' is 'enabled'.
-                           type: str
-                           choices:
-                           - disabled
-                           - enabled
-                           required: true
-                        admin_state:
-                           description: NTP remote server administrative state.
-                           type: str
-                           choices:
-                           - disabled
-                           - enabled
-                           required: true
-                        key_id:
-                           description: Leafref to 'ntp-key' list 'key-id' values.
-                           type: str
-                           required: true
-                  multicast_server:
-                     description: List of NTP multicast servers to use for time synchronization.
-                     type: list
-                     elements: dict
-                     suboptions:
-                        ip_address:
-                           description: Configured IPv6 address for NTP Multicast
-                              server.
-                           type: str
-                           required: true
-            dns:
-               description: Waveserver DNS client configuration attributes.
-               type: dict
-               suboptions:
-                  admin_state:
-                     description: DNS client administrative state.
-                     type: str
-                     choices:
-                     - disabled
-                     - enabled
-                     required: true
-                  server:
-                     description: List of DNS servers to use for domain name resolution.
-                        DNS servers can be manually created by the user, or dynamically
-                        created by via DHCP. Waveserver supports up to 3 manually
-                        provisioned DNS servers and up to 2 DHCP-assigned servers.
-                     type: list
-                     elements: dict
-                     suboptions:
-                        ip_address:
-                           description: IP address associated with the remote DNS
-                              server.
-                           type: str
-                           required: true
-                        admin_state:
-                           description: DNS remote server administrative state.
-                           type: str
-                           choices:
-                           - disabled
-                           - enabled
-                           required: true
-                        user_priority:
-                           description: User-assigned DNS server priority. Only applicable
-                              when server source is 'user' or 'both'. Ignored otherwise.
-                           type: int
-                           required: true
-      xftp_config:
-         description: Waveserver system XFTP configuration attributes.
-         type: dict
-         suboptions:
+                    List of SSH message authentication code algorithms.
+                    The algorithm names are system assigned.
+                  type: list
+                  elements: dict
+                  suboptions:
+                    algorithm_name:
+                      description: The SSH message authentication code
+                        algorithm name.
+                      type: str
+                      required: false
+                    admin_state:
+                      description: SSH message authentication code algorithm
+                        administrative state.
+                      type: str
+                      choices:
+                        - disabled
+                        - enabled
+                      required: false
+                public_key_authentication:
+                  description: List of SSH public key authentication algorithms.
+                    The algorithm names are system assigned.
+                  type: list
+                  elements: dict
+                  suboptions:
+                    algorithm_name:
+                      description: The SSH public key authentication algorithm
+                        name.
+                      type: str
+                      required: false
+                    admin_state:
+                      description: SSH public key authentication algorithm
+                        administrative state.
+                      type: str
+                      choices:
+                        - disabled
+                        - enabled
+                      required: false
+    client_config:
+      description: Waveserver client configuration attributes.
+      type: dict
+      suboptions:
+        dhcp:
+          description: Waveserver DHCP client configuration attributes.
+          type: dict
+          suboptions:
+            admin_state:
+              description: DHCP client administrative atate
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: false
+            interface_type:
+              description: DHCP client interface type.
+              type: str
+              choices:
+                - remote
+                - active
+              required: false
+            discovery_interval:
+              description: DHCP client discovery interval in seconds.
+              type: int
+              required: false
+            requested_lease_time:
+              description: DHCP client requested lease time in seconds.
+              type: int
+              required: false
+            options:
+              description: DHCP Options. A list of the enabled/requested options
+                configured on the DHCP client.
+              type: dict
+              suboptions:
+                subnet_mask:
+                  description: DHCP Option 1 - Subnet Mask.
+                  type: bool
+                  required: false
+                time_offset:
+                  description: DHCP Option 2 - Time Offset.
+                  type: bool
+                  required: false
+                router:
+                  description: DHCP Option 3 - Router.
+                  type: bool
+                  required: false
+                domain_server:
+                  description: DHCP Option 6 - Domain Name Server.
+                  type: bool
+                  required: false
+                log_server:
+                  description: DHCP Option 7 - Log Server.
+                  type: bool
+                  required: false
+                host_name:
+                  description: DHCP Option 12 - Host Name.
+                  type: bool
+                  required: false
+                domain_name:
+                  description: DHCP Option 15 - Domain Name.
+                  type: bool
+                  required: false
+                ntp_servers:
+                  description: DHCP Option 42 - Network Time Protocol Servers.
+                  type: bool
+                  required: false
+                lease_time:
+                  description: DHCP Option 51 - Lease Time.
+                  type: bool
+                  required: false
+                tftp_server_name:
+                  description: DHCP Option 66 - TFTP Server Name.
+                  type: bool
+                  required: false
+                bootfile_name:
+                  description: DHCP Option 67 - Bootfile Name.
+                  type: bool
+                  required: false
+        ntp:
+          description: Waveserver NTP client configuration attributes.
+          type: dict
+          suboptions:
+            admin_state:
+              description: NTP client administrative state.
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: false
+            authentication_state:
+              description: NTP client authentication state. When enabled, only
+                MD5 authenticated packets will be used to synchronize the
+                time.
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: false
+            autokey_authentication_state:
+              description: NTP client autokey authentication state. A RSA host
+                key and an X509 certificate (RSA-SHA1) will be created (if
+                not exist) and saved. The host key and certificate will be
+                loaded to NTP daemon only if the NTP autokey is enabled on
+                Waveserver
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: false
             mode:
-               description: Identifies which file transfer protocol to user when default-server
-                  is specified in a command - FTP, SFTP, TFTP or SCP.
-               type: str
-               choices:
-               - none
-               - tftp
-               - ftp
-               - sftp
-               - scp
-               required: true
-            tftp:
-               description: Waveserver system TFTP configuration.
-               type: dict
-               suboptions:
-                  config_host_name:
-                     description: TFTP host name configured by user. Format is an
-                        IP address (with optional port) or host name.
-                     type: str
-                     required: true
-            ftp:
-               description: Waveserver system FTP configuration.
-               type: dict
-               suboptions:
-                  host_name:
-                     description: FTP host name. Format is an IP address (with optional
-                        port) or host name.
-                     type: str
-                     required: true
-                  user_name:
-                     description: FTP user name.
-                     type: str
-                     required: true
-                  password:
-                     description: FTP password string.
-                     type: str
-                     required: true
-                  secret:
-                     description: FTP secret string.
-                     type: str
-                     required: true
-            sftp:
-               description: Waveserver system SFTP configuration.
-               type: dict
-               suboptions:
-                  host_name:
-                     description: SFTP host name. Format is an IP address (with optional
-                        port) or host name.
-                     type: str
-                     required: true
-                  user_name:
-                     description: SFTP user name.
-                     type: str
-                     required: true
-                  password:
-                     description: SFTP password string.
-                     type: str
-                     required: true
-                  secret:
-                     description: SFTP secret string.
-                     type: str
-                     required: true
-            scp:
-               description: Waveserver system SCP configuration.
-               type: dict
-               suboptions:
-                  host_name:
-                     description: SCP host name. Format is an IP address (with optional
-                        port) or host name.
-                     type: str
-                     required: true
-                  user_name:
-                     description: SCP user name.
-                     type: str
-                     required: true
-                  password:
-                     description: SCP password string.
-                     type: str
-                     required: true
-                  secret:
-                     description: SCP secret string.
-                     type: str
-                     required: true
-      global_provisioning:
-         description: Waveserver system global provisioning attributes.
-         type: dict
-         suboptions:
-            line_config:
-               description: Waveserver system line configuration.
-               type: dict
-               suboptions:
-                  line_protection:
-                     description: Line protection settings. If line protection is
-                        enabled, this means that the photonic line the Waveserver
-                        is connected to has protection enabled. In the event of a
-                        line side fault, the protection card on the line side will
-                        select the protection path and the modems will reacquire the
-                        signal on the alternate path. While the switch is occuring,
-                        link state messaging will be disabled to the clients so that
-                        the connected devices do not attempt a switch or a restoration.
-                     type: str
-                     choices:
-                     - unprotected
-                     - trunk-ops
-                     required: true
-      lamp_test:
-         description: Waveserver lamp test attributes.
-         type: dict
-         suboptions:
+              description: NTP client mode.
+              type: str
+              choices:
+                - polling
+                - broadcast
+                - multicast
+              required: false
+            polling_interval:
+              description:
+                The NTP client polling interval, in seconds. Applicable
+                only when NTP client mode is set to 'polling'. This is a global
+                setting that applies to all configured NTP peer servers.
+              type: int
+              required: false
+            ntp_key:
+              description: List of NTP authentication keys.
+              type: list
+              elements: dict
+              suboptions:
+                key_id:
+                  description: Unique index value for the NTP authentication
+                    key.
+                  type: int
+                  required: true
+                key_value:
+                  description: NTP authentication key value.
+                  type: str
+                  required: false
+            server:
+              description: List of NTP servers to use for time synchronization.
+              type: list
+              elements: dict
+              suboptions:
+                address:
+                  description: Configured IP address or Domain Name of the
+                    remote NTP server.
+                  type: str
+                  required: true
+                autokey_authentication:
+                  description: Whether autokey authentication method is enabled
+                    for the server. The 'enabled' state will only be effective
+                    when the 'ntp/authentication-state' is 'enabled'.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                admin_state:
+                  description: NTP remote server administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                key_id:
+                  description: Leafref to 'ntp-key' list 'key-id' values.
+                  type: str
+                  required: false
+            multicast_server:
+              description: List of NTP multicast servers to use for time synchronization.
+              type: list
+              elements: dict
+              suboptions:
+                ip_address:
+                  description: Configured IPv6 address for NTP Multicast
+                    server.
+                  type: str
+                  required: false
+        dns:
+          description: Waveserver DNS client configuration attributes.
+          type: dict
+          suboptions:
             admin_state:
-               description: Enable or disable the system lamp test. The lamp-test
-                  admin-state will be automatically disabled once the timeout period
-                  has expired.
-               type: str
-               choices:
-               - disabled
-               - enabled
-               required: true
-            target_type:
-               description: Lamp testing target type. It can be chassis, slot, or
-                  port. The default type is chassis. When the target-type is slot
-                  or port, the slot/port identifier should also be set for the selected
-                  target(s) to be tested.
-               type: str
-               choices:
-               - chassis
-               - slot
-               - port
-               required: true
-            target_id:
-               description: Lamp testing target ID string. Must be specified when
-                  target-type is 'slot' or 'port'. When the target-type is 'slot'
-                  the target-id should be a slot number (e.g. 1, 2, or 3). When the
-                  target-type is 'port' the target-id should be a port-id (e.g. '1-1')
-                  or comma-separated list of port-id's (e.g. '1-1,1-2,1-3').
-               type: str
-               required: true
-            timeout:
-               description: The number of seconds the lamp flash testing will be operating
-                  when enabled.
-               type: int
-               required: true
-      management:
-         description: Waveserver system management configuration attributes.
-         type: dict
-         suboptions:
-            query_limits:
-               description: Run time query limits for get operations on management
-                  interfaces.
-               type: dict
-               suboptions:
-                  netconf:
-                     description: NETCONF protocol source type.
-                     type: dict
-                     suboptions:
-                        pm_history_bins:
-                           description: Maximum query limit for PM history bins in
-                              NETCONF get responses.
-                           type: int
-                           required: true
-                  rest:
-                     description: REST protocol source type.
-                     type: dict
-                     suboptions:
-                        pm_history_bins:
-                           description: Maximum query limit for PM history bins in
-                              REST get responses.
-                           type: int
-                           required: true
-                  gnmi:
-                     description: gNMI protocol source type.
-                     type: dict
-                     suboptions:
-                        pm_history_bins:
-                           description: Maximum query limit for PM history bins in
-                              gNMI get responses.
-                           type: int
-                           required: true
-            root_scope:
-               description: Control for root-level get and replace operations for
-                  management interfaces.
-               type: dict
-               suboptions:
-                  netconf:
-                     description: NETCONF protocol source type.
-                     type: dict
-                     suboptions:
-                        get:
-                           description: Scope for NETCONF root-level get operations.
-                           type: str
-                           choices:
-                           - native
-                           - openconfig
-                           - all
-                           required: true
-                        replace:
-                           description: Scope for NETCONF root-level replace operations.
-                           type: str
-                           choices:
-                           - native
-                           - openconfig
-                           - all
-                           required: true
-                  rest:
-                     description: REST protocol source type.
-                     type: dict
-                     suboptions:
-                        get:
-                           description: Scope for REST root-level get operations.
-                           type: str
-                           choices:
-                           - native
-                           - openconfig
-                           - all
-                           required: true
-                        replace:
-                           description: Scope for REST root-level replace operations.
-                           type: str
-                           choices:
-                           - native
-                           - openconfig
-                           - all
-                           required: true
-                  gnmi:
-                     description: gNMI protocol source type.
-                     type: dict
-                     suboptions:
-                        get:
-                           description: Scope for gNMI root-level get operations.
-                           type: str
-                           choices:
-                           - native
-                           - openconfig
-                           - all
-                           required: true
-                        replace:
-                           description: Scope for gNMI root-level replace operations.
-                           type: str
-                           choices:
-                           - native
-                           - openconfig
-                           - all
-                           required: true
-      environment:
-         description: Waveserver system linux environment attributes.
-         type: dict
-         suboptions:
-            root:
-               description: Waveserver system user root configuration.
-               type: dict
-               suboptions:
-                  password:
-                     description: User root password string.
-                     type: str
-                     required: true
-                  secret:
-                     description: The encrypted user password string, supplied as
-                        a hashed value.
-                     type: str
-                     required: true
-            diag:
-               description: System level default environment configuration for diag
-                  level users.
-               type: dict
-               suboptions:
-                  shell:
-                     description: The default shell session type for authenticated
-                        diag users.
-                     type: str
-                     choices:
-                     - cli
-                     - system
-                     required: true
-                  sudo:
-                     description: Specifies whether or not diag users will be automatically
-                        added to the sudoers list. Default is disabled.
-                     type: bool
-                     required: true
-      auto_config_recovery:
-         description: Waveserver system automatic configuration recovery for CP replacement
-            attributes.
-         type: dict
-         suboptions:
-            config_mismatch_detection_state:
-               description: Indicate whether config mismatch detection for CP replacement
-                  is enabled.
-               type: str
-               choices:
-               - disabled
-               - enabled
-               required: true
+              description: DNS client administrative state.
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: false
+            server:
+              description:
+                List of DNS servers to use for domain name resolution.
+                DNS servers can be manually created by the user, or dynamically
+                created by via DHCP. Waveserver supports up to 3 manually
+                provisioned DNS servers and up to 2 DHCP-assigned servers.
+              type: list
+              elements: dict
+              suboptions:
+                ip_address:
+                  description: IP address associated with the remote DNS
+                    server.
+                  type: str
+                  required: false
+                admin_state:
+                  description: DNS remote server administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                user_priority:
+                  description:
+                    User-assigned DNS server priority. Only applicable
+                    when server source is 'user' or 'both'. Ignored otherwise.
+                  type: int
+                  required: false
+    xftp_config:
+      description: Waveserver system XFTP configuration attributes.
+      type: dict
+      suboptions:
+        mode:
+          description:
+            Identifies which file transfer protocol to user when default-server
+            is specified in a command - FTP, SFTP, TFTP or SCP.
+          type: str
+          choices:
+            - none
+            - tftp
+            - ftp
+            - sftp
+            - scp
+          required: false
+        tftp:
+          description: Waveserver system TFTP configuration.
+          type: dict
+          suboptions:
+            config_host_name:
+              description: TFTP host name configured by user. Format is an
+                IP address (with optional port) or host name.
+              type: str
+              required: false
+        ftp:
+          description: Waveserver system FTP configuration.
+          type: dict
+          suboptions:
+            host_name:
+              description: FTP host name. Format is an IP address (with optional
+                port) or host name.
+              type: str
+              required: false
+            user_name:
+              description: FTP user name.
+              type: str
+              required: false
+            password:
+              description: FTP password string.
+              type: str
+              required: false
+            secret:
+              description: FTP secret string.
+              type: str
+              required: false
+        sftp:
+          description: Waveserver system SFTP configuration.
+          type: dict
+          suboptions:
+            host_name:
+              description:
+                SFTP host name. Format is an IP address (with optional
+                port) or host name.
+              type: str
+              required: false
+            user_name:
+              description: SFTP user name.
+              type: str
+              required: false
+            password:
+              description: SFTP password string.
+              type: str
+              required: false
+            secret:
+              description: SFTP secret string.
+              type: str
+              required: false
+        scp:
+          description: Waveserver system SCP configuration.
+          type: dict
+          suboptions:
+            host_name:
+              description: SCP host name. Format is an IP address (with optional
+                port) or host name.
+              type: str
+              required: false
+            user_name:
+              description: SCP user name.
+              type: str
+              required: false
+            password:
+              description: SCP password string.
+              type: str
+              required: false
+            secret:
+              description: SCP secret string.
+              type: str
+              required: false
+    global_provisioning:
+      description: Waveserver system global provisioning attributes.
+      type: dict
+      suboptions:
+        line_config:
+          description: Waveserver system line configuration.
+          type: dict
+          suboptions:
+            line_protection:
+              description: Line protection settings. If line protection is
+                enabled, this means that the photonic line the Waveserver
+                is connected to has protection enabled. In the event of a
+                line side fault, the protection card on the line side will
+                select the protection path and the modems will reacquire the
+                signal on the alternate path. While the switch is occuring,
+                link state messaging will be disabled to the clients so that
+                the connected devices do not attempt a switch or a restoration.
+              type: str
+              choices:
+                - unprotected
+                - trunk-ops
+              required: false
+    lamp_test:
+      description: Waveserver lamp test attributes.
+      type: dict
+      suboptions:
+        admin_state:
+          description: Enable or disable the system lamp test. The lamp-test
+            admin-state will be automatically disabled once the timeout period
+            has expired.
+          type: str
+          choices:
+            - disabled
+            - enabled
+          required: false
+        target_type:
+          description: Lamp testing target type. It can be chassis, slot, or
+            port. The default type is chassis. When the target-type is slot
+            or port, the slot/port identifier should also be set for the selected
+            target(s) to be tested.
+          type: str
+          choices:
+            - chassis
+            - slot
+            - port
+          required: false
+        target_id:
+          description: Lamp testing target ID string. Must be specified when
+            target-type is 'slot' or 'port'. When the target-type is 'slot'
+            the target-id should be a slot number (e.g. 1, 2, or 3). When the
+            target-type is 'port' the target-id should be a port-id (e.g. '1-1')
+            or comma-separated list of port-id's (e.g. '1-1,1-2,1-3').
+          type: str
+          required: false
+        timeout:
+          description:
+            The number of seconds the lamp flash testing will be operating
+            when enabled.
+          type: int
+          required: false
+    management:
+      description: Waveserver system management configuration attributes.
+      type: dict
+      suboptions:
+        query_limits:
+          description: Run time query limits for get operations on management
+            interfaces.
+          type: dict
+          suboptions:
+            netconf:
+              description: NETCONF protocol source type.
+              type: dict
+              suboptions:
+                pm_history_bins:
+                  description: Maximum query limit for PM history bins in
+                    NETCONF get responses.
+                  type: int
+                  required: false
+            rest:
+              description: REST protocol source type.
+              type: dict
+              suboptions:
+                pm_history_bins:
+                  description: Maximum query limit for PM history bins in
+                    REST get responses.
+                  type: int
+                  required: false
+            gnmi:
+              description: gNMI protocol source type.
+              type: dict
+              suboptions:
+                pm_history_bins:
+                  description: Maximum query limit for PM history bins in
+                    gNMI get responses.
+                  type: int
+                  required: false
+        root_scope:
+          description: Control for root-level get and replace operations for
+            management interfaces.
+          type: dict
+          suboptions:
+            netconf:
+              description: NETCONF protocol source type.
+              type: dict
+              suboptions:
+                get:
+                  description: Scope for NETCONF root-level get operations.
+                  type: str
+                  choices:
+                    - native
+                    - openconfig
+                    - all
+                  required: false
+                replace:
+                  description: Scope for NETCONF root-level replace operations.
+                  type: str
+                  choices:
+                    - native
+                    - openconfig
+                    - all
+                  required: false
+            rest:
+              description: REST protocol source type.
+              type: dict
+              suboptions:
+                get:
+                  description: Scope for REST root-level get operations.
+                  type: str
+                  choices:
+                    - native
+                    - openconfig
+                    - all
+                  required: false
+                replace:
+                  description: Scope for REST root-level replace operations.
+                  type: str
+                  choices:
+                    - native
+                    - openconfig
+                    - all
+                  required: false
+            gnmi:
+              description: gNMI protocol source type.
+              type: dict
+              suboptions:
+                get:
+                  description: Scope for gNMI root-level get operations.
+                  type: str
+                  choices:
+                    - native
+                    - openconfig
+                    - all
+                  required: false
+                replace:
+                  description: Scope for gNMI root-level replace operations.
+                  type: str
+                  choices:
+                    - native
+                    - openconfig
+                    - all
+                  required: false
+    environment:
+      description: Waveserver system linux environment attributes.
+      type: dict
+      suboptions:
+        root:
+          description: Waveserver system user root configuration.
+          type: dict
+          suboptions:
+            password:
+              description: User root password string.
+              type: str
+              required: false
+            secret:
+              description: The encrypted user password string, supplied as
+                a hashed value.
+              type: str
+              required: false
+        diag:
+          description: System level default environment configuration for diag
+            level users.
+          type: dict
+          suboptions:
+            shell:
+              description: The default shell session type for authenticated
+                diag users.
+              type: str
+              choices:
+                - cli
+                - system
+              required: false
+            sudo:
+              description:
+                Specifies whether or not diag users will be automatically
+                added to the sudoers list. Default is disabled.
+              type: bool
+              required: false
+    auto_config_recovery:
+      description:
+        Waveserver system automatic configuration recovery for CP replacement
+        attributes.
+      type: dict
+      suboptions:
+        config_mismatch_detection_state:
+          description:
+            Indicate whether config mismatch detection for CP replacement
+            is enabled.
+          type: str
+          choices:
+            - disabled
+            - enabled
+          required: false
+        admin_state:
+          description: Indicate whether auto config recovery is enabled.
+          type: str
+          choices:
+            - disabled
+            - enabled
+          required: false
+        passphrase:
+          description: "Passphrase used for backup encryption (Default: none,
+            use builtin key)."
+          type: str
+          required: false
+        audit_interval:
+          description: Audit Interval in minutes.
+          type: int
+          required: false
+    ssl:
+      description: Waveserver SSL security configuration and operational data.
+      type: dict
+      suboptions:
+        tls_cipher_suite_algorithms:
+          description:
+            List of transport layer security(TLS) cipher suite algorithms.
+            The algorithm names are system assigned.
+          type: list
+          elements: dict
+          suboptions:
+            algorithm_name:
+              description: The TLS cipher suite algorithm name.
+              type: str
+              required: false
             admin_state:
-               description: Indicate whether auto config recovery is enabled.
-               type: str
-               choices:
-               - disabled
-               - enabled
-               required: true
-            passphrase:
-               description: 'Passphrase used for backup encryption (Default: none,
-                  use builtin key).'
-               type: str
-               required: true
-            audit_interval:
-               description: Audit Interval in minutes.
-               type: int
-               required: true
-      ssl:
-         description: Waveserver SSL security configuration and operational data.
-         type: dict
-         suboptions:
-            tls_cipher_suite_algorithms:
-               description: List of transport layer security(TLS) cipher suite algorithms.
-                  The algorithm names are system assigned.
-               type: list
-               elements: dict
-               suboptions:
-                  algorithm_name:
-                     description: The TLS cipher suite algorithm name.
-                     type: str
-                     required: true
-                  admin_state:
-                     description: TLS cipher suite algorithm administrative state.
-                     type: str
-                     choices:
-                     - disabled
-                     - enabled
-                     required: true
-      shell:
-         description: Waveserver system CLI shell/session attributes.
-         type: dict
-         suboptions:
-            more:
-               description: Global CLI/shell session pagination (more) behavior.
-               type: str
-               choices:
-               - disabled
-               - enabled
-               required: true
-            more_lines:
-               description: Global CLI/shell session pagination (more) number of lines
-                  per page.
-               type: int
-               required: true
-            login_authentication_message:
-               description: Toggles the authentication message for CLI/shell session
-                  logins.
-               type: str
-               choices:
-               - disabled
-               - enabled
-               required: true
-            login_banner_file:
-               description: Local file name containing the banner text to be displayed
-                  prior to CLI/shell session logins.
-               type: str
-               required: true
-            welcome_banner_file:
-               description: Local file name containing the welcome banner text to
-                  be displayed upon successful CLI/shell session logins.
-               type: str
-               required: true
-      default_settings:
-         description: Waveserver system default configuration values.
-         type: dict
-         suboptions:
-            conditioning:
-               description: Waveserver system default conditioning values. Ports are
-                  created with these values. When the system defaults are set, all
-                  existing ports have their values updated.
-               type: dict
-               suboptions:
-                  type:
-                     description: Egress UNI port consequent action for an EPL service
-                        to be applied on a far-end ingress UNI failure or network
-                        failure.
-                     type: str
-                     choices:
-                     - none
-                     - laser-off
-                     - ethernet
-                     - otn
-                     - protocol-specific
-                     required: true
-                  holdoff:
-                     description: Number of milliseconds the failure must be present
-                        before applying Egress UNI port consequent action for an EPL
-                        service.
-                     type: int
-                     required: true
-            terrestrial_reach_limit:
-               description: The maximum reach allowed in km. The possible values are
-                  [250, 500, 1000, 2000, 2100, 3000, 4000, 5000, 8000] for terrestrial
-                  modem class. [0] if the value is unknown/unavailable or inapplicable.
-               type: int
-               required: true
+              description: TLS cipher suite algorithm administrative state.
+              type: str
+              choices:
+                - disabled
+                - enabled
+              required: false
+    shell:
+      description: Waveserver system CLI shell/session attributes.
+      type: dict
+      suboptions:
+        more:
+          description: Global CLI/shell session pagination (more) behavior.
+          type: str
+          choices:
+            - disabled
+            - enabled
+          required: false
+        more_lines:
+          description:
+            Global CLI/shell session pagination (more) number of lines
+            per page.
+          type: int
+          required: false
+        login_authentication_message:
+          description: Toggles the authentication message for CLI/shell session
+            logins.
+          type: str
+          choices:
+            - disabled
+            - enabled
+          required: false
+        login_banner_file:
+          description:
+            Local file name containing the banner text to be displayed
+            prior to CLI/shell session logins.
+          type: str
+          required: false
+        welcome_banner_file:
+          description: Local file name containing the welcome banner text to
+            be displayed upon successful CLI/shell session logins.
+          type: str
+          required: false
+    default_settings:
+      description: Waveserver system default configuration values.
+      type: dict
+      suboptions:
+        conditioning:
+          description: Waveserver system default conditioning values. Ports are
+            created with these values. When the system defaults are set, all
+            existing ports have their values updated.
+          type: dict
+          suboptions:
+            type:
+              description: Egress UNI port consequent action for an EPL service
+                to be applied on a far-end ingress UNI failure or network
+                failure.
+              type: str
+              choices:
+                - none
+                - laser-off
+                - ethernet
+                - otn
+                - protocol-specific
+              required: false
+            holdoff:
+              description: Number of milliseconds the failure must be present
+                before applying Egress UNI port consequent action for an EPL
+                service.
+              type: int
+              required: false
+        terrestrial_reach_limit:
+          description: The maximum reach allowed in km. The possible values are
+            [250, 500, 1000, 2000, 2100, 3000, 4000, 5000, 8000] for terrestrial
+            modem class. [0] if the value is unknown/unavailable or inapplicable.
+          type: int
+          required: false

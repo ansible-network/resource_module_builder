@@ -12,7 +12,7 @@ waveserver_snmp:
                choices:
                - disabled
                - enabled
-               required: true
+               required: false
             standard_link_traps_admin_state:
                description: Specifies whether standard link up/down trap notifications
                   are enabled or disabled.
@@ -20,20 +20,20 @@ waveserver_snmp:
                choices:
                - disabled
                - enabled
-               required: true
+               required: false
             contact:
                description: SNMP system contact string.
                type: str
-               required: true
+               required: false
             location:
                description: SNMP system location string.
                type: str
-               required: true
+               required: false
             local_port:
                description: UDP port number on which snmp agent listens. Default is
                   161.
                type: int
-               required: true
+               required: false
       target:
          description: List of target transport addresses (e.g. trap destinations)
             to be used in the generation of SNMP messages.
@@ -44,7 +44,7 @@ waveserver_snmp:
                description: SNMP trap target name. Uniquely identifies the target
                   entry in the list.
                type: str
-               required: true
+               required: false
             address:
                description: The SNMP target transport address, as an IPv4 address
                   with optional prefix length, or hostname format.
@@ -62,12 +62,12 @@ waveserver_snmp:
                description: Tag value used to select one or more target address entries
                   for a particular operation.
                type: str
-               required: true
+               required: false
             port:
                description: UDP port number associated with the target entry. Default
                   is 162.
                type: int
-               required: true
+               required: false
             transport_domain:
                description: Indicates the transport type of the address contained
                   in this SNMP target entry. Default is 'snmp-udp'.
@@ -76,19 +76,19 @@ waveserver_snmp:
                - snmp-udp
                - v4-udp
                - v6-udp
-               required: true
+               required: false
             timeout:
                description: The expected maximum round trip time for communicating
                   with this target transport address, expressed in hundredths of a
                   second.
                type: int
-               required: true
+               required: false
             retry_count:
                description: The default number of retries to be attempted when a response
                   is not received for a generate message to this target transport
                   address.
                type: int
-               required: true
+               required: false
       target_params:
          description: List of objects containing one ore more SNMP parameters which
             can be associated with an SNMP transport target.
@@ -99,7 +99,7 @@ waveserver_snmp:
                description: An arbitrary name which uniquely identifies this target-params
                   entry in the list.
                type: str
-               required: true
+               required: false
             security_name:
                description: SNMP security name, represented as a string.
                type: str
@@ -112,7 +112,7 @@ waveserver_snmp:
                - v1
                - v2c
                - usm
-               required: true
+               required: false
             security_level:
                description: The security level associated with this target-params
                   entry. Default is no-auth-no-priv.
@@ -121,7 +121,7 @@ waveserver_snmp:
                - no-auth-no-priv
                - auth-no-priv
                - auth-priv
-               required: true
+               required: false
       community:
          description: List of community entries for SNMP v1 and v2c security.
          type: list
@@ -130,7 +130,7 @@ waveserver_snmp:
             index:
                description: Index into the community list.
                type: str
-               required: true
+               required: false
             community_name:
                description: SNMP community name, represented as a string.
                type: str
@@ -143,12 +143,12 @@ waveserver_snmp:
                description: Used to limit access for this community to the specified
                   target(s).
                type: str
-               required: true
+               required: false
             context_name:
                description: The context in which management information is accessed
                   when using the community string specified by this entry.
                type: str
-               required: true
+               required: false
       user:
          description: List of SNMPv3 user profiles. A double-keyed list that consists
             of a user name and an Engine Id value. The combination of user name and
@@ -160,12 +160,12 @@ waveserver_snmp:
                description: SNMP user name. Uniquely identifies the user entry in
                   the list.
                type: str
-               required: true
+               required: false
             engine_id:
                description: The SNMP user engine id, unique identifier, expressed
                   as a series of colon-separated hexadecimal octets.
                type: str
-               required: true
+               required: false
             auth_protocol:
                description: The SNMP user authentication protocol.
                type: str
@@ -180,13 +180,13 @@ waveserver_snmp:
                   nor returned on user retrieval. The password will be encrypted via
                   one-way hash function and stored only in its encrypted format.
                type: str
-               required: true
+               required: false
             auth_secret:
                description: The encrypted user authentication protocol password string,
                   supplied as a hashed value. This should only be configured at user
                   creation time, and will be ignored if the user account already exists.
                type: str
-               required: true
+               required: false
             priv_protocol:
                description: The SNMP user privacy protocol.
                type: str
@@ -195,20 +195,20 @@ waveserver_snmp:
                - des
                - 3des
                - aes-128
-               required: true
+               required: false
             priv_password:
                description: The user privacy protocol password, supplied as cleartext.
                   This is a write-only attribute that should not be stored nor returned
                   on user retrieval. The password will be encrypted via one-way hash
                   function and stored only in its encrypted format.
                type: str
-               required: true
+               required: false
             priv_secret:
                description: The encrypted user privacy protocol password string, supplied
                   as a hashed value. This should only be configured at user creation
                   time, and will be ignored if the user account already exists.
                type: str
-               required: true
+               required: false
       viewtree:
          description: List of view tree definitions. A double-keyed list that consists
             of a view tree name and sub-tree OID string value. The combination of
@@ -228,17 +228,17 @@ waveserver_snmp:
                description: SNMP viewtree name. Identifies the viewtree entries in
                   the list that belong to the same viewtree family.
                type: str
-               required: true
+               required: false
             sub_tree:
                description: SNMP Sub-tree definition, OID format, Ex:1.3.6.1.4.1.1271.35,
                   and predefined system defaults snmpResearch and iso.
                type: str
-               required: true
+               required: false
             mask:
                description: Sub-tree mask or family mask, a colon-separated octet
                   string.
                type: str
-               required: true
+               required: false
       security_to_group:
          description: List of security-to-group entries. A double-keyed list of entries
             identified by security criteria (name and model) which can be assigned
@@ -252,7 +252,7 @@ waveserver_snmp:
                description: User name string (SNMPv3) or community string (SNMPv1,
                   SNMPv2) associated with the security group.
                type: str
-               required: true
+               required: false
             sec_model:
                description: The security model associated with this security-to-group
                   entry.
@@ -261,7 +261,7 @@ waveserver_snmp:
                - v1
                - v2c
                - usm
-               required: true
+               required: false
             group:
                description: A user-assigned access entry group name identifying a
                   group of users with similar access control permissions, notification
@@ -282,7 +282,7 @@ waveserver_snmp:
                description: Entry name. Uniquely identifies the access entry/group
                   in the list.
                type: str
-               required: true
+               required: false
             sec_model:
                description: The security model associated with this access entry.
                type: str
@@ -307,11 +307,11 @@ waveserver_snmp:
             write_view:
                description: Write view type, optional.
                type: str
-               required: true
+               required: false
             notify_view:
                description: Notify view type, optional.
                type: str
-               required: true
+               required: false
       notify:
          description: List of notification target entries. Used to select management
             targets which should receive notifications, as well as the type of notification
@@ -323,7 +323,7 @@ waveserver_snmp:
                description: Notify name. Uniquely identifies the notify entry in the
                   list.
                type: str
-               required: true
+               required: false
             notify_tag:
                description: Notify tag name. Contains a single tag value which is
                   used to select entries in the target list (target address table).
@@ -339,4 +339,4 @@ waveserver_snmp:
                choices:
                - trap
                - inform
-               required: true
+               required: false
