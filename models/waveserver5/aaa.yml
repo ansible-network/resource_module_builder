@@ -77,12 +77,14 @@ waveserver_aaa:
                   retrieved via the 'secret' attribute.
                type: str
                required: false
+               no_log: true
             secret:
                description: The encrypted user password string, supplied as a hashed
                   value. This should only be configured at user creation time, and
                   will be ignored if the user account already exists.
                type: str
                required: false
+               no_log: true
             access_level:
                description: The access-level or role assigned to the local user.
                type: str
@@ -199,6 +201,7 @@ waveserver_aaa:
                         string will clear the shared secret value.
                      type: str
                      required: false
+                     no_log: true
             server:
                description: Global list of TACACS+ servers to use for AAA functions.
                type: list
@@ -243,6 +246,7 @@ waveserver_aaa:
                         string will clear the shared secret value.
                      type: str
                      required: false
+                     no_log: true
             authentication_server:
                description: List of TACACS+ authentication servers to use for AAA
                   functions.
@@ -288,6 +292,7 @@ waveserver_aaa:
                         string will clear the shared secret value.
                      type: str
                      required: false
+                     no_log: true
             authorization_server:
                description: List of TACACS+ authorization servers to use for AAA functions.
                type: list
@@ -332,6 +337,7 @@ waveserver_aaa:
                         string will clear the shared secret value.
                      type: str
                      required: false
+                     no_log: true
             accounting_server:
                description: List of TACACS+ accounting servers to use for AAA functions.
                type: list
@@ -376,6 +382,7 @@ waveserver_aaa:
                         string will clear the shared secret value.
                      type: str
                      required: false
+                     no_log: true
       radius:
          description: Top-level RADIUS container.
          type: dict
@@ -417,6 +424,7 @@ waveserver_aaa:
                         string will clear the shared secret value.
                      type: str
                      required: false
+                     no_log: true
                   retries:
                      description: The number of retries. Default is 3.
                      type: int

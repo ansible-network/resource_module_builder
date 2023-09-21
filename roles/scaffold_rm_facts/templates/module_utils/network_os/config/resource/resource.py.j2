@@ -16,10 +16,11 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 try:
-    from lxml import etree
-
+    from lxml.etree import tostring as xml_to_string, fromstring, Element
     HAS_LXML = True
 except ImportError:
+    from xml.etree.ElementTree import Element
+    from xml.etree.ElementTree import tostring as xml_to_string, fromstring
     HAS_LXML = False
 
 
@@ -74,9 +75,6 @@ class {{ resource|capitalize }}(ConfigBase):
 
         if config_dict:
             config_xml = self._create_xml_config_generic(config_dict)
-            if not self.validate_xml(config_xml):
-                raise ValueError("Generated XML is not valid.")
-
             kwargs = {"config": f"<config>{config_xml}</config>", "target": "running"}
             try:
                 self._module._connection.edit_config(**kwargs)
@@ -116,20 +114,20 @@ class {{ resource|capitalize }}(ConfigBase):
         config_dict = state_methods[state](want, have) if state in self.ACTION_STATES else {}
         return config_dict
 
-    def _populate_xml_subtree(self, parent: etree.Element, data: dict):
+    def _populate_xml_subtree(self, parent: Element, data: dict):
         for key, value in data.items():
             sanitized_key = key.replace("_", "-")
             if isinstance(value, dict):
-                subelem = etree.Element(sanitized_key)
+                subelem = Element(sanitized_key)
                 self._populate_xml_subtree(subelem, value)
                 parent.append(subelem)
             elif isinstance(value, list):
                 for list_item in value:
-                    subelem = etree.Element(sanitized_key)
+                    subelem = Element(sanitized_key)
                     self._populate_xml_subtree(subelem, list_item)
                     parent.append(subelem)
             else:
-                subelem = etree.Element(sanitized_key)
+                subelem = Element(sanitized_key)
                 subelem.text = str(value)
                 if value is not None:
                     parent.append(subelem)
@@ -143,21 +141,21 @@ class {{ resource|capitalize }}(ConfigBase):
             raise TypeError(f"Expected a dictionary or a list, got a {type(config_dict_or_list)}")
 
     def _init_xml_root(self):
-        return etree.Element("{{ '{%s}%s' }}" % (NAMESPACE, ROOT_KEY), nsmap={None: NAMESPACE})
+        return Element("{{ '{%s}%s' }}" % (NAMESPACE, ROOT_KEY), nsmap={None: NAMESPACE})
     def create_xml_config_from_dict(self, config_dict: dict) -> str:
         root = self._init_xml_root()
         self._populate_xml_subtree(root, config_dict)
-        return etree.tostring(root).decode()
+        return xml_to_string(root).decode()
 
     def create_xml_config_from_list(self, config_list: list) -> str:
         root = self._init_xml_root()
         for list_item in config_list:
             if not isinstance(list_item, dict):
                 raise ValueError("List items must be dictionaries.")
-            subroot = etree.Element(XML_ITEMS)
+            subroot = Element(XML_ITEMS)
             self._populate_xml_subtree(subroot, list_item)
             root.append(subroot)
-        return etree.tostring(root).decode()
+        return xml_to_string(root).decode()
 
     def _state_merged(self, want, have):
         if isinstance(want, list):
@@ -182,10 +180,3 @@ class {{ resource|capitalize }}(ConfigBase):
                 continue
             response.append(w_item)
         return response
-
-    def validate_xml(self, xml_str) -> bool:
-        try:
-            etree.fromstring(xml_str.encode())
-        except etree.XMLSyntaxError:
-            return False
-        return True
