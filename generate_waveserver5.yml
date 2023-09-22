@@ -1,4 +1,5 @@
 ---
+# ansible-playbook generate_waveserver5.yml -e modules=system
 - hosts: localhost
   vars:
     ansible_collection_root: /home/{{ansible_user_id}}/src/ansible_collections

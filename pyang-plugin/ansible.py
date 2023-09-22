@@ -193,7 +193,6 @@ class AnsiblePlugin(plugin.PyangPlugin):
         fd.write(yaml_data)
 
     def yang_to_dict(self, yang_module, path):
-        sensitive_keys = {"key_exchange", "key_value", "ntp_key", "passphrase", "password", "secret"}
         data = {}
         for child in yang_module.i_children:
             logging.warning(child)
@@ -202,7 +201,6 @@ class AnsiblePlugin(plugin.PyangPlugin):
                 logging.warning(f"Skipping deprecated leaf: {child.arg}")
                 continue  # Skip this leaf but continue processing siblings
             key_name = child.arg.replace("-", "_")
-            is_sensitive = key_name in sensitive_keys
             if child.keyword in ["leaf", "leaf-list"]:
                 if child.i_config:
                     ansible_type = self.yang_type_to_ansible_type(child)
@@ -220,8 +218,6 @@ class AnsiblePlugin(plugin.PyangPlugin):
                         for key, value in ansible_type.items():
                             if key != "type":
                                 data[key_name][key] = value
-                if is_sensitive:
-                    data[key_name]['no_log'] = True
 
             elif child.keyword in ["container", "list"]:
                 if child.i_config:

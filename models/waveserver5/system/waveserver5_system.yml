@@ -18,7 +18,7 @@ XML_ITEMS: N/A
 
 DOCUMENTATION: |
   module: waveserver5_system
-  version_added: 0.0.1
+  version_added: 1.0.0
   short_description: Waveserver System configuration data and operational data.
   description: Waveserver System configuration data and operational data.
   author:
@@ -563,7 +563,6 @@ DOCUMENTATION: |
                       description: NTP authentication key value.
                       type: str
                       required: false
-                      no_log: true
                 server:
                   description: List of NTP servers to use for time synchronization.
                   type: list
@@ -679,12 +678,10 @@ DOCUMENTATION: |
                   description: FTP password string.
                   type: str
                   required: false
-                  no_log: true
                 secret:
                   description: FTP secret string.
                   type: str
                   required: false
-                  no_log: true
             sftp:
               description: Waveserver system SFTP configuration.
               type: dict
@@ -702,12 +699,10 @@ DOCUMENTATION: |
                   description: SFTP password string.
                   type: str
                   required: false
-                  no_log: true
                 secret:
                   description: SFTP secret string.
                   type: str
                   required: false
-                  no_log: true
             scp:
               description: Waveserver system SCP configuration.
               type: dict
@@ -725,12 +720,10 @@ DOCUMENTATION: |
                   description: SCP password string.
                   type: str
                   required: false
-                  no_log: true
                 secret:
                   description: SCP secret string.
                   type: str
                   required: false
-                  no_log: true
         global_provisioning:
           description: Waveserver system global provisioning attributes.
           type: dict
@@ -900,13 +893,11 @@ DOCUMENTATION: |
                   description: User root password string.
                   type: str
                   required: false
-                  no_log: true
                 secret:
                   description: The encrypted user password string, supplied as a hashed
                     value.
                   type: str
                   required: false
-                  no_log: true
             diag:
               description: System level default environment configuration for diag level
                 users.
@@ -950,7 +941,6 @@ DOCUMENTATION: |
                 builtin key).'
               type: str
               required: false
-              no_log: true
             audit_interval:
               description: Audit Interval in minutes.
               type: int

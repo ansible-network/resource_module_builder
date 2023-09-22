@@ -8,6 +8,7 @@ __metaclass__ = type  # pylint: disable=C0103
 import pprint
 import yaml
 import json
+import re
 
 from ansible.module_utils.six import iteritems
 from ansible.module_utils.six import string_types
@@ -17,6 +18,7 @@ from ansible.errors import AnsibleFilterError
 OPTIONS_METADATA = ('type', 'elements', 'default', 'choices', 'required')
 SUBOPTIONS_METADATA = ('mutually_exclusive', 'required_together',
                        'required_one_of', 'supports_check_mode', 'required_if')
+SENSITIVE_KEYS = ["key_exchange", "key_value", "ntp_key", "passphrase", "password", "secret"]
 
 display = Display()
 
@@ -33,6 +35,8 @@ def dive(obj, result):
     for k, val in iteritems(obj):
         result[k] = dict()
         retrieve_metadata(val, result[k])
+        if k in SENSITIVE_KEYS:
+            result[k]['no_log'] = True
         suboptions = val.get('suboptions')
         if suboptions:
             for item in SUBOPTIONS_METADATA:
@@ -55,7 +59,8 @@ def to_argspec(spec):
     dive(doc['options'], result)
 
     result = json.dumps(result, indent=1)
-    result = result.replace('"required": true', '"required": True')
+    result = re.sub(r'":\s*true', '": True', result)
+    result = re.sub(r'":\s*false', '": False', result)
     # result = pprint.pformat(result, indent=1)
     display.debug("Arguments: %s" % result)
     return result
