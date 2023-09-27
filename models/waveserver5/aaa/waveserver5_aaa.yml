@@ -1,0 +1,596 @@
+---
+GENERATOR_VERSION: "1.0"
+
+ANSIBLE_METADATA: |
+  {
+    'metadata_version': '1.1',
+    'status': ['preview'],
+    'supported_by': 'network'
+  }
+
+NETWORK_OS: waveserver5
+RESOURCE: aaa
+COPYRIGHT: Copyright 2023 Ciena
+XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-waveserver-aaa"
+XML_ROOT_KEY: waveserver-aaa
+# Promoted list
+XML_ITEMS: N/A
+
+DOCUMENTATION: |
+  module: waveserver5_aaa
+  version_added: 1.1.0
+  short_description: Waveserver AAA configuration data and operational data.
+  description: Waveserver AAA configuration data and operational data.
+  author:
+    - Jeff Groom (@jgroom33)
+    - Galo Ertola (@perrary)
+  requirements:
+    - ncclient (>=v0.6.4)
+    - xmltodict (>=0.12.0)
+  options:
+    config:
+      description: Waveserver AAA configuration and operational data. Defines authentication,
+        authorization and accounting services.
+      type: dict
+      suboptions:
+        authentication:
+          description: Global authentication configuration.
+          type: dict
+          suboptions:
+            authentication_method:
+              description: Ordered list of authentication methods for user login attempts,
+                indexed by priority. If an authentication attempt fails using the first
+                method, the next defined method will be attempted, until all specified
+                authentication methods have been tried, at which point the user will
+                be denied access. By default, this list will have a single entry with
+                type 'local'.
+              type: list
+              elements: dict
+              suboptions:
+                type:
+                  description: The authentication method / provider type. Must be unique
+                    within the list.
+                  type: str
+                  choices:
+                    - local
+                    - radius
+                    - tacacs
+                    - radsec
+                  required: true
+                priority:
+                  description: Authentication priority, indicating the order in which
+                    each of the authentication providers will be consulted.
+                  type: int
+                  required: false
+                scope:
+                  description: Scope of the authentication method.
+                  type: str
+                  choices:
+                    - all
+                    - serial
+                    - remote
+                  required: false
+        user_management:
+          description: User management.
+          type: dict
+          suboptions:
+            min_password_length:
+              description: Minimum length of the user password.
+              type: int
+              required: false
+            max_login_attempt:
+              description: Maximum number of consecutive unsuccessful login attempts
+                allowed before a user account is locked out. Applies only to local user
+                accounts. System default is 5.
+              type: int
+              required: false
+            lockout_interval:
+              description: User lockout time interval, in minutes. Applies only to local
+                user accounts. System default is 10 min.
+              type: int
+              required: false
+        user:
+          description: List of local user accounts used for local authentication.
+          type: list
+          elements: dict
+          suboptions:
+            user_name:
+              description: The configured username for this local user. Must be unique
+                across the list of configured local users.
+              type: str
+              required: false
+            password:
+              description: The user password, supplied as cleartext. This is a write-only
+                attribute that should not be stored nor returned on user retrieval.
+                The password will be encrypted via one-way hash function and stored
+                only in its encrypted format. The hashed password string can be retrieved
+                via the 'secret' attribute.
+              type: str
+              required: false
+            secret:
+              description: The encrypted user password string, supplied as a hashed
+                value. This should only be configured at user creation time, and will
+                be ignored if the user account already exists.
+              type: str
+              required: false
+            access_level:
+              description: The access-level or role assigned to the local user.
+              type: str
+              choices:
+                - limited
+                - admin
+                - super
+                - diag
+              required: true
+        tacacs:
+          description: Top-level TACACS+ container.
+          type: dict
+          suboptions:
+            global_config:
+              description: Global TACACS+ configuration attributes.
+              type: dict
+              suboptions:
+                admin_state:
+                  description: TACACS+ administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                authentication_admin_state:
+                  description: TACACS+ authentication administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                authorization_admin_state:
+                  description: TACACS+ authorization administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                accounting_admin_state:
+                  description: TACACS+ accounting administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                accounting_command_enabled:
+                  description: Specifies whether TACACS+ command accounting is enabled.
+                  type: bool
+                  required: false
+                accounting_session_enabled:
+                  description: Specifies whether TACACS+ session accounting is enabled.
+                  type: bool
+                  required: false
+                syslog_admin_state:
+                  description: TACACS+ syslog administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                global_servers:
+                  description: Specifies whether the TACACS+ global servers list is
+                    enabled for all AAA functions.
+                  type: str
+                  choices:
+                    - "off"
+                    - "on"
+                  required: false
+                search_method:
+                  description: 'set the search method for TACACS+ servers (Default:
+                    priority)'
+                  type: str
+                  choices:
+                    - priority
+                    - cached
+                  required: false
+                privilege_level_admin:
+                  description: 'value for read-write privilege level (Default: 2).'
+                  type: int
+                  required: false
+                privilege_level_super:
+                  description: 'value for read-write-create privilege level (Default:
+                    10)'
+                  type: int
+                  required: false
+                privilege_level_diag:
+                  description: 'value for diagnostic privilege level (Default: 15).'
+                  type: int
+                  required: false
+                timeout:
+                  description: Global timeout period in seconds on responses from a
+                    TACACS+ server.
+                  type: int
+                  required: false
+                key:
+                  description: The non-encrypted key that can be configured to generate
+                    a shared secret between the authentication server and the device.
+                    This string is clear-text and will not be retrievable nor stored
+                    directly on the device. Specifying a zero-length string will clear
+                    the key value.
+                  type: str
+                  required: false
+                key_min_length:
+                  description: The minimum secret key length in bytes.
+                  type: int
+                  required: false
+                secret:
+                  description: The encrypted shared secret key used between the authentication
+                    server and the device. Specifying a zero-length string will clear
+                    the shared secret value.
+                  type: str
+                  required: false
+            server:
+              description: Global list of TACACS+ servers to use for AAA functions.
+              type: list
+              elements: dict
+              suboptions:
+                address:
+                  description: Configured IP address or Domain Name of the remote server.
+                  type: str
+                  required: false
+                admin_state:
+                  description: Server administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                priority:
+                  description: Server priority.
+                  type: int
+                  required: true
+                tcp_port:
+                  description: TACACS+ server TCP Port. Default value is 49.
+                  type: int
+                  required: false
+                timeout:
+                  description: Global timeout period in seconds on responses from a
+                    TACACS+ server.
+                  type: int
+                  required: false
+                key:
+                  description: The non-encrypted key that can be configured to generate
+                    a shared secret between the authentication server and the device.
+                    This string is clear-text and will not be retrievable nor stored
+                    directly on the device. Specifying a zero-length string will clear
+                    the key value.
+                  type: str
+                  required: false
+                secret:
+                  description: The encrypted shared secret key used between the authentication
+                    server and the device. Specifying a zero-length string will clear
+                    the shared secret value.
+                  type: str
+                  required: false
+            authentication_server:
+              description: List of TACACS+ authentication servers to use for AAA functions.
+              type: list
+              elements: dict
+              suboptions:
+                address:
+                  description: Configured IP address or Domain Name of the remote server.
+                  type: str
+                  required: false
+                admin_state:
+                  description: Server administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                priority:
+                  description: Server priority.
+                  type: int
+                  required: true
+                tcp_port:
+                  description: TACACS+ server TCP Port. Default value is 49.
+                  type: int
+                  required: false
+                timeout:
+                  description: Global timeout period in seconds on responses from a
+                    TACACS+ server.
+                  type: int
+                  required: false
+                key:
+                  description: The non-encrypted key that can be configured to generate
+                    a shared secret between the authentication server and the device.
+                    This string is clear-text and will not be retrievable nor stored
+                    directly on the device. Specifying a zero-length string will clear
+                    the key value.
+                  type: str
+                  required: false
+                secret:
+                  description: The encrypted shared secret key used between the authentication
+                    server and the device. Specifying a zero-length string will clear
+                    the shared secret value.
+                  type: str
+                  required: false
+            authorization_server:
+              description: List of TACACS+ authorization servers to use for AAA functions.
+              type: list
+              elements: dict
+              suboptions:
+                address:
+                  description: Configured IP address or Domain Name of the remote server.
+                  type: str
+                  required: false
+                admin_state:
+                  description: Server administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                priority:
+                  description: Server priority.
+                  type: int
+                  required: true
+                tcp_port:
+                  description: TACACS+ server TCP Port. Default value is 49.
+                  type: int
+                  required: false
+                timeout:
+                  description: Global timeout period in seconds on responses from a
+                    TACACS+ server.
+                  type: int
+                  required: false
+                key:
+                  description: The non-encrypted key that can be configured to generate
+                    a shared secret between the authentication server and the device.
+                    This string is clear-text and will not be retrievable nor stored
+                    directly on the device. Specifying a zero-length string will clear
+                    the key value.
+                  type: str
+                  required: false
+                secret:
+                  description: The encrypted shared secret key used between the authentication
+                    server and the device. Specifying a zero-length string will clear
+                    the shared secret value.
+                  type: str
+                  required: false
+            accounting_server:
+              description: List of TACACS+ accounting servers to use for AAA functions.
+              type: list
+              elements: dict
+              suboptions:
+                address:
+                  description: Configured IP address or Domain Name of the remote server.
+                  type: str
+                  required: false
+                admin_state:
+                  description: Server administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                priority:
+                  description: Server priority.
+                  type: int
+                  required: true
+                tcp_port:
+                  description: TACACS+ server TCP Port. Default value is 49.
+                  type: int
+                  required: false
+                timeout:
+                  description: Global timeout period in seconds on responses from a
+                    TACACS+ server.
+                  type: int
+                  required: false
+                key:
+                  description: The non-encrypted key that can be configured to generate
+                    a shared secret between the authentication server and the device.
+                    This string is clear-text and will not be retrievable nor stored
+                    directly on the device. Specifying a zero-length string will clear
+                    the key value.
+                  type: str
+                  required: false
+                secret:
+                  description: The encrypted shared secret key used between the authentication
+                    server and the device. Specifying a zero-length string will clear
+                    the shared secret value.
+                  type: str
+                  required: false
+        radius:
+          description: Top-level RADIUS container.
+          type: dict
+          suboptions:
+            global_config:
+              description: Global RADIUS configuration attributes.
+              type: dict
+              suboptions:
+                admin_state:
+                  description: RADIUS administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                timeout:
+                  description: Global timeout period in seconds on responses from a
+                    RADIUS server.
+                  type: int
+                  required: false
+                search_method:
+                  description: 'RADIUS Search Method (Default: priority)'
+                  type: str
+                  choices:
+                    - priority
+                    - cached
+                  required: false
+                key:
+                  description: The non-encrypted key that can be configured to generate
+                    a shared secret between the authentication server and the device.
+                    This string is clear-text and will not be retrievable nor stored
+                    directly on the device. Specifying a zero-length string will clear
+                    the key value.
+                  type: str
+                  required: false
+                secret:
+                  description: The encrypted shared secret key used between the authentication
+                    server and the device. Specifying a zero-length string will clear
+                    the shared secret value.
+                  type: str
+                  required: false
+                retries:
+                  description: The number of retries. Default is 3.
+                  type: int
+                  required: false
+            server:
+              description: Global list of RADIUS servers to use for AAA functions.
+              type: list
+              elements: dict
+              suboptions:
+                address:
+                  description: Configured IP address or Domain Name of the remote server.
+                  type: str
+                  required: false
+                admin_state:
+                  description: Server administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                priority:
+                  description: Server priority.
+                  type: int
+                  required: true
+                udp_port:
+                  description: RADIUS server UDP Port. Default value is 1812.
+                  type: int
+                  required: false
+        radsec:
+          description: Top-level RADSec container.
+          type: dict
+          suboptions:
+            global_config:
+              description: Global RADSec configuration attributes.
+              type: dict
+              suboptions:
+                admin_state:
+                  description: RADSec administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                timeout:
+                  description: Global timeout period in seconds on responses from a
+                    RADSec server.
+                  type: int
+                  required: false
+                search_method:
+                  description: 'RADSec Search Method (Default: priority)'
+                  type: str
+                  choices:
+                    - priority
+                    - cached
+                  required: false
+                certificate_name:
+                  description: RADSec device certificate name.
+                  type: str
+                  required: false
+                check_ip_host:
+                  description: Check peer's specified ip or hostname against it's certificate.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                check_fingerprint:
+                  description: Check the fingerprint of the peer's certificate.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+            ocsp_config:
+              description: RADSec Online Certificate Status Protocol (OCSP) configuration
+                attributes.
+              type: dict
+              suboptions:
+                admin_state:
+                  description: Whether OCSP verification is enabled or disabled.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                responder_preference:
+                  description: If 'responder-preference' is set to aia, the OCSP responder
+                    referred in client certificate AIA extension will be used first
+                    during OCSP certificate validation. If it is set to 'default-responder',
+                    the configured default OCSP responder is used first.
+                  type: str
+                  choices:
+                    - aia
+                    - default-responder
+                  required: false
+                default_responder:
+                  description: Default OCSP responder. It should be in URL format. e.g.
+                    https://192.168.20.2:2440. If the 'responder-preference' is not
+                    set to 'default-responder', the URL given will be used only if no
+                    responder URL (AIA extension) is specified in the client certificate
+                    being verified.
+                  type: str
+                  required: false
+                nonce:
+                  description: Determine whether queries to OCSP responders should contain
+                    a nonce or not. By default nonce option is turned on.
+                  type: str
+                  choices:
+                    - "off"
+                    - "on"
+                  required: false
+            server:
+              description: Global list of RADSec servers to use for AAA functions.
+              type: list
+              elements: dict
+              suboptions:
+                address:
+                  description: Configured IP address or Domain Name of the remote server.
+                  type: str
+                  required: false
+                admin_state:
+                  description: Server administrative state.
+                  type: str
+                  choices:
+                    - disabled
+                    - enabled
+                  required: false
+                priority:
+                  description: Server priority.
+                  type: int
+                  required: true
+                port:
+                  description: RADSec server TCP Port. Default value is 2083.
+                  type: int
+                  required: false
+                trusted_dns:
+                  description: Trusted dns name used to check peer's certificate. The
+                    name should be fully qualified whenever possible, and can accept
+                    a leading wildcard period.
+                  type: str
+                  required: false
+                trusted_fingerprint:
+                  description: Trusted fingerprint for peer's certificate. The string
+                    should have length of 95, except when it is empty or 'Not Set'.
+                  type: str
+                  required: false
+
+requirements:
+  - ncclient (>=v0.6.4)
+notes:
+  - This module requires the netconf system service be enabled on the remote device
+    being managed.
+  - This module works with connection C(netconf)
+
+EXAMPLES:
+  - merged_example_01.txt

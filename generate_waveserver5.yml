@@ -9,6 +9,7 @@
       - ptps
       - ports
       - pm
+      - aaa
     overwrite: true
   tasks:
     - name: Remove directory
