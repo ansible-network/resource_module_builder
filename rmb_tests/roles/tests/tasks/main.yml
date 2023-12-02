@@ -1,4 +1,4 @@
-- include: "{{ item }}"
+- include_tasks: "{{ item }}"
   loop:
   - facts.yml
   - argspec.yml
