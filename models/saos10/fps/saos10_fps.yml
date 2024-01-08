@@ -11,8 +11,8 @@ ANSIBLE_METADATA: |
 NETWORK_OS: saos10
 RESOURCE: fps
 COPYRIGHT: Copyright 2021 Ciena
-XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-mef-classifier"
-XML_ROOT_KEY: waveserver-fps
+XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-pn::ciena-mef-fp"
+XML_ROOT_KEY: fps
 XML_ITEMS: fp
 
 DOCUMENTATION: |
@@ -20,7 +20,7 @@ DOCUMENTATION: |
   version_added: 1.5.0
   short_description: Manage flow points on Ciena SAOS 10 devices
   description: This module provides declarative management of a flow point
-  author: Ciena
+  author: Jeff Groom (@jgroom33)
   requirements:
     - ncclient (>=v0.6.4)
     - xmltodict (>=0.12.0)

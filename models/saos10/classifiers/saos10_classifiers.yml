@@ -11,8 +11,8 @@ ANSIBLE_METADATA: |
 NETWORK_OS: saos10
 RESOURCE: classifiers
 COPYRIGHT: Copyright 2021 Ciena
-XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-ws:ciena-mef-classifier"
-XML_ROOT_KEY: waveserver-classifiers
+XML_NAMESPACE: "urn:ciena:params:xml:ns:yang:ciena-pn::ciena-mef-classifier"
+XML_ROOT_KEY: classifiers
 XML_ITEMS: classifier
 
 DOCUMENTATION: |
