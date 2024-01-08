@@ -1,0 +1,79 @@
+classifiers:
+  description:
+    List of classifier templates. Classifiers can be referenced by various
+    entities (flow-point/access-flow/qos-flow etc.), to define their incoming classification.
+  type: dict
+  suboptions:
+    classifier:
+      description: List of classifier templates. Classifiers can be referenced
+        by various entities (flow-point/access-flow/qos-flow etc.) to define their
+        incoming classification.
+      type: list
+      elements: dict
+      suboptions:
+        name:
+          description: A unique name for the classifier.
+          type: str
+          required: false
+        filter_operation:
+          description: Choose the scope of application of the rule
+          type: str
+          choices:
+            - match-all
+            - match-any
+          required: false
+        filter_entry:
+          description: Add one filtering rule for this classifier.
+          type: list
+          elements: dict
+          suboptions:
+            filter_parameter:
+              description: Indicates which filter parameter is used by this
+                filter entry
+              type: str
+              choices:
+                - vtag-stack
+                - mpls-label-stack
+                - dscp
+                - source-ip
+                - destination-ip
+                - l4-source-port
+                - l4-destination-port
+                - ip-protocol
+                - base-etype
+                - any
+                - ip-fragment
+                - l4-application
+                - tcp-flags
+                - source-mac
+                - destination-mac
+                - local-termination
+                - icmp
+                - ip-version
+                - internal-cos
+
+              required: false
+            logical_not:
+              description:
+                Opposite of what is specified in the filter-parameters.
+                If the filter-parameter specifies a tpid as tpid-8100, then
+                anything other than tpid-8100 is considered an acceptable
+                packet.
+              type: bool
+              required: false
+            untagged-exclude-priority-tagged:
+              description: Untagged exclude priority tagged
+              type: bool
+            vtags:
+              description: List of VLAN tags
+              type: list
+              elements: dict
+              suboptions:
+                tag:
+                  description: 1 represents outer most tag, 2 next outer most, etc
+                  type: int
+                  required: True
+                vlan-id:
+                  description: A specific value of VLAN Tag VLAN-ID
+                  type: int
+                  required: True

@@ -13,3 +13,8 @@ pyang -f ansible ciena-waveserver-ptp.yang > ../../models/waveserver5/ptps.yml
 pyang -f ansible ciena-waveserver-pm.yang > ../../models/waveserver5/pm.yml
 pyang -f ansible ciena-waveserver-snmp.yang > ../../models/waveserver5/snmp.yml
 cd ../..
+cd yangs/saos10
+pyang -f ansible ciena-mef-classifier.yang > ../../models/saos10/classifier.yml
+pyang -f jsonschema ciena-mef-classifier.yang > ../../models/saos10/classifier.json
+pyang -f ansible ciena-mef-fd.yang > ../../models/saos10/fd.yml
+pyang -f ansible ciena-mef-fp.yang > ../../models/saos10/fp.yml

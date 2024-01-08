@@ -11,6 +11,7 @@ from pyang import plugin, error
 def pyang_plugin_init():
     plugin.register_plugin(AnsiblePlugin())
 
+
 def order_dict(d, ordered_keys):
     new_dict = {}
     for key in ordered_keys:
@@ -126,6 +127,12 @@ class AnsiblePlugin(plugin.PyangPlugin):
             logging.error(f"determined: {ansible_type}")
             return ansible_type
 
+        if yang_type == "identityref":
+            logging.error(f"({key_count}) identityref type found. Using `handle_identity`.")
+            ansible_type = self.handle_identity(type_node, child)
+            logging.error(f"determined: {ansible_type}")
+            return {"type": "str", "choices": ansible_type}
+
         if ":" in yang_type:
             namespace, custom_type = yang_type.split(":")
             root_module = child.i_module
@@ -183,6 +190,50 @@ class AnsiblePlugin(plugin.PyangPlugin):
 
         for module in modules:
             self.process_module(module, path, fd)
+
+    def handle_identity(self, type_node, child):
+        logging.error(f"Handling identityref for {child.arg}")
+        identity_list = self.get_identity_list(type_node, child)
+        logging.error(f"Identity list for {child.arg}: {identity_list}")
+        return identity_list
+
+    def get_identity_list(self, type_node, child):
+        # Get the type specification of the identityref
+        type_spec = type_node.i_type_spec
+
+        if not hasattr(type_spec, 'base'):
+            logging.error(f"No base identity found for {child.arg}")
+            return []
+
+        base_identity = type_spec.base
+        if not base_identity:
+            logging.error(f"Base identity for {child.arg} is None")
+            return []
+
+        # Collect all identities derived from the base identity
+        identities = self.collect_derived_identities(base_identity)
+
+        # Extract the names of the identities
+        identity_names = [identity.arg for identity in identities]
+
+        return identity_names
+
+    def collect_derived_identities(self, base_identity):
+        derived_identities = []
+
+        # Check if base_identity is not None
+        if base_identity and hasattr(base_identity, 'i_module') and base_identity.i_module:
+            for identity in base_identity.i_module.i_identities.values():
+                if self.is_derived_identity(identity, base_identity):
+                    derived_identities.append(identity)
+
+        return derived_identities
+    def is_derived_identity(self, identity, base_identity):
+        while identity:
+            if identity == base_identity:
+                return True
+            identity = identity.base
+        return False
 
     def process_module(self, module, path, fd):
         global key_count  # Declare counter as global to read
