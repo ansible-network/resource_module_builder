@@ -30,6 +30,9 @@ RESOURCE=xcvrs && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r model
 RESOURCE=ports && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions.$RESOURCE
 RESOURCE=ptps && python3 insert.py -i models/waveserver5/$RESOURCE.yml -r models/waveserver5/$RESOURCE/waveserver5_$RESOURCE.yml -k waveserver_$RESOURCE.suboptions.$RESOURCE
 
+RESOURCE=classifier && python3 insert.py -i models/saos10/$RESOURCE.yml -r models/saos10/$RESOURCE\s/saos10_$RESOURCE\s.yml -k saos10_$RESOURCE.suboptions.$RESOURCE
+RESOURCE=fd && python3 insert.py -i models/saos10/$RESOURCE.yml -r models/saos10/$RESOURCE\s/saos10_$RESOURCE\s.yml -k saos10_$RESOURCE.suboptions.$RESOURCE
+RESOURCE=fp && python3 insert.py -i models/saos10/$RESOURCE.yml -r models/saos10/$RESOURCE\s/saos10_$RESOURCE\s.yml -k saos10_$RESOURCE.suboptions.$RESOURCE
 
 # Generate the module code
 ansible-playbook generate_saos10.yml

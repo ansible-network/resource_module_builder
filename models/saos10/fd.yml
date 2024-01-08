@@ -1,4 +1,4 @@
-soas10_fds:
+saos10_fd:
   description:
     List of forwarding-domains. Forwarding domains are layer 2 forwarding
     domains to which various entities attach (flow-points, MPLS-PWs etc).

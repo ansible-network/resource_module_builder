@@ -1,4 +1,4 @@
-fps:
+saos10_fp:
   description: A List of flow-points.
   type: dict
   suboptions:
