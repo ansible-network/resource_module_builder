@@ -1,13 +1,13 @@
 saos10_classifier:
   description:
-    List of classifier templates. Classifiers can be referenced by various
-    entities (flow-point/access-flow/qos-flow etc.), to define their incoming classification.
+    List of classifier templates. Classifiers can be referenced by various entities (flow-point/access-flow/qos-flow etc.),
+    to define their incoming classification.
   type: dict
   suboptions:
     classifier:
-      description: List of classifier templates. Classifiers can be referenced
-        by various entities (flow-point/access-flow/qos-flow etc.) to define their
-        incoming classification.
+      description:
+        List of classifier templates. Classifiers can be referenced by various entities (flow-point/access-flow/qos-flow
+        etc.) to define their incoming classification.
       type: list
       elements: dict
       suboptions:
@@ -51,7 +51,6 @@ saos10_classifier:
                 - icmp
                 - ip-version
                 - internal-cos
-
               required: false
             logical_not:
               description:
@@ -61,7 +60,7 @@ saos10_classifier:
                 packet.
               type: bool
               required: false
-            untagged-exclude-priority-tagged:
+            untagged_exclude_priority_tagged:
               description: Untagged exclude priority tagged
               type: bool
             vtags:
@@ -73,7 +72,7 @@ saos10_classifier:
                   description: 1 represents outer most tag, 2 next outer most, etc
                   type: int
                   required: True
-                vlan-id:
+                vlan_id:
                   description: A specific value of VLAN Tag VLAN-ID
                   type: int
                   required: True

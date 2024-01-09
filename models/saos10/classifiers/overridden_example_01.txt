@@ -13,5 +13,5 @@
           - filter-parameter: vtag-stack
             vtags:
               - tag: 1
-                vlan-id: 100
+                vlan_id: 100
     state: overridden

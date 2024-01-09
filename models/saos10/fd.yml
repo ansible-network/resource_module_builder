@@ -1,7 +1,7 @@
 saos10_fd:
   description:
-    List of forwarding-domains. Forwarding domains are layer 2 forwarding
-    domains to which various entities attach (flow-points, MPLS-PWs etc).
+    List of forwarding-domains. Forwarding domains are layer 2 forwarding domains to which various entities attach (flow-points,
+    MPLS-PWs etc).
   type: dict
   suboptions:
     fd:
@@ -14,8 +14,7 @@ saos10_fd:
           type: str
           required: false
         name:
-          description: An administratively assigned string, which may be used
-            to identify the forwarding domain.
+          description: An administratively assigned string, which may be used to identify the forwarding domain.
           type: str
           required: false
         mode:
@@ -59,15 +58,13 @@ saos10_fd:
           type: str
           required: false
         queue_group_indirection:
-          description: Reference to queue-group-indirection for hierarchical
-            shaping/scheduling.
+          description: Reference to queue-group-indirection for hierarchical shaping/scheduling.
           type: str
           required: false
         initiate_l2_transform:
           description:
-            For an L2-frame that is initiated/injected via this forwarding
-            domain, this specifies the l2-transform to be applied to the frame.
-            e.g. an L3-frame injected via this forwarding domain to L2 datapath.
+            For an L2-frame that is initiated/injected via this forwarding domain, this specifies the l2-transform to
+            be applied to the frame. e.g. an L3-frame injected via this forwarding domain to L2 datapath.
           type: dict
           suboptions:
             frame_type:
@@ -77,9 +74,8 @@ saos10_fd:
                 - stack
         initiate_cos_to_frame_map:
           description:
-            For an L2-frame that is initiated/injected via this forwarding
-            domain, this specifies the cos-to-frame map to use for a cos-to-frame
-            map policy of 'mapped' from the initiate-l2-transform config.
+            For an L2-frame that is initiated/injected via this forwarding domain, this specifies the cos-to-frame map
+            to use for a cos-to-frame map policy of 'mapped' from the initiate-l2-transform config.
           type: str
           required: false
         initiate_frame_to_cos:

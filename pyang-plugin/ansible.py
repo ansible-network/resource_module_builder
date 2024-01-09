@@ -6,6 +6,7 @@ of the YANG module.
 import ez_yaml
 import logging
 from pyang import plugin, error
+import re
 
 
 def pyang_plugin_init():
@@ -240,8 +241,12 @@ class AnsiblePlugin(plugin.PyangPlugin):
         logging.critical(f"Starting processing for module {module.arg}. Total keys processed so far: {key_count}.")
         data = self.yang_to_dict(module, path)
         ordered_data = order_dict(data, ["description", "type", "elements", "choices", "suboptions"])
-        yaml_data = ez_yaml.to_string(ordered_data)
+        yaml_data = ez_yaml.to_string(ordered_data, settings = dict(width=130))
         fd.write(yaml_data)
+
+    def preprocess_string(self, s):
+        result = re.sub(r'\s+', ' ', s)
+        return result.replace(':', ';')
 
     def yang_to_dict(self, yang_module, path):
         data = {}
@@ -260,7 +265,7 @@ class AnsiblePlugin(plugin.PyangPlugin):
 
                     data[key_name] = {
                         "type": ansible_type if type(ansible_type) is str else ansible_type["type"],
-                        "description": " ".join(child.search_one("description").arg.split("\n"))
+                        "description": self.preprocess_string(child.search_one("description").arg)
                         if child.search_one("description")
                         else "",
                         "required": is_mandatory,
@@ -277,7 +282,7 @@ class AnsiblePlugin(plugin.PyangPlugin):
                     data[key_name] = {
                         "type": "list" if child.keyword == "list" else "dict",
                         "suboptions": suboptions,
-                        "description": " ".join(child.search_one("description").arg.split("\n"))
+                        "description": self.preprocess_string(child.search_one("description").arg)
                         if child.search_one("description")
                         else "",
                     }
@@ -289,7 +294,7 @@ class AnsiblePlugin(plugin.PyangPlugin):
                 if child.i_config:
                     data[key_name] = {
                         "type": "str",
-                        "description": " ".join(child.search_one("description").arg.split("\n"))
+                        "description": self.preprocess_string(child.search_one("description").arg)
                         if child.search_one("description")
                         else "",
                         "choices": [case.arg for case in child.i_children],
