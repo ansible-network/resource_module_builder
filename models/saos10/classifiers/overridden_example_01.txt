@@ -5,11 +5,11 @@
   ciena.saos10.saos10_classifiers:
     config:
       - name: untagged
-        filter-entry:
+        filter_entry:
           - filter-parameter: vtag-stack
-            untagged-exclude-priority-tagged: false
+            untagged_exclude_priority_tagged: false
       - name: foo-100
-        filter-entry:
+        filter_entry:
           - filter-parameter: vtag-stack
             vtags:
               - tag: 1
