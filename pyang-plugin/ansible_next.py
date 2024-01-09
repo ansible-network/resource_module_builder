@@ -19,6 +19,7 @@ from pyang import error
 def pyang_plugin_init():
     plugin.register_plugin(FooPlugin())
 
+
 def order_dict(d, ordered_keys):
     new_dict = {}
     for key in ordered_keys:
@@ -61,20 +62,23 @@ class FooPlugin(plugin.PyangPlugin):
 
     def emit(self, ctx, modules, fd):
         root_stmt = modules[0]
-        if ctx.opts.schema_debug:
+        if ctx.opts.foo_debug:
             logging.basicConfig(level=logging.DEBUG)
             print("")
 
         schema = produce_schema(root_stmt)
 
-        ordered_data = order_dict(schema, ["description", "type", "elements", "choices", "suboptions"])
-        yaml_data = ez_yaml.to_string(ordered_data, settings = dict(width=130))
+        ordered_data = order_dict(
+            schema, ["description", "type", "elements", "choices", "suboptions"]
+        )
+        yaml_data = ez_yaml.to_string(ordered_data, settings=dict(width=130))
         fd.write(yaml_data)
 
 
-def preprocess_string(self, s):
-    result = re.sub(r'\s+', ' ', s)
-    return result.replace(':', ';')
+def preprocess_string(s):
+    result = re.sub(r"\s+", " ", s)
+    return result.replace(":", ";")
+
 
 def find_stmt_by_path(module, path):
     logging.debug(
@@ -183,18 +187,28 @@ def produce_list(stmt):
     arg = qualify_name(stmt)
 
     if stmt.parent.keyword != "list":
-        result = {arg: {"type": "list", "items": []}}
+        result = {
+            arg: {
+                "type": "list",
+                "description": preprocess_string(stmt.search_one("description").arg),
+                "elements": "dict",
+                "suboptions": [],
+            }
+        }
     else:
-        result = {"type": "dict", "suboptions": {arg: {"type": "list", "items": []}}}
+        result = {
+            "type": "dict",
+            "suboptions": {arg: {"type": "list", "suboptions": []}},
+        }
 
     if hasattr(stmt, "i_children"):
         for child in stmt.i_children:
             if child.keyword in producers:
                 logging.debug("keyword hit on: %s %s", child.keyword, child.arg)
                 if stmt.parent.keyword != "list":
-                    result[arg]["items"].append(producers[child.keyword](child))
+                    result[arg]["suboptions"].append(producers[child.keyword](child))
                 else:
-                    result["suboptions"][arg]["items"].append(
+                    result["suboptions"][arg]["suboptions"].append(
                         producers[child.keyword](child)
                     )
             else:
@@ -219,7 +233,7 @@ def produce_leaf_list(stmt):
             stmt.arg,
             type_id,
         )
-        result = {arg: {"type": "list", "items": [{"type": "str"}]}}
+        result = {arg: {"type": "list", "suboptions": [{"type": "str"}]}}
     return result
 
 
@@ -313,7 +327,7 @@ def numeric_type_trans(dtype):
 
 def string_trans(stmt):
     logging.debug("in string_trans with stmt %s %s", stmt.keyword, stmt.arg)
-    result = {"type": "string"}
+    result = {"type": "str"}
     return result
 
 
@@ -328,7 +342,7 @@ def enumeration_trans(stmt):
 
 def bits_trans(stmt):
     logging.debug("in bits_trans with stmt %s %s", stmt.keyword, stmt.arg)
-    result = {"type": "string"}
+    result = {"type": "str"}
     return result
 
 
@@ -340,7 +354,7 @@ def boolean_trans(stmt):
 
 def empty_trans(stmt):
     logging.debug("in empty_trans with stmt %s %s", stmt.keyword, stmt.arg)
-    result = {"type": "list", "items": [{"type": "null"}]}
+    result = {"type": "list", "suboptions": [{"type": "null"}]}
     # Likely needs more/other work per:
     #  https://tools.ietf.org/html/draft-ietf-netmod-yang-json-10#section-6.9
     return result
@@ -359,14 +373,14 @@ def instance_identifier_trans(stmt):
     logging.debug(
         "in instance_identifier_trans with stmt %s %s", stmt.keyword, stmt.arg
     )
-    result = {"type": "string"}
+    result = {"type": "str"}
     return result
 
 
 def leafref_trans(stmt):
     logging.debug("in leafref_trans with stmt %s %s", stmt.keyword, stmt.arg)
     # TODO: Need to resolve i_leafref_ptr here
-    result = {"type": "string"}
+    result = {"type": "str"}
     return result
 
 
