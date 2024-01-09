@@ -137,23 +137,20 @@ def produce_schema(root_stmt):
     return result
 
 
-def produce_type(type_stmt):
+def produce_type(type_stmt, stmt=None):
     logging.debug("In produce_type with: %s %s", type_stmt.keyword, type_stmt.arg)
     type_id = type_stmt.arg
 
     if types.is_base_type(type_id):
         if type_id in _numeric_type_trans_tbl:
-            type_str = numeric_type_trans(type_id)
+            type_str = numeric_type_trans(type_id, stmt)
         elif type_id in _other_type_trans_tbl:
             type_str = other_type_trans(type_id, type_stmt)
         else:
             logging.debug(
                 "Missing mapping of base type: %s %s", type_stmt.keyword, type_stmt.arg
             )
-            type_str = {
-                "type": "str",
-
-            }
+            type_str = {"type": "str", "description": "Missing description for: %s %s"}
     elif hasattr(type_stmt, "i_typedef") and type_stmt.i_typedef is not None:
         logging.debug(
             "Found typedef type in: %s %s (typedef) %s",
@@ -162,7 +159,7 @@ def produce_type(type_stmt):
             type_stmt.i_typedef,
         )
         typedef_type_stmt = type_stmt.i_typedef.search_one("type")
-        typedef_type = produce_type(typedef_type_stmt)
+        typedef_type = produce_type(typedef_type_stmt, stmt)
         type_str = typedef_type
     else:
         logging.debug(
@@ -180,7 +177,7 @@ def produce_leaf(stmt):
     arg = qualify_name(stmt)
 
     type_stmt = stmt.search_one("type")
-    type_str = produce_type(type_stmt)
+    type_str = produce_type(type_stmt, stmt)
 
     return {arg: type_str}
 
@@ -342,11 +339,14 @@ _numeric_type_trans_tbl = {
 }
 
 
-def numeric_type_trans(dtype):
-    trans_type = _numeric_type_trans_tbl[dtype][0]
+def numeric_type_trans(type_id, stmt):
+    trans_type = _numeric_type_trans_tbl[type_id][0]
     # Should include format string in return value
     # tformat = _numeric_type_trans_tbl[dtype][1]
-    return {"type": trans_type}
+    return {
+        "type": trans_type,
+        "description": preprocess_string(stmt.search_one("description").arg),
+    }
 
 
 def string_trans(stmt):
