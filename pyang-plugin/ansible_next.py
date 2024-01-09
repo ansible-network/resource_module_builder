@@ -150,7 +150,10 @@ def produce_type(type_stmt):
             logging.debug(
                 "Missing mapping of base type: %s %s", type_stmt.keyword, type_stmt.arg
             )
-            type_str = {"type": "string"}
+            type_str = {
+                "type": "str",
+
+            }
     elif hasattr(type_stmt, "i_typedef") and type_stmt.i_typedef is not None:
         logging.debug(
             "Found typedef type in: %s %s (typedef) %s",
@@ -198,7 +201,12 @@ def produce_list(stmt):
     else:
         result = {
             "type": "dict",
-            "suboptions": {arg: {"type": "list", "suboptions": []}},
+            "suboptions": {
+                arg: {
+                    "type": "list",
+                    "suboptions": [],
+                }
+            },
         }
 
     if hasattr(stmt, "i_children"):
@@ -225,7 +233,13 @@ def produce_leaf_list(stmt):
 
     if types.is_base_type(type_id) or type_id in _other_type_trans_tbl:
         type_str = produce_type(type_stmt)
-        result = {arg: {"type": "list", "elements": "dict", "suboptions": [type_str]}}
+        result = {
+            arg: {
+                "type": "list",
+                "elements": "dict",
+                "suboptions": [type_str],
+            }
+        }
     else:
         logging.debug(
             "Missing mapping of base type: %s %s, type: %s",
@@ -233,7 +247,12 @@ def produce_leaf_list(stmt):
             stmt.arg,
             type_id,
         )
-        result = {arg: {"type": "list", "suboptions": [{"type": "str"}]}}
+        result = {
+            arg: {
+                "type": "list",
+                "suboptions": [{"type": "str"}],
+            }
+        }
     return result
 
 
@@ -242,7 +261,12 @@ def produce_container(stmt):
     arg = qualify_name(stmt)
 
     if stmt.parent.keyword != "list":
-        result = {arg: {"type": "dict", "suboptions": {}}}
+        result = {
+            arg: {
+                "type": "dict",
+                "suboptions": {},
+            }
+        }
     else:
         result = {
             "type": "dict",
