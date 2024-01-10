@@ -109,7 +109,7 @@ def find_stmt_by_path(module, path):
             children = match[0].i_children
             logging.debug("Path is now: %s", spath)
         else:
-            logging.debug("Miss at %s, path: %s", children, spath)
+            logging.warning("Miss at %s, path: %s", children, spath)
             raise error.EmitError("Path '%s' does not exist in module" % path)
 
     logging.debug("Ended up with %s %s", match[0].keyword, match[0].arg)
@@ -127,13 +127,20 @@ def produce_schema(root_stmt):
                 add = producers[child.keyword](child)
                 result.update(add)
             else:
-                logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+                logging.warning("keyword miss on: %s %s", child.keyword, child.arg)
         else:
-            logging.debug(
-                "keyword not in data_definition_keywords: %s %s",
-                child.keyword,
-                child.arg,
-            )
+            if child.keyword == "rpc":
+                logging.debug(
+                    "skipping rpc. keyword not in data_definition_keywords: %s %s",
+                    child.keyword,
+                    child.arg,
+                )
+            else:
+                logging.warning(
+                    "keyword not in data_definition_keywords: %s %s",
+                    child.keyword,
+                    child.arg,
+                )
     return result
 
 
@@ -147,7 +154,7 @@ def produce_type(type_stmt):
         elif type_id in _other_type_trans_tbl:
             type_str = other_type_trans(type_id, type_stmt)
         else:
-            logging.debug(
+            logging.warning(
                 "Missing mapping of base type: %s %s", type_stmt.keyword, type_stmt.arg
             )
             type_str = {"type": "str", "description": "Missing description for: %s %s"}
@@ -162,13 +169,13 @@ def produce_type(type_stmt):
         typedef_type = produce_type(typedef_type_stmt)
         type_str = typedef_type
     else:
-        logging.debug(
+        logging.warning(
             "Missing mapping of: %s %s",
             type_stmt.keyword,
             type_stmt.arg,
             type_stmt.i_typedef,
         )
-        type_str = {"type": "string"}
+        type_str = {"type": "str"}
     return type_str
 
 
@@ -191,6 +198,7 @@ def produce_leaf(stmt):
     if description is not None:
         description_str = preprocess_string(description.arg)
     else:
+        logging.warning("No description found for: %s %s", stmt.keyword, stmt.arg)
         description_str = "No description available"
 
     return {arg: {**type_str, "description": description_str, "required": required}}
@@ -209,7 +217,7 @@ def produce_list(stmt):
                 for key, value in child_data.items():
                     suboptions_dict[key] = value
             else:
-                logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+                logging.warning("keyword miss on: %s %s", child.keyword, child.arg)
 
     description = stmt.search_one("description")
     if description is not None:
@@ -238,6 +246,7 @@ def produce_leaf_list(stmt):
     if description is not None:
         description_str = preprocess_string(description.arg)
     else:
+        logging.warning("No description found for: %s %s", stmt.keyword, stmt.arg)
         description_str = "No description available"
 
     if types.is_base_type(type_id) or type_id in _other_type_trans_tbl:
@@ -251,7 +260,7 @@ def produce_leaf_list(stmt):
             }
         }
     else:
-        logging.debug(
+        logging.warning(
             "Missing mapping of base type: %s %s, type: %s",
             stmt.keyword,
             stmt.arg,
@@ -273,7 +282,7 @@ def produce_container(stmt):
                 child_data = producers[child.keyword](child)
                 suboptions_dict.update(child_data)
             else:
-                logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+                logging.warning("keyword miss on: %s %s", child.keyword, child.arg)
     description = stmt.search_one("description")
     if description is not None:
         description_str = preprocess_string(description.arg)
@@ -306,7 +315,7 @@ def produce_choice(stmt):
                     )
                     result.update(producers[child.keyword](child))
                 else:
-                    logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+                    logging.warning("keyword miss on: %s %s", child.keyword, child.arg)
 
     # Short ("case-less") version
     #  https://tools.ietf.org/html/rfc6020#section-7.9.2
@@ -341,6 +350,7 @@ _numeric_type_trans_tbl = {
     "uint16": ("int", None),
     "uint32": ("int", "uint32"),
     "uint64": ("int", "uint64"),
+    "decimal64": ("float", "float"),
 }
 
 
@@ -390,10 +400,7 @@ def empty_trans(stmt):
 
 def union_trans(stmt):
     logging.debug("in union_trans with stmt %s %s", stmt.keyword, stmt.arg)
-    result = {"oneOf": []}
-    for member in stmt.search("type"):
-        member_type = produce_type(member)
-        result["oneOf"].append(member_type)
+    result = {"type": "str"}
     return result
 
 
