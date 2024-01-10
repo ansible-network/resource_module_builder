@@ -211,20 +211,34 @@ def produce_list(stmt):
             else:
                 logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
 
+    description = stmt.search_one("description")
+    if description is not None:
+        description_str = preprocess_string(description.arg)
+    else:
+        description_str = "No description available"
+
     result = {
         arg: {
             "type": "list",
             "elements": "dict",
+            "description": description_str,
             "suboptions": suboptions_dict,
         }
     }
     logging.debug("In produce_list for %s, returning %s", stmt.arg, result)
     return result
+
+
 def produce_leaf_list(stmt):
     logging.debug("in produce_leaf_list: %s %s", stmt.keyword, stmt.arg)
     arg = qualify_name(stmt)
     type_stmt = stmt.search_one("type")
     type_id = type_stmt.arg
+    description = stmt.search_one("description")
+    if description is not None:
+        description_str = preprocess_string(description.arg)
+    else:
+        description_str = "No description available"
 
     if types.is_base_type(type_id) or type_id in _other_type_trans_tbl:
         type_str = produce_type(type_stmt)
@@ -232,7 +246,8 @@ def produce_leaf_list(stmt):
             arg: {
                 "type": "list",
                 "elements": "dict",
-                "suboptions": {arg: type_str}
+                "description": description_str,
+                "suboptions": {arg: type_str},
             }
         }
     else:
@@ -242,13 +257,9 @@ def produce_leaf_list(stmt):
             stmt.arg,
             type_id,
         )
-        result = {
-            arg: {
-                "type": "list",
-                "suboptions": {"type": "str"}
-            }
-        }
+        result = {arg: {"type": "list", "suboptions": {"type": "str"}}}
     return result
+
 
 def produce_container(stmt):
     logging.debug("in produce_container: %s %s", stmt.keyword, stmt.arg)
@@ -263,15 +274,22 @@ def produce_container(stmt):
                 suboptions_dict.update(child_data)
             else:
                 logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+    description = stmt.search_one("description")
+    if description is not None:
+        description_str = preprocess_string(description.arg)
+    else:
+        description_str = "No description available"
 
     result = {
         arg: {
             "type": "dict",
+            "description": description_str,
             "suboptions": suboptions_dict,
         }
     }
     logging.debug("In produce_container, returning %s", result)
     return result
+
 
 def produce_choice(stmt):
     logging.debug("in produce_choice: %s %s", stmt.keyword, stmt.arg)
@@ -358,7 +376,7 @@ def bits_trans(stmt):
 
 def boolean_trans(stmt):
     logging.debug("in boolean_trans with stmt %s %s", stmt.keyword, stmt.arg)
-    result = {"type": "boolean"}
+    result = {"type": "bool"}
     return result
 
 
