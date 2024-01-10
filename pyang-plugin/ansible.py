@@ -67,11 +67,16 @@ class AnsiblePlugin(plugin.PyangPlugin):
             print("")
 
         schema = produce_schema(root_stmt)
+        converted_schema = convert_schema_to_ansible(schema)
 
         ordered_data = order_dict(
-            schema, ["description", "type", "elements", "choices", "suboptions"]
+            converted_schema,
+            ["description", "type", "required", "elements", "choices", "suboptions"],
         )
-        yaml_data = ez_yaml.to_string(ordered_data, settings=dict(width=130))
+
+        yaml_data = ez_yaml.to_string(
+            ordered_data, settings=dict(width=130, indent_sequence=2, indent_mapping=2)
+        )
         fd.write(yaml_data)
 
 
@@ -144,6 +149,20 @@ def produce_schema(root_stmt):
     return result
 
 
+def convert_schema_to_ansible(schema):
+    if len(schema) == 1:
+        # Wrap the schema in 'documentation' object
+        documentation = {"documentation": next(iter(schema.values()))}
+        return documentation
+    elif len(schema) > 1:
+        logging.error(f"too many top level keys in schema: {schema.keys()}")
+        raise error.EmitError(
+            "Multiple top-level keys found in the schema. Expected only one."
+        )
+    else:
+        raise error.EmitError("No top-level keys found in the schema.")
+
+
 def produce_type(type_stmt):
     logging.debug("In produce_type with: %s %s", type_stmt.keyword, type_stmt.arg)
     type_id = type_stmt.arg
@@ -183,6 +202,11 @@ def produce_leaf(stmt):
     logging.debug("in produce_leaf: %s %s", stmt.keyword, stmt.arg)
     arg = qualify_name(stmt)
 
+    # Check if the leaf is configurable
+    if not stmt.i_config:
+        logging.debug("Skipping non-configurable leaf: %s", arg)
+        return {}
+
     type_stmt = stmt.search_one("type")
     type_str = produce_type(type_stmt)
 
@@ -207,6 +231,11 @@ def produce_leaf(stmt):
 def produce_list(stmt):
     logging.debug("in produce_list: %s %s", stmt.keyword, stmt.arg)
     arg = qualify_name(stmt)
+
+    # Check if the leaf is configurable
+    if not stmt.i_config:
+        logging.debug("Skipping non-configurable leaf: %s", arg)
+        return {}
 
     suboptions_dict = {}
     if hasattr(stmt, "i_children"):
@@ -240,6 +269,12 @@ def produce_list(stmt):
 def produce_leaf_list(stmt):
     logging.debug("in produce_leaf_list: %s %s", stmt.keyword, stmt.arg)
     arg = qualify_name(stmt)
+ 
+    # Check if the leaf is configurable
+    if not stmt.i_config:
+        logging.debug("Skipping non-configurable leaf: %s", arg)
+        return {}
+    
     type_stmt = stmt.search_one("type")
     type_id = type_stmt.arg
     description = stmt.search_one("description")
@@ -273,6 +308,11 @@ def produce_leaf_list(stmt):
 def produce_container(stmt):
     logging.debug("in produce_container: %s %s", stmt.keyword, stmt.arg)
     arg = qualify_name(stmt)
+
+    # Check if the leaf is configurable
+    if not stmt.i_config:
+        logging.debug("Skipping non-configurable leaf: %s", arg)
+        return {}
 
     suboptions_dict = {}
     if hasattr(stmt, "i_children"):
