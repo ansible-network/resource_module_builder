@@ -485,7 +485,7 @@ def qualify_name(stmt):
     if stmt.parent.parent is None:  # We're on top
         pfx = stmt.i_module.arg
         logging.debug("In qualify_name with: %s %s on top", stmt.keyword, stmt.arg)
-        qualified_name = pfx + ":" + stmt.arg
+        qualified_name = stmt.arg
         return qualified_name.replace("-", "_")
     if stmt.top.arg != stmt.parent.top.arg:  # Parent node is different
         pfx = stmt.top.arg
@@ -494,6 +494,6 @@ def qualify_name(stmt):
             stmt.keyword,
             stmt.arg,
         )
-        qualified_name = pfx + ":" + stmt.arg
+        qualified_name = stmt.arg
         return qualified_name.replace("-", "_")
     return stmt.arg.replace("-", "_")
