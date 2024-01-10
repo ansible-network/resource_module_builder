@@ -1,12 +1,19 @@
-"""Ansible Resource Module Builder output plugin
-Generates a YML that presents resource module skeleton
-of the YANG module.
+"""Ansible output plugin
 """
 
-import ez_yaml
-import logging
-from pyang import plugin, error
+# pylint: disable=C0111
+
+from __future__ import print_function
+
 import re
+import ez_yaml
+import optparse
+import logging
+
+from pyang import plugin
+from pyang import statements
+from pyang import types
+from pyang import error
 
 
 def pyang_plugin_init():
@@ -31,273 +38,397 @@ def order_dict(d, ordered_keys):
 
 
 class AnsiblePlugin(plugin.PyangPlugin):
-    def __init__(self):
-        super().__init__("ansible")
-        global key_count  # Declare counter as global to modify
-        key_count = 0  # Reset counter
-
-    def get_type_node(self, child):
-        logging.error(f"Getting type node for {child.arg}")
-        type_node = child.search_one("type")
-        if not type_node:
-            logging.error(f"type_node is empty on {child.arg}")
-            return None, "str"
-
-        base_type_node = self.resolve_base_type(type_node)
-        logging.error(f"Got base {base_type_node} {base_type_node.arg}")
-        return base_type_node, base_type_node.arg
-
-    def resolve_base_type(self, type_node):
-        # Recursively resolve the base type
-        while True:
-            typedef = type_node.i_typedef
-            if typedef is None:
-                break
-            type_node = typedef.search_one("type")
-        return type_node
-
-    def handle_enumeration(self, type_node):
-        logging.error("Handling enumeration type")
-        enums = [enum.arg for enum in type_node.search("enum")]
-        return {"type": "str", "choices": enums}
-
-    def handle_custom_enum(self, type_node):
-        logging.error(f"Processing custom enum: {type_node}")
-        enums = [enum.arg for enum in type_node.search("enum")]
-        return {"type": "str", "choices": enums}
-
-    def handle_custom_type(self, child, namespace, custom_type, root_module):
-        logging.error(f"Handling custom type: {namespace}:{custom_type}")
-        target_module = next((mod for mod in root_module.i_ctx.modules.values() if mod.i_prefix == namespace), None)
-        if target_module:
-            typedef_node = target_module.search_one("typedef", custom_type)
-            if typedef_node:
-                type_node = typedef_node.search_one("type")
-                if type_node.arg == "enumeration":
-                    logging.error("Methodology: Custom enumeration type found. Using handle_custom_enum.")
-                    return self.handle_custom_enum(type_node)
-        else:
-            typedef_node = None
-
-        if typedef_node:
-            logging.error("Typedef node found, proceeding.")
-            type_node = typedef_node.search_one("type")
-            if type_node:
-                logging.error("Type node under typedef found.")
-                return self.handle_string_custom_type(typedef_node)
-
-    def handle_string_custom_type(self, typedef_node):
-        logging.error("Handling custom string type")
-        length_constraint = typedef_node.search_one("length")
-        if length_constraint:
-            logging.error(f"Length constraint found: {length_constraint.arg}")
-            return {"type": "str", "max_length": int(length_constraint.arg.split("..")[1])}
-        else:
-            return {"type": "str"}
-
-    def yang_type_to_ansible_type(self, child):
-        global key_count  # Declare counter as global to modify
-        key_count += 1  # Increment counter
-
-        logging.critical(f"({key_count}) Determining type for key {child.arg}.")
-
-        type_mapping = {
-            "": "",
-            "decimal64": "float",
-            "string": "str",
-            "int16": "int",
-            "int32": "int",
-            "uint8": "int",
-            "uint16": "int",
-            "uint32": "int",
-            "boolean": "bool",
-            "union": "str",
-        }
-
-        type_node, yang_type = self.get_type_node(child)
-        key = child.arg
-        if yang_type == "enumeration":
-            logging.error(f"({key_count}) Enumeration type found. Using `handle_enumeration`.")
-            ansible_type = self.handle_enumeration(type_node)
-            logging.error(f"determined: {ansible_type}")
-            return ansible_type
-
-        if yang_type == "leafref":
-            logging.error(f"({key_count}) leafref type found. Using `handle_leafref`.")
-            ansible_type = self.handle_leafref(type_node, key)
-            logging.error(f"determined: {ansible_type}")
-            return ansible_type
-
-        if yang_type == "identityref":
-            logging.error(f"({key_count}) identityref type found. Using `handle_identity`.")
-            ansible_type = self.handle_identity(type_node, child)
-            logging.error(f"determined: {ansible_type}")
-            return {"type": "str", "choices": ansible_type}
-
-        if ":" in yang_type:
-            namespace, custom_type = yang_type.split(":")
-            root_module = child.i_module
-            while hasattr(root_module, "i_including_module"):
-                root_module = root_module.i_including_module
-            logging.error(f"Custom type found. Using `handle_custom_type`. for {namespace}:{custom_type}")
-            ansible_type = self.handle_custom_type(child, namespace, custom_type, root_module)
-            if ansible_type:
-                logging.error(f"determined: {ansible_type}")
-                return ansible_type
-
-        if yang_type not in type_mapping:
-            logging.error(f"Unhandled YANG type: {yang_type} on {key}")
-            raise ValueError(f"Unhandled YANG type: {yang_type} on {key}")
-
-        return type_mapping.get(yang_type, "str")
-
-    def handle_leafref(self, type_node, key):
-        """
-        Handle leafref type by looking up the referenced type.
-        """
-        if hasattr(type_node, "i_leafref_ptr") and type_node.i_leafref_ptr:
-            try:
-                leafref_path = type_node.arg
-                referenced_leaf = type_node.i_leafref_ptr
-                if referenced_leaf is None:
-                    logging.error(f"Could not find referenced leaf for leafref: {leafref_path}")
-                    return "str"  # Defaulting to string type for unresolvable leafref
-
-                # Retrieve the type of the referenced leaf
-                referenced_type_node = referenced_leaf.search_one("type")
-                referenced_type = referenced_type_node.arg
-
-                # Your existing logic here to convert yang type to ansible type
-                return self.yang_type_to_ansible_type(referenced_leaf)
-
-            except AttributeError as e:
-                logging.error(f"Error while handling leafref for key {key}: {e}")
-                return "str"  # Defaulting to string type in case of an error
-        else:
-            logging.error(f"'TypeStatement' object has no attribute 'i_leafref_ptr'")
-            return "str"  # or other fallback mechanism
-
     def add_output_format(self, fmts):
-        self.multiple_modules = True
         fmts["ansible"] = self
 
+    def add_opts(self, optparser):
+        optlist = [
+            optparse.make_option(
+                "--ansible-debug",
+                dest="ansible_debug",
+                action="store_true",
+                help="ansible debug",
+            ),
+        ]
+
+        group = optparser.add_option_group("ansible-specific options")
+        group.add_options(optlist)
+
+    def setup_ctx(self, ctx):
+        ctx.opts.stmts = None
+
+    def setup_fmt(self, ctx):
+        ctx.implicit_errors = False
+
     def emit(self, ctx, modules, fd):
-        if ctx.opts.sample_path is not None:
-            path = ctx.opts.sample_path.split("/")
-            if path[0] == "":
-                path = path[1:]
-        else:
-            path = []
+        root_stmt = modules[0]
+        if ctx.opts.ansible_debug:
+            logging.basicConfig(level=logging.DEBUG)
+            print("")
 
-        for module in modules:
-            self.process_module(module, path, fd)
+        schema = produce_schema(root_stmt)
 
-    def handle_identity(self, type_node, child):
-        logging.error(f"Handling identityref for {child.arg}")
-        identity_list = self.get_identity_list(type_node, child)
-        logging.error(f"Identity list for {child.arg}: {identity_list}")
-        return identity_list
-
-    def get_identity_list(self, type_node, child):
-        # Get the type specification of the identityref
-        type_spec = type_node.i_type_spec
-
-        if not hasattr(type_spec, 'base'):
-            logging.error(f"No base identity found for {child.arg}")
-            return []
-
-        base_identity = type_spec.base
-        if not base_identity:
-            logging.error(f"Base identity for {child.arg} is None")
-            return []
-
-        # Collect all identities derived from the base identity
-        identities = self.collect_derived_identities(base_identity)
-
-        # Extract the names of the identities
-        identity_names = [identity.arg for identity in identities]
-
-        return identity_names
-
-    def collect_derived_identities(self, base_identity):
-        derived_identities = []
-
-        # Check if base_identity is not None
-        if base_identity and hasattr(base_identity, 'i_module') and base_identity.i_module:
-            for identity in base_identity.i_module.i_identities.values():
-                if self.is_derived_identity(identity, base_identity):
-                    derived_identities.append(identity)
-
-        return derived_identities
-    def is_derived_identity(self, identity, base_identity):
-        while identity:
-            if identity == base_identity:
-                return True
-            identity = identity.base
-        return False
-
-    def process_module(self, module, path, fd):
-        global key_count  # Declare counter as global to read
-        logging.critical(f"Starting processing for module {module.arg}. Total keys processed so far: {key_count}.")
-        data = self.yang_to_dict(module, path)
-        ordered_data = order_dict(data, ["description", "type", "elements", "choices", "suboptions"])
-        yaml_data = ez_yaml.to_string(ordered_data, settings = dict(width=130))
+        ordered_data = order_dict(
+            schema, ["description", "type", "elements", "choices", "suboptions"]
+        )
+        yaml_data = ez_yaml.to_string(ordered_data, settings=dict(width=130))
         fd.write(yaml_data)
 
-    def preprocess_string(self, s):
-        result = re.sub(r'\s+', ' ', s)
-        return result.replace(':', ';')
 
-    def yang_to_dict(self, yang_module, path):
-        data = {}
-        for child in yang_module.i_children:
-            logging.warning(child)
-            status_node = child.search_one("status")
-            if status_node and status_node.arg == "deprecated":
-                logging.warning(f"Skipping deprecated leaf: {child.arg}")
-                continue  # Skip this leaf but continue processing siblings
-            key_name = child.arg.replace("-", "_")
-            if child.keyword in ["leaf", "leaf-list"]:
-                if child.i_config:
-                    ansible_type = self.yang_type_to_ansible_type(child)
-                    mandatory_field = child.search_one("mandatory")
-                    is_mandatory = mandatory_field.arg == "true" if mandatory_field else False
+def preprocess_string(s):
+    result = re.sub(r"\s+", " ", s)
+    return result.replace(":", ";")
 
-                    data[key_name] = {
-                        "type": ansible_type if type(ansible_type) is str else ansible_type["type"],
-                        "description": self.preprocess_string(child.search_one("description").arg)
-                        if child.search_one("description")
-                        else "",
-                        "required": is_mandatory,
-                    }
-                    if type(ansible_type) is dict:
-                        for key, value in ansible_type.items():
-                            if key != "type":
-                                data[key_name][key] = value
 
-            elif child.keyword in ["container", "list"]:
-                if child.i_config:
-                    suboptions = self.yang_to_dict(child, path)
-                    is_dict_elements = any(sub_child.keyword in ["container", "list"] for sub_child in child.i_children)
-                    data[key_name] = {
-                        "type": "list" if child.keyword == "list" else "dict",
-                        "suboptions": suboptions,
-                        "description": self.preprocess_string(child.search_one("description").arg)
-                        if child.search_one("description")
-                        else "",
-                    }
-                    if child.keyword == "list" and is_dict_elements:
-                        data[key_name]["elements"] = "dict"
-                    if child.keyword == "list" and not is_dict_elements:
-                        data[key_name]["elements"] = "dict"
-            elif child.keyword == "choice":
-                if child.i_config:
-                    data[key_name] = {
-                        "type": "str",
-                        "description": self.preprocess_string(child.search_one("description").arg)
-                        if child.search_one("description")
-                        else "",
-                        "choices": [case.arg for case in child.i_children],
-                    }
+def find_stmt_by_path(module, path):
+    logging.debug(
+        "in find_stmt_by_path with: %s %s path: %s", module.keyword, module.arg, path
+    )
 
-        return data
+    if path is not None:
+        spath = path.split("/")
+        if spath[0] == "":
+            spath = spath[1:]
+
+    children = [
+        child
+        for child in module.i_children
+        if child.keyword in statements.data_definition_keywords
+    ]
+
+    while spath is not None and len(spath) > 0:
+        match = [
+            child
+            for child in children
+            if child.arg == spath[0]
+            and child.keyword in statements.data_definition_keywords
+        ]
+        if len(match) > 0:
+            logging.debug("Match on: %s, path: %s", match[0].arg, spath)
+            spath = spath[1:]
+            children = match[0].i_children
+            logging.debug("Path is now: %s", spath)
+        else:
+            logging.debug("Miss at %s, path: %s", children, spath)
+            raise error.EmitError("Path '%s' does not exist in module" % path)
+
+    logging.debug("Ended up with %s %s", match[0].keyword, match[0].arg)
+    return match[0]
+
+
+def produce_schema(root_stmt):
+    logging.debug("in produce_schema: %s %s", root_stmt.keyword, root_stmt.arg)
+    result = {}
+
+    for child in root_stmt.i_children:
+        if child.keyword in statements.data_definition_keywords:
+            if child.keyword in producers:
+                logging.debug("keyword hit on: %s %s", child.keyword, child.arg)
+                add = producers[child.keyword](child)
+                result.update(add)
+            else:
+                logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+        else:
+            logging.debug(
+                "keyword not in data_definition_keywords: %s %s",
+                child.keyword,
+                child.arg,
+            )
+    return result
+
+
+def produce_type(type_stmt):
+    logging.debug("In produce_type with: %s %s", type_stmt.keyword, type_stmt.arg)
+    type_id = type_stmt.arg
+
+    if types.is_base_type(type_id):
+        if type_id in _numeric_type_trans_tbl:
+            type_str = numeric_type_trans(type_id)
+        elif type_id in _other_type_trans_tbl:
+            type_str = other_type_trans(type_id, type_stmt)
+        else:
+            logging.debug(
+                "Missing mapping of base type: %s %s", type_stmt.keyword, type_stmt.arg
+            )
+            type_str = {"type": "str", "description": "Missing description for: %s %s"}
+    elif hasattr(type_stmt, "i_typedef") and type_stmt.i_typedef is not None:
+        logging.debug(
+            "Found typedef type in: %s %s (typedef) %s",
+            type_stmt.keyword,
+            type_stmt.arg,
+            type_stmt.i_typedef,
+        )
+        typedef_type_stmt = type_stmt.i_typedef.search_one("type")
+        typedef_type = produce_type(typedef_type_stmt)
+        type_str = typedef_type
+    else:
+        logging.debug(
+            "Missing mapping of: %s %s",
+            type_stmt.keyword,
+            type_stmt.arg,
+            type_stmt.i_typedef,
+        )
+        type_str = {"type": "string"}
+    return type_str
+
+
+def produce_leaf(stmt):
+    logging.debug("in produce_leaf: %s %s", stmt.keyword, stmt.arg)
+    arg = qualify_name(stmt)
+
+    type_stmt = stmt.search_one("type")
+    type_str = produce_type(type_stmt)
+
+    mandatory = stmt.search_one("mandatory")
+    is_mandatory = mandatory is not None and mandatory.arg == "true"
+
+    if not is_mandatory:
+        required = False
+    else:
+        required = True
+
+    description = stmt.search_one("description")
+    if description is not None:
+        description_str = preprocess_string(description.arg)
+    else:
+        description_str = "No description available"
+
+    return {arg: {**type_str, "description": description_str, "required": required}}
+
+
+def produce_list(stmt):
+    logging.debug("in produce_list: %s %s", stmt.keyword, stmt.arg)
+    arg = qualify_name(stmt)
+
+    suboptions_dict = {}
+    if hasattr(stmt, "i_children"):
+        for child in stmt.i_children:
+            if child.keyword in producers:
+                logging.debug("keyword hit on: %s %s", child.keyword, child.arg)
+                child_data = producers[child.keyword](child)
+                for key, value in child_data.items():
+                    suboptions_dict[key] = value
+            else:
+                logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+
+    result = {
+        arg: {
+            "type": "list",
+            "elements": "dict",
+            "suboptions": suboptions_dict,
+        }
+    }
+    logging.debug("In produce_list for %s, returning %s", stmt.arg, result)
+    return result
+def produce_leaf_list(stmt):
+    logging.debug("in produce_leaf_list: %s %s", stmt.keyword, stmt.arg)
+    arg = qualify_name(stmt)
+    type_stmt = stmt.search_one("type")
+    type_id = type_stmt.arg
+
+    if types.is_base_type(type_id) or type_id in _other_type_trans_tbl:
+        type_str = produce_type(type_stmt)
+        result = {
+            arg: {
+                "type": "list",
+                "elements": "dict",
+                "suboptions": {arg: type_str}
+            }
+        }
+    else:
+        logging.debug(
+            "Missing mapping of base type: %s %s, type: %s",
+            stmt.keyword,
+            stmt.arg,
+            type_id,
+        )
+        result = {
+            arg: {
+                "type": "list",
+                "suboptions": {"type": "str"}
+            }
+        }
+    return result
+
+def produce_container(stmt):
+    logging.debug("in produce_container: %s %s", stmt.keyword, stmt.arg)
+    arg = qualify_name(stmt)
+
+    suboptions_dict = {}
+    if hasattr(stmt, "i_children"):
+        for child in stmt.i_children:
+            if child.keyword in producers:
+                logging.debug("keyword hit on: %s %s", child.keyword, child.arg)
+                child_data = producers[child.keyword](child)
+                suboptions_dict.update(child_data)
+            else:
+                logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+
+    result = {
+        arg: {
+            "type": "dict",
+            "suboptions": suboptions_dict,
+        }
+    }
+    logging.debug("In produce_container, returning %s", result)
+    return result
+
+def produce_choice(stmt):
+    logging.debug("in produce_choice: %s %s", stmt.keyword, stmt.arg)
+
+    result = {}
+
+    # https://tools.ietf.org/html/rfc6020#section-7.9.2
+    for case in stmt.search("case"):
+        if hasattr(case, "i_children"):
+            for child in case.i_children:
+                if child.keyword in producers:
+                    logging.debug(
+                        "keyword hit on (long version): %s %s", child.keyword, child.arg
+                    )
+                    result.update(producers[child.keyword](child))
+                else:
+                    logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+
+    # Short ("case-less") version
+    #  https://tools.ietf.org/html/rfc6020#section-7.9.2
+    for child in stmt.substmts:
+        logging.debug("checking on keywords with: %s %s", child.keyword, child.arg)
+        if child.keyword in ["container", "leaf", "list", "leaf-list"]:
+            logging.debug(
+                "keyword hit on (short version): %s %s", child.keyword, child.arg
+            )
+            result.update(producers[child.keyword](child))
+
+    logging.debug("In produce_choice, returning %s", result)
+    return result
+
+
+producers = {
+    # "module":     produce_module,
+    "container": produce_container,
+    "list": produce_list,
+    "leaf-list": produce_leaf_list,
+    "leaf": produce_leaf,
+    "choice": produce_choice,
+}
+
+_numeric_type_trans_tbl = {
+    # https://tools.ietf.org/html/draft-ietf-netmod-yang-json-02#section-6
+    "int8": ("int", None),
+    "int16": ("int", None),
+    "int32": ("int", "int32"),
+    "int64": ("int", "int64"),
+    "uint8": ("int", None),
+    "uint16": ("int", None),
+    "uint32": ("int", "uint32"),
+    "uint64": ("int", "uint64"),
+}
+
+
+def numeric_type_trans(type_id):
+    trans_type = _numeric_type_trans_tbl[type_id][0]
+    # Should include format string in return value
+    # tformat = _numeric_type_trans_tbl[dtype][1]
+    return {
+        "type": trans_type,
+    }
+
+
+def string_trans(stmt):
+    logging.debug("in string_trans with stmt %s %s", stmt.keyword, stmt.arg)
+    result = {"type": "str"}
+    return result
+
+
+def enumeration_trans(stmt):
+    logging.debug("in enumeration_trans with stmt %s %s", stmt.keyword, stmt.arg)
+    result = {"type": "str", "choices": []}
+    for enum in stmt.search("enum"):
+        result["choices"].append(enum.arg)
+    logging.debug("In enumeration_trans for %s, returning %s", stmt.arg, result)
+    return result
+
+
+def bits_trans(stmt):
+    logging.debug("in bits_trans with stmt %s %s", stmt.keyword, stmt.arg)
+    result = {"type": "str"}
+    return result
+
+
+def boolean_trans(stmt):
+    logging.debug("in boolean_trans with stmt %s %s", stmt.keyword, stmt.arg)
+    result = {"type": "boolean"}
+    return result
+
+
+def empty_trans(stmt):
+    logging.debug("in empty_trans with stmt %s %s", stmt.keyword, stmt.arg)
+    result = {"type": "list", "suboptions": [{"type": "null"}]}
+    # Likely needs more/other work per:
+    #  https://tools.ietf.org/html/draft-ietf-netmod-yang-json-10#section-6.9
+    return result
+
+
+def union_trans(stmt):
+    logging.debug("in union_trans with stmt %s %s", stmt.keyword, stmt.arg)
+    result = {"oneOf": []}
+    for member in stmt.search("type"):
+        member_type = produce_type(member)
+        result["oneOf"].append(member_type)
+    return result
+
+
+def instance_identifier_trans(stmt):
+    logging.debug(
+        "in instance_identifier_trans with stmt %s %s", stmt.keyword, stmt.arg
+    )
+    result = {"type": "str"}
+    return result
+
+
+def leafref_trans(stmt):
+    logging.debug("in leafref_trans with stmt %s %s", stmt.keyword, stmt.arg)
+    # TODO: Need to resolve i_leafref_ptr here
+    result = {"type": "str"}
+    return result
+
+
+_other_type_trans_tbl = {
+    # https://tools.ietf.org/html/draft-ietf-netmod-yang-json-02#section-6
+    "string": string_trans,
+    "enumeration": enumeration_trans,
+    "bits": bits_trans,
+    "boolean": boolean_trans,
+    "empty": empty_trans,
+    "union": union_trans,
+    "instance-identifier": instance_identifier_trans,
+    "leafref": leafref_trans,
+}
+
+
+def other_type_trans(dtype, stmt):
+    return _other_type_trans_tbl[dtype](stmt)
+
+
+def qualify_name(stmt):
+    # From: draft-ietf-netmod-yang-json
+    # A namespace-qualified member name MUST be used for all members of a
+    # top-level JSON object, and then also whenever the namespaces of the
+    # data node and its parent node are different.  In all other cases, the
+    # simple form of the member name MUST be used.
+    if stmt.parent.parent is None:  # We're on top
+        pfx = stmt.i_module.arg
+        logging.debug("In qualify_name with: %s %s on top", stmt.keyword, stmt.arg)
+        qualified_name = pfx + ":" + stmt.arg
+        return qualified_name.replace("-", "_")
+    if stmt.top.arg != stmt.parent.top.arg:  # Parent node is different
+        pfx = stmt.top.arg
+        logging.debug(
+            "In qualify_name with: %s %s and parent is different",
+            stmt.keyword,
+            stmt.arg,
+        )
+        qualified_name = pfx + ":" + stmt.arg
+        return qualified_name.replace("-", "_")
+    return stmt.arg.replace("-", "_")
