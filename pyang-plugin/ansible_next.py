@@ -137,13 +137,13 @@ def produce_schema(root_stmt):
     return result
 
 
-def produce_type(type_stmt, stmt=None):
+def produce_type(type_stmt):
     logging.debug("In produce_type with: %s %s", type_stmt.keyword, type_stmt.arg)
     type_id = type_stmt.arg
 
     if types.is_base_type(type_id):
         if type_id in _numeric_type_trans_tbl:
-            type_str = numeric_type_trans(type_id, stmt)
+            type_str = numeric_type_trans(type_id)
         elif type_id in _other_type_trans_tbl:
             type_str = other_type_trans(type_id, type_stmt)
         else:
@@ -159,7 +159,7 @@ def produce_type(type_stmt, stmt=None):
             type_stmt.i_typedef,
         )
         typedef_type_stmt = type_stmt.i_typedef.search_one("type")
-        typedef_type = produce_type(typedef_type_stmt, stmt)
+        typedef_type = produce_type(typedef_type_stmt)
         type_str = typedef_type
     else:
         logging.debug(
@@ -177,9 +177,15 @@ def produce_leaf(stmt):
     arg = qualify_name(stmt)
 
     type_stmt = stmt.search_one("type")
-    type_str = produce_type(type_stmt, stmt)
+    type_str = produce_type(type_stmt)
 
-    return {arg: type_str}
+    description = stmt.search_one("description")
+    if description is not None:
+        description_str = preprocess_string(description.arg)
+    else:
+        description_str = "No description available"
+
+    return {arg: {**type_str, "description": description_str}}
 
 
 def produce_list(stmt):
@@ -339,13 +345,12 @@ _numeric_type_trans_tbl = {
 }
 
 
-def numeric_type_trans(type_id, stmt):
+def numeric_type_trans(type_id):
     trans_type = _numeric_type_trans_tbl[type_id][0]
     # Should include format string in return value
     # tformat = _numeric_type_trans_tbl[dtype][1]
     return {
         "type": trans_type,
-        "description": preprocess_string(stmt.search_one("description").arg),
     }
 
 
