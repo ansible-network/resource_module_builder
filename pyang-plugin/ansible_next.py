@@ -179,13 +179,21 @@ def produce_leaf(stmt):
     type_stmt = stmt.search_one("type")
     type_str = produce_type(type_stmt)
 
+    mandatory = stmt.search_one("mandatory")
+    is_mandatory = mandatory is not None and mandatory.arg == "true"
+
+    if not is_mandatory:
+        required = False
+    else:
+        required = True
+
     description = stmt.search_one("description")
     if description is not None:
         description_str = preprocess_string(description.arg)
     else:
         description_str = "No description available"
 
-    return {arg: {**type_str, "description": description_str}}
+    return {arg: {**type_str, "description": description_str, "required": required}}
 
 
 def produce_list(stmt):
@@ -412,7 +420,8 @@ def qualify_name(stmt):
     if stmt.parent.parent is None:  # We're on top
         pfx = stmt.i_module.arg
         logging.debug("In qualify_name with: %s %s on top", stmt.keyword, stmt.arg)
-        return pfx + ":" + stmt.arg
+        qualified_name = pfx + ":" + stmt.arg
+        return qualified_name.replace("-", "_")
     if stmt.top.arg != stmt.parent.top.arg:  # Parent node is different
         pfx = stmt.top.arg
         logging.debug(
@@ -420,5 +429,6 @@ def qualify_name(stmt):
             stmt.keyword,
             stmt.arg,
         )
-        return pfx + ":" + stmt.arg
-    return stmt.arg
+        qualified_name = pfx + ":" + stmt.arg
+        return qualified_name.replace("-", "_")
+    return stmt.arg.replace("-", "_")
