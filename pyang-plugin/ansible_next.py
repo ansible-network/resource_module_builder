@@ -192,42 +192,26 @@ def produce_list(stmt):
     logging.debug("in produce_list: %s %s", stmt.keyword, stmt.arg)
     arg = qualify_name(stmt)
 
-    if stmt.parent.keyword != "list":
-        result = {
-            arg: {
-                "type": "list",
-                "description": preprocess_string(stmt.search_one("description").arg),
-                "elements": "dict",
-                "suboptions": [],
-            }
-        }
-    else:
-        result = {
-            "type": "dict",
-            "suboptions": {
-                arg: {
-                    "type": "list",
-                    "suboptions": [],
-                }
-            },
-        }
-
+    suboptions_dict = {}
     if hasattr(stmt, "i_children"):
         for child in stmt.i_children:
             if child.keyword in producers:
                 logging.debug("keyword hit on: %s %s", child.keyword, child.arg)
-                if stmt.parent.keyword != "list":
-                    result[arg]["suboptions"].append(producers[child.keyword](child))
-                else:
-                    result["suboptions"][arg]["suboptions"].append(
-                        producers[child.keyword](child)
-                    )
+                child_data = producers[child.keyword](child)
+                for key, value in child_data.items():
+                    suboptions_dict[key] = value
             else:
                 logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+
+    result = {
+        arg: {
+            "type": "list",
+            "elements": "dict",
+            "suboptions": suboptions_dict,
+        }
+    }
     logging.debug("In produce_list for %s, returning %s", stmt.arg, result)
     return result
-
-
 def produce_leaf_list(stmt):
     logging.debug("in produce_leaf_list: %s %s", stmt.keyword, stmt.arg)
     arg = qualify_name(stmt)
@@ -240,7 +224,7 @@ def produce_leaf_list(stmt):
             arg: {
                 "type": "list",
                 "elements": "dict",
-                "suboptions": [type_str],
+                "suboptions": {arg: type_str}
             }
         }
     else:
@@ -253,44 +237,33 @@ def produce_leaf_list(stmt):
         result = {
             arg: {
                 "type": "list",
-                "suboptions": [{"type": "str"}],
+                "suboptions": {"type": "str"}
             }
         }
     return result
-
 
 def produce_container(stmt):
     logging.debug("in produce_container: %s %s", stmt.keyword, stmt.arg)
     arg = qualify_name(stmt)
 
-    if stmt.parent.keyword != "list":
-        result = {
-            arg: {
-                "type": "dict",
-                "suboptions": {},
-            }
-        }
-    else:
-        result = {
-            "type": "dict",
-            "suboptions": {arg: {"type": "dict", "suboptions": {}}},
-        }
-
+    suboptions_dict = {}
     if hasattr(stmt, "i_children"):
         for child in stmt.i_children:
             if child.keyword in producers:
                 logging.debug("keyword hit on: %s %s", child.keyword, child.arg)
-                if stmt.parent.keyword != "list":
-                    result[arg]["suboptions"].update(producers[child.keyword](child))
-                else:
-                    result["suboptions"][arg]["suboptions"].update(
-                        producers[child.keyword](child)
-                    )
+                child_data = producers[child.keyword](child)
+                suboptions_dict.update(child_data)
             else:
                 logging.debug("keyword miss on: %s %s", child.keyword, child.arg)
+
+    result = {
+        arg: {
+            "type": "dict",
+            "suboptions": suboptions_dict,
+        }
+    }
     logging.debug("In produce_container, returning %s", result)
     return result
-
 
 def produce_choice(stmt):
     logging.debug("in produce_choice: %s %s", stmt.keyword, stmt.arg)
