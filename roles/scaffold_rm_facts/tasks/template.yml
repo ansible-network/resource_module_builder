@@ -1,9 +1,9 @@
-- name: Check to see if the file exists
+- name: Check to see if {{ template['destination'] }} exists
   stat:
     path: "{{ template['destination'] }}"
   register: file_stat
 
-- name: Create the file, if it doesnt exist already or override is set
+- name: Create the {{ template['source'] }} file, if it doesnt exist already or override is set
   template:
     src: "{{ template['source'] }}"
     dest: "{{ template['destination'] }}"

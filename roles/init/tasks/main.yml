@@ -15,14 +15,6 @@
     file: "{{ model }}"
     name: rm
 
-- name: Set the module documentation variable
-  set_fact:
-    rm_documentation: "{{ rm['DOCUMENTATION']|from_yaml }}"
-
-- name: Set the module ansible_metadata variable
-  set_fact:
-    rm_ansible_metadata: "{{ rm['ANSIBLE_METADATA'] }}"
-
 - name: "Create the {{ structure }} directory structure"
   file:
     path: "{{ rm_dest }}/{{ item }}"

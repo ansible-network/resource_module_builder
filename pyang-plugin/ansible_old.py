@@ -3,7 +3,6 @@ Generates a YML that presents resource module skeleton
 of the YANG module.
 """
 
-import ez_yaml
 import logging
 from pyang import plugin, error
 import re

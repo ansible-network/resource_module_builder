@@ -6,9 +6,10 @@
 from __future__ import print_function
 
 import re
-import ez_yaml
+import yaml
 import optparse
 import logging
+from collections import OrderedDict
 
 from pyang import plugin
 from pyang import statements
@@ -16,25 +17,87 @@ from pyang import types
 from pyang import error
 
 
+class CustomDumper(yaml.SafeDumper):
+    pass
+
+
+def represent_ordered_dict(dumper, data):
+    return dumper.represent_dict(data.items())
+
+
+CustomDumper.add_representer(OrderedDict, represent_ordered_dict)
+
+MAPPINGS = {
+    "urn:ciena:params:xml:ns:yang:ciena-pn:ciena-mef-fp": dict(
+        config_path="suboptions.fp",
+        NETWORK_OS="saos10",
+        RESOURCE="fps",
+        XML_ROOT_KEY="fps",
+        XML_ITEMS="fp",
+        module="saos10_fps",
+        short_description="Manage flow points on Ciena SAOS 10 devices",
+        description="This module provides declarative management of a flow point on Ciena SAOS 10 devices.",
+        author="Jeff Groom (@jgroom33)",
+    ),
+    "urn:ciena:params:xml:ns:yang:ciena-pn::ciena-mef-classifier": dict(
+        config_path="suboptions.classifier",
+        NETWORK_OS="saos10",
+        RESOURCE="classifiers",
+        XML_ROOT_KEY="classifiers",
+        XML_ITEMS="classifier",
+        module="saos10_classifiers",
+        short_description="Manage classifiers on Ciena SAOS 10 devices",
+        description="This module provides declarative management of a classifier on Ciena SAOS 10 devices.",
+        author="Jeff Groom (@jgroom33)",
+    ),
+    "urn:ciena:params:xml:ns:yang:ciena-pn:ciena-mef-fd": dict(
+        config_path="suboptions.fd",
+        NETWORK_OS="saos10",
+        RESOURCE="fds",
+        XML_ROOT_KEY="fds",
+        XML_ITEMS="fd",
+        module="saos10_fds",
+        short_description="Manage forwarding domains on Ciena SAOS 10 devices",
+        description="This module provides declarative management of a forwarding domain on Ciena SAOS 10 devices.",
+        author="Jeff Groom (@jgroom33)",
+    ),
+}
+
+
 def pyang_plugin_init():
     plugin.register_plugin(AnsiblePlugin())
 
 
-def order_dict(d, ordered_keys):
-    new_dict = {}
-    for key in ordered_keys:
-        if key in d:
-            value = d[key]
-            if isinstance(value, dict):
-                value = order_dict(value, ordered_keys)
-            new_dict[key] = value
-    for key in d:
-        if key not in ordered_keys:
-            value = d[key]
-            if isinstance(value, dict):
-                value = order_dict(value, ordered_keys)
-            new_dict[key] = value
-    return new_dict
+def order_dict(obj, priority_keys):
+    """
+    Order dictionary keys with specified keys first, followed by others alphabetically.
+    """
+    if isinstance(obj, dict):
+        # Create an ordered dictionary with prioritized keys
+        ordered = OrderedDict((k, obj[k]) for k in priority_keys if k in obj)
+
+        # Add the remaining keys in alphabetical order
+        for key in sorted(obj.keys()):
+            if key not in ordered:
+                ordered[key] = obj[key]
+
+        # Recursively apply ordering to nested dictionaries
+        return OrderedDict(
+            (k, order_dict(v, priority_keys)) for k, v in ordered.items()
+        )
+    elif isinstance(obj, list):
+        return [order_dict(element, priority_keys) for element in obj]
+    else:
+        return obj
+
+
+def get_nested_schema(schema, config_path):
+    keys = config_path.split(".")
+    for key in keys:
+        schema = schema.get(key, {})
+        if not schema:
+            break
+    return schema
 
 
 class AnsiblePlugin(plugin.PyangPlugin):
@@ -66,16 +129,41 @@ class AnsiblePlugin(plugin.PyangPlugin):
             logging.basicConfig(level=logging.DEBUG)
             print("")
 
+        # Extract the namespace
+        namespace = root_stmt.search_one("namespace")
+        if namespace:
+            xml_namespace = namespace.arg
+        else:
+            xml_namespace = "No namespace found"
+
         schema = produce_schema(root_stmt)
-        converted_schema = convert_schema_to_ansible(schema)
+        converted_schema = convert_schema_to_ansible(schema, xml_namespace)
 
-        ordered_data = order_dict(
-            converted_schema,
-            ["description", "type", "required", "elements", "choices", "suboptions"],
-        )
+        priority_keys = [
+            "GENERATOR_VERSION",
+            "NETWORK_OS",
+            "RESOURCE",
+            "XML_NAMESPACE",
+            "XML_ROOT_KEY",
+            "XML_ITEMS",
+            "module",
+            "short_description",
+            "description",
+            "type",
+            "required",
+            "elements",
+            "choices",
+            "suboptions",
+        ]
+        ordered_data = order_dict(converted_schema, priority_keys)
 
-        yaml_data = ez_yaml.to_string(
-            ordered_data, settings=dict(width=130, indent_sequence=2, indent_mapping=2)
+        yaml_data = yaml.dump(
+            ordered_data,
+            Dumper=CustomDumper,
+            default_flow_style=False,
+            width=140,
+            indent=2,
+            allow_unicode=True,
         )
         fd.write(yaml_data)
 
@@ -149,11 +237,47 @@ def produce_schema(root_stmt):
     return result
 
 
-def convert_schema_to_ansible(schema):
+def convert_schema_to_ansible(schema, xml_namespace):
+    logging.warning(f"xml_namespace: {xml_namespace}")
     if len(schema) == 1:
-        # Wrap the schema in 'documentation' object
-        documentation = {"documentation": next(iter(schema.values()))}
-        return documentation
+        mapped_ns = MAPPINGS.get(xml_namespace)
+        config = next(iter(schema.values()))
+
+        # Get the nested schema based on the config path
+        if mapped_ns.get("config_path"):
+            config = get_nested_schema(config, mapped_ns.get("config_path"))
+
+        result = {
+            "GENERATOR_VERSION": "2.0",
+            "ANSIBLE_METADATA": """
+                {
+                    'metadata_version': '1.1',
+                    'status': ['preview'],
+                    'supported_by': 'network'
+                }
+            """,
+            "NETWORK_OS": mapped_ns.get("NETWORK_OS"),
+            "RESOURCE": mapped_ns.get("RESOURCE"),
+            "COPYRIGHT": "Copyright 2023 Ciena",
+            "XML_NAMESPACE": xml_namespace,
+            "XML_ROOT_KEY": mapped_ns.get("XML_ROOT_KEY"),
+            "XML_ITEMS": mapped_ns.get("XML_ITEMS"),
+            "DOCUMENTATION": {},
+            "requirements": ["ncclient (>=v0.6.4)"],
+            "notes": [
+                "This module requires the netconf system service be enabled on the remote device being managed.",
+                "This module works with connection C(netconf)",
+            ],
+            "EXAMPLES": ["merged_example_01.txt"],
+        }
+        result["DOCUMENTATION"]["module"] = mapped_ns.get("module")
+        result["DOCUMENTATION"]["short_description"] = mapped_ns.get(
+            "short_description"
+        )
+        result["DOCUMENTATION"]["description"] = mapped_ns.get("description")
+        result["DOCUMENTATION"]["author"] = mapped_ns.get("author")
+        result["DOCUMENTATION"]["options"] = dict(config=config)
+        return result
     elif len(schema) > 1:
         logging.error(f"too many top level keys in schema: {schema.keys()}")
         raise error.EmitError(
@@ -269,12 +393,12 @@ def produce_list(stmt):
 def produce_leaf_list(stmt):
     logging.debug("in produce_leaf_list: %s %s", stmt.keyword, stmt.arg)
     arg = qualify_name(stmt)
- 
+
     # Check if the leaf is configurable
     if not stmt.i_config:
         logging.debug("Skipping non-configurable leaf: %s", arg)
         return {}
-    
+
     type_stmt = stmt.search_one("type")
     type_id = type_stmt.arg
     description = stmt.search_one("description")

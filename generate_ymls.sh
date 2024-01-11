@@ -1,19 +1,18 @@
 #!/bin/bash
 export PYANG_PLUGINPATH=/home/jgroom/src/resource_module_builder/pyang-plugin
-cd yangs/ws5
-pyang -f ansible ciena-waveserver-system.yang > ../../models/waveserver5/system.yml
-pyang -f ansible ciena-waveserver-xcvr.yang > ../../models/waveserver5/xcvrs.yml
-pyang -f ansible ciena-waveserver-interfaces.yang > ../../models/waveserver5/interfaces.yml
-pyang -f ansible ciena-waveserver-aaa.yang > ../../models/waveserver5/aaa.yml
-pyang -f ansible ciena-waveserver-module.yang > ../../models/waveserver5/modules.yml
-pyang -f ansible ciena-waveserver-port.yang > ../../models/waveserver5/ports.yml
-pyang -f ansible ciena-waveserver-snmp.yang > ../../models/waveserver5/snmp.yml
-pyang -f ansible ciena-waveserver-chassis.yang > ../../models/waveserver5/chassis.yml
-pyang -f ansible ciena-waveserver-ptp.yang > ../../models/waveserver5/ptps.yml
-pyang -f ansible ciena-waveserver-pm.yang > ../../models/waveserver5/pm.yml
-pyang -f ansible ciena-waveserver-snmp.yang > ../../models/waveserver5/snmp.yml
-cd ../..
-cd yangs/saos10
-pyang -f ansible ciena-mef-classifier.yang > ../../models/saos10/classifier.yml
-pyang -f ansible ciena-mef-fd.yang > ../../models/saos10/fd.yml
-pyang -f ansible ciena-mef-fp.yang > ../../models/saos10/fp.yml
+# WAVESERVER5
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-system.yang > models/waveserver5/system/model.yml
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-xcvr.yang > models/waveserver5/xcvrs/model.yml
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-interfaces.yang > models/waveserver5/interfaces/model.yml
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-aaa.yang > models/waveserver5/aaa/model.yml
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-module.yang > models/waveserver5/modules/model.yml
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-port.yang > models/waveserver5/ports/model.yml
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-snmp.yang > models/waveserver5/snmp/model.yml
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-chassis.yang > models/waveserver5/chassis/model.yml
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-ptp.yang > models/waveserver5/ptps/model.yml
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-pm.yang > models/waveserver5/pm/model.yml
+pyang -f ansible -p yangs/waveserver5 ciena-waveserver-snmp.yang > models/waveserver5/snmp/model.yml
+# SAOS10
+pyang -f ansible -p yangs/saos10 yangs/saos10/ciena-mef-classifier.yang > models/saos10/classifiers/model.yml
+pyang -f ansible -p yangs/saos10 yangs/saos10/ciena-mef-fd.yang > models/saos10/fds/model.yml
+pyang -f ansible -p yangs/saos10 yangs/saos10/ciena-mef-fp.yang > models/saos10/fps/model.yml

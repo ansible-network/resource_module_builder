@@ -4,13 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-ansible = ">=2.13.0"
+ansible = ">=2.16.0"
 jsonref = ">=0.2"
 ansible-core = "*"
 collection-prep = {git = "https://github.com/ansible-network/collection_prep"}
 pyang = "*"
+black = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"

@@ -29,7 +29,11 @@ The module file for {{ network_os }}_{{ resource }}
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-{{ rm|to_doc(model) }}
+DOCUMENTATION = """
+---
+{{ rm['DOCUMENTATION'] | to_pretty_yaml }}
+"""
+
 
 from ansible.module_utils.basic import AnsibleModule
 from {{ import_path }}.{{ network_os }}.argspec.{{ resource }}.{{ resource }} import (

@@ -7,7 +7,7 @@
     rm_dest: build/{{ product }}
     collection_org: ciena
     collection_name: '{{ product }}'
-    model: models/{{ product }}/{{ item }}/{{ product }}_{{ item }}.yml
+    model: models/{{ product }}/{{ item }}/model.yml
     transport: netconf
 - name: Generation
   include_role:
@@ -17,7 +17,7 @@
     rm_dest: build/{{ product }}
     collection_org: ciena
     collection_name: '{{ product }}'
-    model: models/{{ product }}/{{ item }}/{{ product }}_{{ item }}.yml
+    model: models/{{ product }}/{{ item }}/model.yml
     transport: netconf
 - name: Copy modules
   block:
