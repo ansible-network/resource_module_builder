@@ -234,13 +234,11 @@ def convert_schema_to_ansible(schema, xml_namespace, input_mappings):
 
         result = {
             "GENERATOR_VERSION": "2.0",
-            "ANSIBLE_METADATA": """
-                {
-                    'metadata_version': '1.1',
-                    'status': ['preview'],
-                    'supported_by': 'network'
-                }
-            """,
+            "ANSIBLE_METADATA": {
+                "metadata_version": "2.0",
+                "status": ["preview"],
+                "supported_by": "network",
+            },
             "NETWORK_OS": input_mappings.get("NETWORK_OS"),
             "RESOURCE": input_mappings.get("RESOURCE"),
             "COPYRIGHT": "Copyright 2023 Ciena",

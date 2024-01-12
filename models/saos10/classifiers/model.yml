@@ -4,8 +4,11 @@ RESOURCE: classifiers
 XML_NAMESPACE: urn:ciena:params:xml:ns:yang:ciena-pn::ciena-mef-classifier
 XML_ROOT_KEY: classifiers
 XML_ITEMS: classifier
-ANSIBLE_METADATA: "\n                {\n                    'metadata_version': '1.1',\n                    'status': ['preview'],\n         \
-  \           'supported_by': 'network'\n                }\n            "
+ANSIBLE_METADATA:
+  metadata_version: '2.0'
+  status:
+  - preview
+  supported_by: network
 COPYRIGHT: Copyright 2023 Ciena
 DOCUMENTATION:
   module: saos10_classifiers
