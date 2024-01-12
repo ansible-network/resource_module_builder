@@ -260,6 +260,12 @@ def convert_schema_to_ansible(schema, xml_namespace, input_mappings):
         result["DOCUMENTATION"]["description"] = input_mappings.get("description")
         result["DOCUMENTATION"]["author"] = input_mappings.get("author")
         result["DOCUMENTATION"]["options"] = dict(config=config)
+        result["DOCUMENTATION"]["options"]["state"] = {
+            "choices": ["merged", "deleted"],
+            "default": "merged",
+            "description": "The state of the configuration after module completion.",
+            "type": "str",
+        }
         return result
     elif len(schema) > 1:
         logging.error(f"too many top level keys in schema: {schema.keys()}")
