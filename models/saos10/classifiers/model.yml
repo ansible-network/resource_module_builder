@@ -26,10 +26,8 @@ DOCUMENTATION:
           suboptions:
             any:
               description: Accept any classification. Wide-Open classifier
-              type: list
+              type: str
               required: false
-              suboptions:
-              - type: 'null'
             base_ethertype:
               description: Base Ethernet type.
               type: int
@@ -146,20 +144,16 @@ DOCUMENTATION:
                   required: false
                 label_any:
                   description: Any value of mpls-label.
-                  type: list
+                  type: str
                   required: false
-                  suboptions:
-                  - type: 'null'
                 mpls_label:
                   description: A specific value of mpls-label.
                   type: int
                   required: false
                 tc_any:
                   description: Any value of mpls TC.
-                  type: list
+                  type: str
                   required: false
-                  suboptions:
-                  - type: 'null'
                 tc_value:
                   description: A specific value of mpls TC.
                   type: int

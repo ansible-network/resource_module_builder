@@ -82,7 +82,8 @@ class AnsiblePlugin(plugin.PyangPlugin):
                 help="ansible debug",
             ),
             optparse.make_option(
-                "-i", "--yaml-mappings-file",
+                "-i",
+                "--yaml-mappings-file",
                 dest="yaml_mappings_file",
                 help="Path to the YAML file containing input mappings",
                 default=None,  # No default value
@@ -409,7 +410,7 @@ def produce_leaf_list(stmt):
             stmt.arg,
             type_id,
         )
-        result = {arg: {"type": "list", "suboptions": {"type": "str"}}}
+        result = {arg: {"type": "str", "description": description_str}}
     return result
 
 
@@ -577,6 +578,7 @@ _other_type_trans_tbl = {
     "union": union_trans,
     "instance-identifier": instance_identifier_trans,
     "leafref": leafref_trans,
+    "empty": string_trans,
 }
 
 

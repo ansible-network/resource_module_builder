@@ -30,9 +30,8 @@ DOCUMENTATION:
           - enabled
           - disabled
         classifier_list:
-          type: list
-          suboptions:
-            type: str
+          description: List of classifier templates referenced by flow-point to define their incoming classification.
+          type: str
         classifier_list_precedence:
           description: A precedence value for the flow-point. Lower values take precedence over higher values.
           type: int
@@ -103,16 +102,12 @@ DOCUMENTATION:
               suboptions:
                 no_op:
                   description: No Operation chosen for swapping vlan identifier.
-                  type: list
+                  type: str
                   required: false
-                  suboptions:
-                  - type: 'null'
                 pop_type:
                   description: This removes the outermost tag of the frame.
-                  type: list
+                  type: str
                   required: false
-                  suboptions:
-                  - type: 'null'
                 push_dei:
                   description: This enables/disables pushing drop eligibility indicator to indicate frames eligible to be dropped in the presence
                     of congestion.
@@ -192,10 +187,8 @@ DOCUMENTATION:
                   required: false
         egress_l3_mapped:
           description: For an egress-l3-transform, map internal-cos and internal-color to dscp based on a cos-to-frame-map.
-          type: list
+          type: str
           required: false
-          suboptions:
-          - type: 'null'
         egress_remark_dscp_value:
           description: Remark the egress L2-Switched packet with the DSCP value.
           type: int
@@ -262,16 +255,12 @@ DOCUMENTATION:
               suboptions:
                 no_op:
                   description: No Operation chosen for swapping vlan identifier.
-                  type: list
+                  type: str
                   required: false
-                  suboptions:
-                  - type: 'null'
                 pop_type:
                   description: This removes the outermost tag of the frame.
-                  type: list
+                  type: str
                   required: false
-                  suboptions:
-                  - type: 'null'
                 push_dei:
                   description: This enables/disables pushing drop eligibility indicator to indicate frames eligible to be dropped in the presence
                     of congestion.
@@ -351,10 +340,8 @@ DOCUMENTATION:
                   required: false
         ingress_l3_mapped:
           description: For an ingress-l3-transform, map internal-cos and internal-color to dscp based on a cos-to-frame-map.
-          type: list
+          type: str
           required: false
-          suboptions:
-          - type: 'null'
         ingress_remark_dscp_value:
           description: Remark the ingress L2-Switched packet with the DSCP value.
           type: int
@@ -386,10 +373,8 @@ DOCUMENTATION:
           required: false
         mpls_pw:
           description: The type of flow-point is MPLS pseudowire.
-          type: list
+          type: str
           required: false
-          suboptions:
-          - type: 'null'
         mtu_size:
           description: This object indicates the configured EVC maximum service frame format size. It must be less than or equal to the max-mtu-size.
             Vendors may choose to go beyond this limit.
@@ -432,10 +417,8 @@ DOCUMENTATION:
               required: false
         other:
           description: A flow-point with no specific type
-          type: list
+          type: str
           required: false
-          suboptions:
-          - type: 'null'
         pfg_group:
           description: The Private-Forwarding-Group that the flow-point belongs to for the scope of a Private-Forwarding-Group-Profile. Can be
             leaf/root for a PFG-profile with PFG-type of leaf-and-root or spokemesh-and-leafroot. Can be mesh/spoke for a PFG-profile with PFG-type
@@ -470,10 +453,8 @@ DOCUMENTATION:
           required: false
         uni:
           description: The type of flow-point is uni-port.
-          type: list
+          type: str
           required: false
-          suboptions:
-          - type: 'null'
 EXAMPLES:
 - merged_example_01.txt
 notes:
