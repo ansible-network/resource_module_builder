@@ -27,41 +27,10 @@ def represent_ordered_dict(dumper, data):
 
 CustomDumper.add_representer(OrderedDict, represent_ordered_dict)
 
-MAPPINGS = {
-    "urn:ciena:params:xml:ns:yang:ciena-pn:ciena-mef-fp": dict(
-        config_path="suboptions.fp",
-        NETWORK_OS="saos10",
-        RESOURCE="fps",
-        XML_ROOT_KEY="fps",
-        XML_ITEMS="fp",
-        module="saos10_fps",
-        short_description="Manage flow points on Ciena SAOS 10 devices",
-        description="This module provides declarative management of a flow point on Ciena SAOS 10 devices.",
-        author="Jeff Groom (@jgroom33)",
-    ),
-    "urn:ciena:params:xml:ns:yang:ciena-pn::ciena-mef-classifier": dict(
-        config_path="suboptions.classifier",
-        NETWORK_OS="saos10",
-        RESOURCE="classifiers",
-        XML_ROOT_KEY="classifiers",
-        XML_ITEMS="classifier",
-        module="saos10_classifiers",
-        short_description="Manage classifiers on Ciena SAOS 10 devices",
-        description="This module provides declarative management of a classifier on Ciena SAOS 10 devices.",
-        author="Jeff Groom (@jgroom33)",
-    ),
-    "urn:ciena:params:xml:ns:yang:ciena-pn:ciena-mef-fd": dict(
-        config_path="suboptions.fd",
-        NETWORK_OS="saos10",
-        RESOURCE="fds",
-        XML_ROOT_KEY="fds",
-        XML_ITEMS="fd",
-        module="saos10_fds",
-        short_description="Manage forwarding domains on Ciena SAOS 10 devices",
-        description="This module provides declarative management of a forwarding domain on Ciena SAOS 10 devices.",
-        author="Jeff Groom (@jgroom33)",
-    ),
-}
+
+def load_mappings(file_path):
+    with open(file_path, "r") as file:
+        return yaml.safe_load(file)
 
 
 def pyang_plugin_init():
@@ -112,6 +81,12 @@ class AnsiblePlugin(plugin.PyangPlugin):
                 action="store_true",
                 help="ansible debug",
             ),
+            optparse.make_option(
+                "-i", "--yaml-mappings-file",
+                dest="yaml_mappings_file",
+                help="Path to the YAML file containing input mappings",
+                default=None,  # No default value
+            ),
         ]
 
         group = optparser.add_option_group("ansible-specific options")
@@ -136,8 +111,18 @@ class AnsiblePlugin(plugin.PyangPlugin):
         else:
             xml_namespace = "No namespace found"
 
+        mappings_file = ctx.opts.yaml_mappings_file
+        if not mappings_file:
+            raise error.EmitError(
+                "YAML mappings file path is required. Use --yaml-mappings-file to specify the path."
+            )
+
+        imput_mappings = load_mappings(mappings_file)
+
         schema = produce_schema(root_stmt)
-        converted_schema = convert_schema_to_ansible(schema, xml_namespace)
+        converted_schema = convert_schema_to_ansible(
+            schema, xml_namespace, imput_mappings
+        )
 
         priority_keys = [
             "GENERATOR_VERSION",
@@ -237,15 +222,14 @@ def produce_schema(root_stmt):
     return result
 
 
-def convert_schema_to_ansible(schema, xml_namespace):
+def convert_schema_to_ansible(schema, xml_namespace, input_mappings):
     logging.warning(f"xml_namespace: {xml_namespace}")
     if len(schema) == 1:
-        mapped_ns = MAPPINGS.get(xml_namespace)
         config = next(iter(schema.values()))
 
         # Get the nested schema based on the config path
-        if mapped_ns.get("config_path"):
-            config = get_nested_schema(config, mapped_ns.get("config_path"))
+        if input_mappings.get("config_path"):
+            config = get_nested_schema(config, input_mappings.get("config_path"))
 
         result = {
             "GENERATOR_VERSION": "2.0",
@@ -256,12 +240,12 @@ def convert_schema_to_ansible(schema, xml_namespace):
                     'supported_by': 'network'
                 }
             """,
-            "NETWORK_OS": mapped_ns.get("NETWORK_OS"),
-            "RESOURCE": mapped_ns.get("RESOURCE"),
+            "NETWORK_OS": input_mappings.get("NETWORK_OS"),
+            "RESOURCE": input_mappings.get("RESOURCE"),
             "COPYRIGHT": "Copyright 2023 Ciena",
-            "XML_NAMESPACE": xml_namespace,
-            "XML_ROOT_KEY": mapped_ns.get("XML_ROOT_KEY"),
-            "XML_ITEMS": mapped_ns.get("XML_ITEMS"),
+            "XML_NAMESPACE": input_mappings.get("XML_NAMESPACE"),
+            "XML_ROOT_KEY": input_mappings.get("XML_ROOT_KEY"),
+            "XML_ITEMS": input_mappings.get("XML_ITEMS"),
             "DOCUMENTATION": {},
             "requirements": ["ncclient (>=v0.6.4)"],
             "notes": [
@@ -270,12 +254,12 @@ def convert_schema_to_ansible(schema, xml_namespace):
             ],
             "EXAMPLES": ["merged_example_01.txt"],
         }
-        result["DOCUMENTATION"]["module"] = mapped_ns.get("module")
-        result["DOCUMENTATION"]["short_description"] = mapped_ns.get(
+        result["DOCUMENTATION"]["module"] = input_mappings.get("module")
+        result["DOCUMENTATION"]["short_description"] = input_mappings.get(
             "short_description"
         )
-        result["DOCUMENTATION"]["description"] = mapped_ns.get("description")
-        result["DOCUMENTATION"]["author"] = mapped_ns.get("author")
+        result["DOCUMENTATION"]["description"] = input_mappings.get("description")
+        result["DOCUMENTATION"]["author"] = input_mappings.get("author")
         result["DOCUMENTATION"]["options"] = dict(config=config)
         return result
     elif len(schema) > 1:

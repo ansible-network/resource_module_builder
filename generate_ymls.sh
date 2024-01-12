@@ -13,6 +13,6 @@ pyang -f ansible -p yangs/waveserver5 ciena-waveserver-ptp.yang > models/waveser
 pyang -f ansible -p yangs/waveserver5 ciena-waveserver-pm.yang > models/waveserver5/pm/model.yml
 pyang -f ansible -p yangs/waveserver5 ciena-waveserver-snmp.yang > models/waveserver5/snmp/model.yml
 # SAOS10
-pyang -f ansible -p yangs/saos10 yangs/saos10/ciena-mef-classifier.yang > models/saos10/classifiers/model.yml
-pyang -f ansible -p yangs/saos10 yangs/saos10/ciena-mef-fd.yang > models/saos10/fds/model.yml
-pyang -f ansible -p yangs/saos10 yangs/saos10/ciena-mef-fp.yang > models/saos10/fps/model.yml
+pyang -f ansible -p yangs/saos10 -i models/saos10/classifiers/input.yml yangs/saos10/ciena-mef-classifier.yang > models/saos10/classifiers/model.yml
+pyang -f ansible -p yangs/saos10 -i models/saos10/fds/input.yml yangs/saos10/ciena-mef-fd.yang > models/saos10/fds/model.yml
+pyang -f ansible -p yangs/saos10 -i models/saos10/fps/input.yml yangs/saos10/ciena-mef-fp.yang > models/saos10/fps/model.yml

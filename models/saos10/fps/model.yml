@@ -9,7 +9,7 @@ ANSIBLE_METADATA: "\n                {\n                    'metadata_version': 
 COPYRIGHT: Copyright 2023 Ciena
 DOCUMENTATION:
   module: saos10_fps
-  short_description: Manage flow points on Ciena SAOS 10 devices
+  short_description: Manage Flow Points on Ciena SAOS 10 devices
   description: This module provides declarative management of a flow point on Ciena SAOS 10 devices.
   author: Jeff Groom (@jgroom33)
   options:

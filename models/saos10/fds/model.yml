@@ -9,7 +9,7 @@ ANSIBLE_METADATA: "\n                {\n                    'metadata_version': 
 COPYRIGHT: Copyright 2023 Ciena
 DOCUMENTATION:
   module: saos10_fds
-  short_description: Manage forwarding domains on Ciena SAOS 10 devices
+  short_description: Manage Forwarding Domains on Ciena SAOS 10 devices
   description: This module provides declarative management of a forwarding domain on Ciena SAOS 10 devices.
   author: Jeff Groom (@jgroom33)
   options:
