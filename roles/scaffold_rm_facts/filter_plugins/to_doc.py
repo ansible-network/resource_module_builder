@@ -11,8 +11,10 @@ class CustomDumper(yaml.SafeDumper):
 def represent_ansible_unicode(dumper, data):
     return dumper.represent_scalar("tag:yaml.org,2002:str", str(data))
 
+
 def represent_ordered_dict(dumper, data):
     return dumper.represent_dict(data.items())
+
 
 CustomDumper.add_representer(AnsibleUnsafeText, represent_ansible_unicode)
 CustomDumper.add_representer(OrderedDict, represent_ordered_dict)
@@ -25,11 +27,15 @@ def convert_to_plain_python(obj):
     if isinstance(obj, AnsibleUnsafeText) or isinstance(obj, AnsibleUnicode):
         return str(obj)
     elif isinstance(obj, dict) or isinstance(obj, OrderedDict):
-        return {convert_to_plain_python(key): convert_to_plain_python(value) for key, value in obj.items()}
+        return {
+            convert_to_plain_python(key): convert_to_plain_python(value)
+            for key, value in obj.items()
+        }
     elif isinstance(obj, list):
         return [convert_to_plain_python(element) for element in obj]
     else:
         return obj
+
 
 def order_dict(obj, priority_keys):
     """
@@ -54,28 +60,29 @@ def order_dict(obj, priority_keys):
         return obj
 
 
+def to_doc(value):
+    priority_keys = [
+        "module",
+        "short_description",
+        "description",
+        "type",
+        "required",
+        "elements",
+        "choices",
+        "suboptions",
+    ]
+    plain_value = convert_to_plain_python(value)
+    ordered_value = order_dict(plain_value, priority_keys)
+    return yaml.dump(
+        ordered_value,
+        Dumper=CustomDumper,
+        default_flow_style=False,
+        width=140,
+        indent=2,
+        allow_unicode=True,
+    )
+
+
 class FilterModule(object):
     def filters(self):
-        return {"to_pretty_yaml": self.to_pretty_yaml}
-
-    def to_pretty_yaml(self, value):
-        priority_keys = [
-            "module",
-            "short_description",
-            "description",
-            "type",
-            "required",
-            "elements",
-            "choices",
-            "suboptions",
-        ]
-        plain_value = convert_to_plain_python(value)
-        ordered_value = order_dict(plain_value, priority_keys)
-        return yaml.dump(
-            ordered_value,
-            Dumper=CustomDumper,
-            default_flow_style=False,
-            width=140,
-            indent=2,
-            allow_unicode=True,
-        )
+        return {"to_doc": to_doc}

@@ -32,8 +32,9 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 ---
-{{ rm['DOCUMENTATION'] | to_pretty_yaml }}
+{{ rm['DOCUMENTATION'] | to_doc }}
 """
+{{ rm['EXAMPLES'] | to_examples(model) }}
 RETURN = """
 before:
   description: The configuration prior to the model invocation.

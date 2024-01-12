@@ -159,6 +159,7 @@ DOCUMENTATION:
           required: false
 EXAMPLES:
 - merged_example_01.txt
+- deleted_example_01.txt
 notes:
 - This module requires the netconf system service be enabled on the remote device being managed.
 - This module works with connection C(netconf)

@@ -8,3 +8,6 @@ module: "saos10_fps"
 short_description: "Manage Flow Points on Ciena SAOS 10 devices"
 description: "This module provides declarative management of a flow point on Ciena SAOS 10 devices."
 author: "Jeff Groom (@jgroom33)"
+EXAMPLES:
+  - merged_example_01.txt
+  - deleted_example_01.txt
