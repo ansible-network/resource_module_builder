@@ -1,27 +1,13 @@
 # Copyright (c) 2019 Ansible Project
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-
-from __future__ import absolute_import, division, print_function
-
-__metaclass__ = type
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 import os
 from ansible.module_utils.six import StringIO
 from ansible.errors import AnsibleFilterError
 from ansible.utils.display import Display
 
-
 display = Display()
-output = StringIO()
-RM_DIR_PATH = "~/.ansible/tmp/resource_model"
-
-
-def add(line, spaces=0, newline=True):
-    line = line.rjust(len(line) + spaces, " ")
-    if newline:
-        output.write(line + "\n")
-    else:
-        output.write(line)
 
 
 def to_list(val):
@@ -33,15 +19,15 @@ def to_list(val):
 
 
 def get_examples(spec, path):
-    # write examples
-
-    add('EXAMPLES = """')
+    output = StringIO()
+    output.write('EXAMPLES = """\n')
     dir_name = os.path.dirname(path)
     for item in to_list(spec):
         with open(os.path.join(dir_name, item)) as fileh:
-            add(fileh.read().strip("\n"))
-        add("\n")
-    add('"""')
+            output.write(fileh.read().strip("\n") + "\n")
+    output.write('"""\n')
+    return output.getvalue()
+
 
 def to_examples(value, path):
     display.debug("value: %s" % value)
@@ -51,7 +37,7 @@ def to_examples(value, path):
         raise AnsibleFilterError("model file %s does not exist" % path)
 
     result = get_examples(value, path)
-    display.debug("%s" % result)
+    display.debug("Generated examples: %s" % result)
     return result
 
 

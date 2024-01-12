@@ -1,7 +1,14 @@
+# Copyright (c) 2019 Ansible Project
+# GNU General Public License v3.0+
+# (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
 import yaml
 from ansible.utils.unsafe_proxy import AnsibleUnsafeText
 from ansible.parsing.yaml.objects import AnsibleUnicode
 from collections import OrderedDict
+from ansible.utils.display import Display
+
+display = Display()
 
 
 class CustomDumper(yaml.SafeDumper):
@@ -73,7 +80,7 @@ def to_doc(value):
     ]
     plain_value = convert_to_plain_python(value)
     ordered_value = order_dict(plain_value, priority_keys)
-    return yaml.dump(
+    result = yaml.dump(
         ordered_value,
         Dumper=CustomDumper,
         default_flow_style=False,
@@ -81,6 +88,8 @@ def to_doc(value):
         indent=2,
         allow_unicode=True,
     )
+    display.debug("Arguments: %s" % result)
+    return result
 
 
 class FilterModule(object):
