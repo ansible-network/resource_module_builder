@@ -54,22 +54,22 @@ resource_module_templates:
   overwrite: True
 - source: modules/network_os_facts.py.j2
   destination: "{{ parent_directory }}/{{ module_directory }}/{{ network_os }}_facts.py"
-  overwrite: False
+  overwrite: True
 - source: module_utils/network_os/argspec/facts/facts.py.j2
   destination: "{{ parent_directory}}/module_utils/network/{{ network_os }}/argspec/facts/facts.py"
-  overwrite: False
+  overwrite: True
 - source: module_utils/network_os/argspec/resource/resource.py.j2
   destination: "{{ parent_directory }}/module_utils/network/{{ network_os }}/argspec/{{ resource }}/{{ resource }}.py"
   overwrite: True
 - source: module_utils/network_os/config/resource/resource.py.j2
   destination: "{{ parent_directory }}/module_utils/network/{{ network_os }}/config/{{ resource }}/{{ resource }}.py"
-  overwrite: False
+  overwrite: True
 - source: module_utils/network_os/facts/facts.py.j2
   destination: "{{ parent_directory}}/module_utils/network/{{ network_os }}/facts/facts.py"
-  overwrite: False
+  overwrite: True
 - source: module_utils/network_os/facts/resource/resource.py.j2
   destination: "{{ parent_directory}}/module_utils/network/{{ network_os }}/facts/{{ resource }}/{{ resource }}.py"
-  overwrite: False
+  overwrite: True
 - source: module_utils/network_os/utils/utils.py.j2
   destination: "{{ parent_directory}}/module_utils/network/{{ network_os }}/utils/utils.py"
   overwrite: False
