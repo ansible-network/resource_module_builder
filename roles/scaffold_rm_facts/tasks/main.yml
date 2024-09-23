@@ -12,7 +12,7 @@
   with_items: "{{ resource_module_directories }}"
 
 - name: Template each of the files
-  include: template.yml
+  include_tasks: template.yml
   with_items: "{{ resource_module_templates }}"
   loop_control:
     loop_var: template
